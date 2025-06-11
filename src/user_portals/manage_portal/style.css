@@ -1,0 +1,332 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+/* reset all style */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+}
+
+a {
+  text-decoration: none;
+
+}
+
+/* set html & body style */
+
+/* menyembunyikan konten yang melebihi luas body */
+body {
+  overflow-x: hidden;
+}
+
+.btn-close {
+  box-sizing: content-box;
+  background: transparent !important;
+}
+.account_inner_box {
+  display: flex;
+}
+.accnt_label {
+  font-size: 16px;
+  text-transform: capitalize;
+  font-weight: 500;
+  color: #000;
+  margin-bottom: 5px !important;
+}
+/* brand-logo style */
+
+.brand-logo {
+  width: 100%;
+  height: 60px;
+  padding: 0 0.85em;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  /* background-color: #101a6b; */
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.brand-logo a h1 i {
+  color: rgb(212, 154, 45);
+}
+
+.brand-logo a h1 {
+  margin-left: 0.9em;
+}
+
+/* toggle-menu style */
+.toggle-menu {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s;
+  /* color: rgb(251, 251, 251); */
+  color: #ff7b3a;
+}
+.header_user_details {
+list-style: none;
+display: flex;
+align-items: center;
+margin: 0px 0px 0px 44rem;
+}
+.header_user_details li {
+margin-right: 20px;
+border-right: 1px solid #ccc;
+padding-right: 20px;
+}
+.header_user_details li a i {
+color: #ff7b3a;
+font-size: 16px;
+}
+.header_user_details li a {
+color: #000;
+font-size: 15px;
+}
+
+.toggle-menu i {
+  position: absolute;
+}
+
+.toggle-menu .btn-close {
+  display: none;
+  transition: all 0.3s;
+}
+
+.toggle-menu .btn-close:hover {
+  transition: all 0.3s;
+  transform: rotate(180deg);
+}
+.btn-close:hover {
+color: #fff;
+text-decoration: none;
+opacity: 1;
+padding-right: 0px;
+}
+
+.toggle-menu:hover {
+  border-radius: 50%;
+  background-color: rgba(35, 46, 138, 0.91);
+  color: #fff;
+}
+
+/* tampilan navigasi sebelum humberger menu di klik */
+.toggle-nav-item {
+  height: 100%;
+  padding: 0.6em;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  z-index: 1;
+  /* background-color: rgb(16, 26, 107); */
+  background-color: rgb(240, 240, 240);
+}
+.close_icon {
+  margin-right: 4% !important;
+}
+.toggle-nav-item a li {
+  padding: 10px 0px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s;
+  /* color: #fff; */
+  color: #ff7b3a;
+}
+
+.toggle-nav-item i {
+  font-size: 17px;
+  margin-bottom: 0.15em;
+}
+
+.toggle-nav-item a li:hover {
+  background-color: rgb(14, 57, 127);
+  color: #fff;
+}
+.full-nav-item.show-full-nav-item a {
+color: #000;
+}
+.full-nav-item.show-full-nav-item a li i {
+color: #ff7b3a;
+}
+
+/* tampilan navigasi saat humberger menu sudah di klik */
+.full-nav-item {
+  width: 20%;
+  height: 100%;
+  padding: 0.6em;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  z-index: 1;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-100%);
+  transition: all 0.3s;
+  /* background-color: rgb(16, 26, 107); */
+  background-color: rgb(240, 240, 240);
+}
+
+.full-nav-item a li {
+  padding: 1.25em;
+  border-radius: 10px;
+  display: flex;
+  transition: all 0.3s;
+  width: 100%;
+}
+
+.full-nav-item a li:hover {
+  padding-left: 2em;
+  background-color: rgb(255, 255, 255);
+}
+
+.dropdown-toggle::after {
+  display: none !important;
+}
+
+.full-nav-item i {
+  width: 20px;
+  margin-right: 2em;
+}
+
+/* class tambahan untuk mengubah style display:none pada class full-nav-item */
+.show-full-nav-item {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+/* wrapper-header style */
+.wrapper-header {
+  width: 100%;
+  padding-left: 2em;
+  padding-right: 6.4em;
+  position: absolute;
+  top: 60px;
+  left: 4.4em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.1s;
+}
+
+/* class tambahan untuk mengubah posisi content saat area navbar dalam posisi melebar */
+.swipe-wrapper-header {
+  width: 80%;
+  left: 20%;
+  padding-right: 2em;
+  transition: all 0.15s ease 0.15s;
+}
+
+/* wrapper-header section style */
+.wrapper-header section {
+  width: 100%;
+  min-height: 500px;
+  padding: 0 1.5em;
+  padding-top: 5em;
+  margin-top: 2em;
+  border-radius: 10px;
+  text-align: center;
+  background-color: rgb(212, 154, 45);
+}
+
+.wrapper-header section h1 {
+  margin-bottom: 1em;
+}
+
+.wrapper-header section h1::after {
+  content: '';
+  display: block;
+  width: 5%;
+  margin: auto;
+  border-bottom: 2px solid rgb(26, 27, 27);
+}
+
+/* footer style */
+footer {
+  width: 100%;
+  padding: 1em;
+  margin-top: 8em;
+  text-align: center;
+}
+
+/* ======== */
+.brand-logo a img {
+  width: 100%;
+}
+
+.dropdown-menu.drpdwn_show.show {
+  display: contents;
+}
+
+/* =====header-user--toggle-css===== */
+.user_innr_box {
+  border-radius: 10px !important;
+  border: 1px solid #ccc !important;
+  box-shadow: 0px 0px 7px -4px #000 !important;
+  text-align: center;
+}
+.user_innr_box h5 {
+  /* background-color: #0e397f; */
+  color: #0e397f;
+  font-size: 18px;
+  padding: 6px 0;
+  text-transform: capitalize;
+  /* border-radius: 7px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.user_rounded-circle{
+  width: 35px;
+  height: 35px;
+  border-radius: 30px;
+  margin-right: 10px;
+
+}
+.user_list {
+  display: flex;
+  margin: 0;
+}
+.user_list li {
+ padding: 0 10px;
+}
+.user_button {
+  border-radius: 11px;
+  text-transform: capitalize;
+  color: #000;
+  cursor: pointer;
+  font-size: 13px !important;
+  text-decoration: underline;
+  margin: 0 !important;
+  padding: 0;
+}
+
+/* =====modal===== */
+.MuiBox-root.css-s1kcrx {
+  background-image: url(http://localhost:3000/static/media/mdlbg-cover.4e9a1c6f84ed8587e28d.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #fff !important;
+  border-radius: 10px !important;
+  text-align: center !important;
+}
+.bg_imagess{
+ 
+  border: 1px solid #fff !important;
+  border-radius: 10px !important;
+  text-align: center !important;
+}

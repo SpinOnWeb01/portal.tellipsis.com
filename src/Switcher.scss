@@ -1,0 +1,349 @@
+
+
+
+.theme_options
+{
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: right;
+  padding: 20px 0;
+
+  div{
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    margin: 2px 10px;
+    border: 1px solid #fff;
+    display: inline-block;
+    opacity: 0.5;
+    &.active{opacity: 1;}
+  }
+  .menu_icon_button {
+    background-color: #0c367a !important;
+  }
+
+  
+}
+
+#theme_white{
+    // background-color: #eee;
+    color: #eee;
+}
+
+#theme_blue{
+    // background-color: blue;
+    color: black;
+}
+#theme_orange{
+  background-color: orangered;
+}
+#theme_purple{
+  background-color: purple;
+}
+#theme_green{
+  background-color: green;
+}
+#theme_black{
+    background-color: black;
+}
+
+
+.App.theme_white{
+   // height: 100vh;
+  // background-color: #18191b;
+
+.contant_box{
+    margin: 0 auto;
+    background-color: #141B2B;
+    color: #f1f1f1;
+    // background-image: none !important;
+    // background-color: #0f1520 !important;
+   // border-radius: 8px;
+   // padding: 30px 30px 40px 30px;
+   // max-width: 800px;
+   // modalpopup===>
+
+//    .bg_imagess {
+//      background-color: transparent;
+//      background-image: none !important;
+//    }
+   
+//    .MuiBox-root.css-s1kcrx {
+//     background-image: none !important;
+//     background-color: #0f1520 !important;
+// }
+
+
+.css-10jhk8h {
+  background-color: #23304a !important;
+}
+
+.MuiDataGrid-columnHeaders.MuiDataGrid-withBorderColor.css-1iyq7zh-MuiDataGrid-columnHeaders {
+  background: #23304a !important;
+}
+
+main.right_sidebox.user_profile_page {
+  background-color: #141b2b !important;
+}
+.makeStyles-formControl-3 .MuiInputBase-root {
+  color: #666;
+  height: 45px;
+  min-width: 120px;
+  //border-color: #3c3c3c;
+  border-style: solid;
+  border-width: 1px;
+  justify-content: center;
+}
+
+
+.card_button_box {
+  background-color: #1f2a40;
+}
+// .layout_box{
+//   background-color: #1f2a40;
+// }
+
+// div{
+//   color: #fff;
+// }
+.select_title {
+  background-color: #23304A;
+  width: 100%;
+  text-align: center;
+  margin: 0 !important;
+}
+.selectgroup_box {
+  border-right: 1px solid #23304A;
+}
+.manage_mobile_logo {
+  padding: 8px;
+  background-color: #23304A;
+}
+.select_title span {
+  font-size: 16px;
+  color: #fff;
+  font-weight: 600;
+}
+.form_profile_box {
+  background-color: #1f2a40;
+}
+.pdf_div_box {
+  background-color: #1f2a40;
+}
+.brk_label {
+  color: #fff;
+  background: transparent !important;
+}
+.list-pdf-file {
+  color: #fff !important;
+}
+.card_box {
+  text-align: center;
+  background-color: #1f2a40;
+  border-radius: 0;
+  border: 0;
+  overflow: visible;
+}
+   .manage_top_header
+{
+    box-shadow: rgb(20, 27, 43) 0px 0px 4px -1px !important;
+  background-color: rgba(253, 253, 253, 0.97) !important;
+  background-color: #1f2a40 !important;
+  border-bottom: 1px solid #141b2b;
+}
+.css-ptkaw2-MuiDataGrid-root{
+  border-color: rgb(35, 48, 74);
+}
+.pie-container
+{
+  background-color: #1f2a40;
+}
+button,ul,li,a,b,g,text
+{
+    fill: #fff !important;
+  color: #fff !important;
+ 
+}
+.form_flied_box{
+  border: 1px solid #fff !important;
+  color: #fff !important;
+}
+label{
+  color: #fff;
+  background: #141b2b;
+}
+.pro-sidebar .pro-menu > ul > .pro-sub-menu > .pro-inner-list-item {
+  position: relative;
+  background-color: #1f2a40 !important;
+}
+   .custom-header
+{
+  background-color: #23304A;
+}
+.menu_icon_button {
+  background-color: #23304a !important;
+}
+.makeStyles-borderedRed-2
+{
+  margin: 4px 4px 1px 4px !important;
+  box-shadow: 2px -1px 4px -3px #1F2A40;
+  border-left: 3px solid red;
+  background-color: #1F2A40;
+}
+.css-ptkaw2-MuiDataGrid-root .MuiDataGrid-withBorderColor
+{
+  border-color: rgb(35, 48, 74) !important;
+}
+.css-rzbl6g-MuiDataGrid-root .MuiDataGrid-withBorderColor
+{
+    border-color: rgb(35, 48, 74) !important;
+}
+.tbl_innr_box
+{
+  border: 1px solid #23304a;
+}
+
+
+*
+{
+  scrollbar-width: thin;
+  scrollbar-color: #6f6f6f #C6C6C6;
+  color:#fff;
+}
+
+.MuiDataGrid-columnHeaders.MuiDataGrid-withBorderColor.css-y599qu {
+  background: #23304a !important;
+  display: block;
+}
+
+.pro-sidebar-inner
+{
+  background: #1F2A40 !important;
+
+}
+
+.pro-inner-item{
+    border-bottom: 1px solid #141b2b;
+}
+.top_table
+{
+  border: 1px solid #23304a;
+}
+    h2 ,h3,p,div{
+        color: #fff;
+    }
+    h5{
+        line-height: 1.5;
+        margin: 0;
+        font-size: 20px;
+    }
+    .makeStyles-borderedRed-2{
+        color: #fff !important;
+    }
+
+}
+}
+
+
+.App.theme_blue{
+   // height: 100vh;
+  //  background-color: #fff;
+  .contant_box{
+        margin: 0 auto;
+       // background-color: #eee;
+       // border-radius: 8px;
+       // padding: 30px 30px 40px 30px;
+       // max-width: 800px;
+        h2,h5{
+            color: #000;
+        }
+        p{
+            color: #000;
+        }
+        main.right_sidebox.user_profile_page {
+          background-color: #f2f2f2 !important;
+        }
+        .card_box {
+          text-align: center;
+          background-color: #fff;
+          border-radius: 0;
+          border: 0;
+          overflow: hidden;
+      }
+      .card_button_box {
+        background-color: #fff;
+    }
+    .pdf_div_box {
+      background-color: #fff;
+  }
+  .body_row {
+    background-color: blue;
+  }
+
+   
+  
+    }
+}
+
+
+.App.theme_orange{
+    background-color: #f4c9b7;
+    .contant_box{
+        background-color: #f4dfd6;
+        h2,h5{
+            color: #b64b1e;
+        }
+        p{
+            color: #000;
+        }
+        
+    }
+}
+
+
+.App.theme_purple{
+    background-color: #d0b7f4;
+    .contant_box{
+        background-color: #d8def4;
+        h2,h5{
+            color: #ca00b9;
+        }
+        p{
+            color: #000;
+        }
+    }
+}
+
+.App.theme_green{
+    background-color: #c3e3c1;
+    .contant_box{
+        background-color: #e2f6e1;
+        h2,h5{
+            color: #01db5c;
+        }
+        p{
+            color: #000;
+        }
+    }
+}
+
+.App.theme_black{
+    background-color: #5c5c5c;
+    .contant_box{
+        background-color: #333;
+        h2,h5{
+            color: #4b4b4b;
+        }
+        p{
+            color: #000;
+        }
+    }
+}
+
+// .permission_select_box{
+//   background-color: #1f2a40;
+// }
+.permission_label{
+  color: #fff !important;
+}
