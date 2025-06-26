@@ -90,6 +90,7 @@ import { allUserResellerReducers, createUserResellerReducer, deleteUserResellerR
 import { allDidResellerReducers, createDestinationResellerReducer, updateDestinationResellerReducer } from "./reducers/resellerPortal/resellerPortal_destinationReducer";
 import { getAdminPaymentReducers } from "./reducers/adminPortal/adminPortal_paymentReducer";
 import { getManagePaymentReducers } from "./reducers/managePortal/managePortal_paymentReducer";
+import { createAdminRolesReducer, getAdminRolesReducers, updateAdminRolesReducer } from "./reducers/adminPortal/adminPortal_rolesReducers";
 
 const reducer = combineReducers({
   user: userReducer,
@@ -143,6 +144,7 @@ const reducer = combineReducers({
   allDidReseller:allDidResellerReducers, //11-07-2024
   getAdminPayment:getAdminPaymentReducers, //07-08-2024
   getManagePayment:getManagePaymentReducers, //09-08-2024
+  getAdminRoles: getAdminRolesReducers, //26-06-2025
   //CREATE
   createUser: createUserReducer,
   createUserReseller:createUserResellerReducer, //11-07-2024
@@ -167,6 +169,7 @@ const reducer = combineReducers({
   createAdminInvoice:createAdminInvoiceReducer, //05-07-2024
   createDestinationReseller:createDestinationResellerReducer,  //11-07-2024
   createBlockReport:blockReportReducers,  //24-07-2024
+  createAdminRoles: createAdminRolesReducer, //26-06-2025
   //UPDATE
   updateUser: updateUserReducer,
   updateUserReseller:updateUserResellerReducer,  //11-07-2024
@@ -190,6 +193,7 @@ const reducer = combineReducers({
   updateDestinationReseller:updateDestinationResellerReducer,  //11-07-2024
   updateUserStatus: updateUserStatusReducer, //04-06-2025
   suspendDestination: suspendDestinationReducer, //04-06-2025
+  updateAdminRoles: updateAdminRolesReducer, //26-06-2025
   //DELETE
   deleteUser: deleteUserReducer,
   deleteUserReseller: deleteUserResellerReducer,  //11-07-2024
