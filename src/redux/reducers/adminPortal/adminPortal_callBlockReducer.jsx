@@ -1,4 +1,4 @@
-import { CREATE_ADMIN_CALL_BLOCK_FAIL, CREATE_ADMIN_CALL_BLOCK_REQUEST, CREATE_ADMIN_CALL_BLOCK_SUCCESS, DELETE_ADMIN_CALL_BLOCK_FAIL, DELETE_ADMIN_CALL_BLOCK_REQUEST, DELETE_ADMIN_CALL_BLOCK_SUCCESS, GET_ADMIN_CALL_BLOCK_FAIL, GET_ADMIN_CALL_BLOCK_REQUEST, GET_ADMIN_CALL_BLOCK_SUCCESS, UPDATE_ADMIN_CALL_BLOCK_FAIL, UPDATE_ADMIN_CALL_BLOCK_REQUEST, UPDATE_ADMIN_CALL_BLOCK_SUCCESS } from "../../constants/adminPortal/adminPortal_callBlockConstants"
+import { CREATE_ADMIN_CALL_BLOCK_FAIL, CREATE_ADMIN_CALL_BLOCK_REQUEST, CREATE_ADMIN_CALL_BLOCK_SUCCESS, DELETE_ADMIN_CALL_BLOCK_FAIL, DELETE_ADMIN_CALL_BLOCK_REQUEST, DELETE_ADMIN_CALL_BLOCK_SUCCESS, GET_ADMIN_CALL_BLOCK_FAIL, GET_ADMIN_CALL_BLOCK_REQUEST, GET_ADMIN_CALL_BLOCK_SUCCESS, UPDATE_ADMIN_CALL_BLOCK_FAIL, UPDATE_ADMIN_CALL_BLOCK_REQUEST, UPDATE_ADMIN_CALL_BLOCK_STATUS_FAIL, UPDATE_ADMIN_CALL_BLOCK_STATUS_REQUEST, UPDATE_ADMIN_CALL_BLOCK_STATUS_SUCCESS, UPDATE_ADMIN_CALL_BLOCK_SUCCESS } from "../../constants/adminPortal/adminPortal_callBlockConstants"
 
 export const getAdminCallBlockReducers = (state = { users: [] }, action) => {
 
@@ -113,6 +113,39 @@ export const deleteAdminCallBlockReducer = (state = {}, action) => {
                 message: action.payload.message
             }
         case DELETE_ADMIN_CALL_BLOCK_FAIL:
+
+            return {
+
+                loading: false,
+
+                error: action.payload,
+            }
+
+        default:
+            return state
+    }
+}
+
+export const updateAdminCallBlockStatusReducer = (state = {}, action) => {
+
+    switch (action.type) {
+        case UPDATE_ADMIN_CALL_BLOCK_STATUS_REQUEST:
+
+            return {
+                ...state,
+
+                loading: true,
+            }
+        case UPDATE_ADMIN_CALL_BLOCK_STATUS_SUCCESS:
+
+            return {
+                ...state,
+                loading: false,
+
+                isUpdated: action.payload,
+                message: action.payload
+            }
+        case UPDATE_ADMIN_CALL_BLOCK_STATUS_FAIL:
 
             return {
 

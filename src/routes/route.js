@@ -8,7 +8,7 @@ const Router = {
   ADMIN_USER: "/admin_portal/user",
   ADMIN_MANAGE_CAMPAIGN: "/admin_portal/manage_campaign",
   ADMIN_DID_TFN_NUMBER: "/admin_portal/destination",
-  ADMIN_DID_TFN_NUMBER_NEW: "/admin_portal/did_tfn_number_test",
+  ADMIN_DID_TFN_NUMBER_NEW: "/admin_portal/did_tfn_number",
   ADMIN_REPORT: "/admin_portal/report",
   ADMIN_EXTENSION: "/admin_portal/extension",
   ADMIN_PAYMENT: "/admin_portal/payment",

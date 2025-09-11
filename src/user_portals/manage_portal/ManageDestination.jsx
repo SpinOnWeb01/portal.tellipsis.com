@@ -270,7 +270,9 @@ function ManageDestination() {
     const request = JSON.stringify({
       id: didId,
       is_active: enable.toString().charAt(0),
-      details: Array.isArray(destinationAction) ? destinationAction.join(",") : destinationAction,
+      details: Array.isArray(destinationAction)
+        ? destinationAction.join(",")
+        : destinationAction,
       description: description,
       recording: recording?.charAt(0),
       service_type: service?.toUpperCase(),
@@ -523,42 +525,40 @@ function ManageDestination() {
                         <div className="cntnt_title d-flex justify-content-between">
                           <h3>Destination</h3>
                           <Box sx={{ width: "auto" }}>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  variant="outlined"
-                                  placeholder="Search destination numbers..."
-                                  value={searchDestination} // Controlled by internal state
-                                  onChange={(e) =>
-                                    setSearchDestination(e.target.value)
-                                  } // Updates the state
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <SearchIcon fontSize="small" />
-                                      </InputAdornment>
-                                    ),
-                                    endAdornment: searchDestination && ( // Show clear button only when there's input
-                                      <InputAdornment position="end">
-                                        <IconButton
-                                          edge="end"
-                                          size="small"
-                                          sx={{ mr: -1 }}
-                                          onClick={() =>
-                                            setSearchDestination("")
-                                          } // Clears the input
-                                        >
-                                          <ClearIcon fontSize="small" />
-                                        </IconButton>
-                                      </InputAdornment>
-                                    ),
-                                    sx: {
-                                      fontSize: { xs: "0.875rem", sm: "1rem" },
-                                      height: { xs: "36px", sm: "40px" },
-                                    },
-                                  }}
-                                />
-                              </Box>
+                            <TextField
+                              size="small"
+                              fullWidth
+                              variant="outlined"
+                              placeholder="Search destination numbers..."
+                              value={searchDestination} // Controlled by internal state
+                              onChange={(e) =>
+                                setSearchDestination(e.target.value)
+                              } // Updates the state
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <SearchIcon fontSize="small" />
+                                  </InputAdornment>
+                                ),
+                                endAdornment: searchDestination && ( // Show clear button only when there's input
+                                  <InputAdornment position="end">
+                                    <IconButton
+                                      edge="end"
+                                      size="small"
+                                      sx={{ mr: -1 }}
+                                      onClick={() => setSearchDestination("")} // Clears the input
+                                    >
+                                      <ClearIcon fontSize="small" />
+                                    </IconButton>
+                                  </InputAdornment>
+                                ),
+                                sx: {
+                                  fontSize: { xs: "0.875rem", sm: "1rem" },
+                                  height: { xs: "36px", sm: "40px" },
+                                },
+                              }}
+                            />
+                          </Box>
                         </div>
 
                         <ThemeProvider theme={theme}>
@@ -703,72 +703,70 @@ function ManageDestination() {
                                         // }
                                         // MenuProps={MenuProps}
                                       >
-                                        {sub_type.map((name) => (
-                                          <MenuItem key={name} value={name}>
-                                            {/* <Checkbox
-                                                checked={
-                                                  serviceType.indexOf(name) > -1
-                                                }
-                                              />
-                                              <ListItemText primary={name} /> */}
-                                            {name}
-                                          </MenuItem>
-                                        ))}
+                                        {sub_type.map((name) => {
+                                          if (
+                                            token.billing_type === "Postpaid" &&
+                                            name !== "Extension"
+                                          ) {
+                                            return null; // skip other names
+                                          }
+                                          return (
+                                            <MenuItem key={name} value={name}>
+                                              {name}
+                                            </MenuItem>
+                                          );
+                                        })}
                                       </Select>
                                     </FormControl>
                                     {subType === "Extension" ? (
                                       <>
                                         <FormControl
-                                                                                             style={{
-                                                                                               width: "100%",
-                                                                                               margin: "5px 0 5px 0",
-                                                                                             }}
-                                                                                           >
-                                                                                             <InputLabel id="demo-multiple-checkbox-label">
-                                                                                               Extension
-                                                                                             </InputLabel>
-                                                                                             <Select
-                                                                                               style={{
-                                                                                                 textAlign: "left",
-                                                                                               }}
-                                                                                               labelId="demo-multiple-checkbox-label"
-                                                                                               label="Extension"
-                                                                                               id="demo-multiple-checkbox"
-                                                                                               multiple // Enable multiple selection
-                                                                                               fullWidth
-                                                                                               value={
-                                                                                                destinationAction ?? []
-                                                                                               } // Ensure the state is an array
-                                                                                               onChange={(e) => {
-                                                                                                 setDestinationAction(
-                                                                                                   e.target.value
-                                                                                                 ); // Update state with selected values
-                                                                                               }}
-                                                                                               renderValue={(
-                                                                                                 selected
-                                                                                               ) =>
-                                                                                                 selected.join(", ")
-                                                                                               } // Display selected values
-                                                                                               MenuProps={MenuProps}
-                                                                                             >
-                                                                                               {extensionNumber?.data?.map(
-                                                                                                 (name) => (
-                                                                                                   <MenuItem
-                                                                                                     key={name}
-                                                                                                     value={name}
-                                                                                                   >
-                                                                                                     <Checkbox
-                                                                                                       checked={destinationAction.includes(
-                                                                                                         name
-                                                                                                       )}
-                                                                                                     />{" "}
-                                                                                                     {/* Add Checkbox */}
-                                                                                                     {name}
-                                                                                                   </MenuItem>
-                                                                                                 )
-                                                                                               )}
-                                                                                             </Select>
-                                                                                           </FormControl>
+                                          style={{
+                                            width: "100%",
+                                            margin: "5px 0 5px 0",
+                                          }}
+                                        >
+                                          <InputLabel id="demo-multiple-checkbox-label">
+                                            Extension
+                                          </InputLabel>
+                                          <Select
+                                            style={{
+                                              textAlign: "left",
+                                            }}
+                                            labelId="demo-multiple-checkbox-label"
+                                            label="Extension"
+                                            id="demo-multiple-checkbox"
+                                            multiple // Enable multiple selection
+                                            fullWidth
+                                            value={destinationAction ?? []} // Ensure the state is an array
+                                            onChange={(e) => {
+                                              setDestinationAction(
+                                                e.target.value
+                                              ); // Update state with selected values
+                                            }}
+                                            renderValue={(selected) =>
+                                              selected.join(", ")
+                                            } // Display selected values
+                                            MenuProps={MenuProps}
+                                          >
+                                            {extensionNumber?.data?.map(
+                                              (name) => (
+                                                <MenuItem
+                                                  key={name}
+                                                  value={name}
+                                                >
+                                                  <Checkbox
+                                                    checked={destinationAction.includes(
+                                                      name
+                                                    )}
+                                                  />{" "}
+                                                  {/* Add Checkbox */}
+                                                  {name}
+                                                </MenuItem>
+                                              )
+                                            )}
+                                          </Select>
+                                        </FormControl>
                                       </>
                                     ) : (
                                       <></>

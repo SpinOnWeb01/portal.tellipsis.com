@@ -1,4 +1,4 @@
-import { CREATE_MANAGE_CALL_BLOCK_FAIL, CREATE_MANAGE_CALL_BLOCK_REQUEST, CREATE_MANAGE_CALL_BLOCK_SUCCESS, DELETE_MANAGE_CALL_BLOCK_FAIL, DELETE_MANAGE_CALL_BLOCK_REQUEST, DELETE_MANAGE_CALL_BLOCK_SUCCESS, GET_MANAGE_CALL_BLOCK_FAIL, GET_MANAGE_CALL_BLOCK_REQUEST, GET_MANAGE_CALL_BLOCK_SUCCESS, UPDATE_MANAGE_CALL_BLOCK_FAIL, UPDATE_MANAGE_CALL_BLOCK_REQUEST, UPDATE_MANAGE_CALL_BLOCK_SUCCESS } from "../../constants/managePortal/managePortal_callBlockConstants"
+import { CREATE_MANAGE_CALL_BLOCK_FAIL, CREATE_MANAGE_CALL_BLOCK_REQUEST, CREATE_MANAGE_CALL_BLOCK_SUCCESS, DELETE_MANAGE_CALL_BLOCK_FAIL, DELETE_MANAGE_CALL_BLOCK_REQUEST, DELETE_MANAGE_CALL_BLOCK_SUCCESS, GET_MANAGE_CALL_BLOCK_FAIL, GET_MANAGE_CALL_BLOCK_REQUEST, GET_MANAGE_CALL_BLOCK_SUCCESS, UPDATE_MANAGE_CALL_BLOCK_FAIL, UPDATE_MANAGE_CALL_BLOCK_REQUEST, UPDATE_MANAGE_CALL_BLOCK_SUCCESS, UPDATE_USER_CALL_BLOCK_STATUS_FAIL, UPDATE_USER_CALL_BLOCK_STATUS_REQUEST, UPDATE_USER_CALL_BLOCK_STATUS_SUCCESS } from "../../constants/managePortal/managePortal_callBlockConstants"
 
 export const getManageCallBlockReducers = (state = { users: [] }, action) => {
 
@@ -113,6 +113,39 @@ export const deleteManageCallBlockReducer = (state = {}, action) => {
                 message: action.payload.message
             }
         case DELETE_MANAGE_CALL_BLOCK_FAIL:
+
+            return {
+
+                loading: false,
+
+                error: action.payload,
+            }
+
+        default:
+            return state
+    }
+}
+
+export const updateUserCallBlockStatusReducer = (state = {}, action) => {
+
+    switch (action.type) {
+        case UPDATE_USER_CALL_BLOCK_STATUS_REQUEST:
+
+            return {
+                ...state,
+
+                loading: true,
+            }
+        case UPDATE_USER_CALL_BLOCK_STATUS_SUCCESS:
+
+            return {
+                ...state,
+                loading: false,
+
+                isUpdated: action.payload,
+                message: action.payload
+            }
+        case UPDATE_USER_CALL_BLOCK_STATUS_FAIL:
 
             return {
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CREATE_MANAGE_CALL_BLOCK_FAIL, CREATE_MANAGE_CALL_BLOCK_REQUEST, CREATE_MANAGE_CALL_BLOCK_SUCCESS, DELETE_MANAGE_CALL_BLOCK_FAIL, DELETE_MANAGE_CALL_BLOCK_REQUEST, DELETE_MANAGE_CALL_BLOCK_SUCCESS, GET_MANAGE_CALL_BLOCK_FAIL, GET_MANAGE_CALL_BLOCK_REQUEST, GET_MANAGE_CALL_BLOCK_SUCCESS, UPDATE_MANAGE_CALL_BLOCK_FAIL, UPDATE_MANAGE_CALL_BLOCK_REQUEST, UPDATE_MANAGE_CALL_BLOCK_SUCCESS } from "../../constants/managePortal/managePortal_callBlockConstants";
+import { CREATE_MANAGE_CALL_BLOCK_FAIL, CREATE_MANAGE_CALL_BLOCK_REQUEST, CREATE_MANAGE_CALL_BLOCK_SUCCESS, DELETE_MANAGE_CALL_BLOCK_FAIL, DELETE_MANAGE_CALL_BLOCK_REQUEST, DELETE_MANAGE_CALL_BLOCK_SUCCESS, GET_MANAGE_CALL_BLOCK_FAIL, GET_MANAGE_CALL_BLOCK_REQUEST, GET_MANAGE_CALL_BLOCK_SUCCESS, UPDATE_MANAGE_CALL_BLOCK_FAIL, UPDATE_MANAGE_CALL_BLOCK_REQUEST, UPDATE_MANAGE_CALL_BLOCK_SUCCESS, UPDATE_USER_CALL_BLOCK_STATUS_FAIL, UPDATE_USER_CALL_BLOCK_STATUS_REQUEST, UPDATE_USER_CALL_BLOCK_STATUS_SUCCESS } from "../../constants/managePortal/managePortal_callBlockConstants";
 import { api } from "../../../mockData";
 import { toast } from "react-toastify";
 
@@ -193,6 +193,48 @@ export const getManageCallBlock = () => async (dispatch) => {
     } 
      catch (error) {
       dispatch({ type: DELETE_MANAGE_CALL_BLOCK_FAIL, payload: error.response.data.message });
+    }
+  };
+
+  export const updateCallBlockStatus = (status, setResponse, setSelectedRows) => async (dispatch) => {
+  
+    try {
+      dispatch({ type: UPDATE_USER_CALL_BLOCK_STATUS_REQUEST });
+      const current_user = localStorage.getItem("current_user");
+      const token = JSON.parse(localStorage.getItem(`user_${current_user}`));
+  const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization" : `Bearer ${token.access_token} `
+      },
+    };
+    const { data } = await axios.put(
+      
+      
+      `${api.dev}/api/multipleusercallblock`,
+      JSON.stringify(status),
+      config
+    );
+   if (data?.status === 200) {
+      toast.success(data?.message, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1500,
+      });      
+      setResponse(data);  
+      setSelectedRows([]);
+    }  else {
+      toast.error(data?.message, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2500,
+      });
+    }
+        dispatch({ type: UPDATE_USER_CALL_BLOCK_STATUS_SUCCESS, payload: data });
+  } catch (error) {
+    toast.error(error?.response?.data?.message, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2500,
+      });
+      dispatch({ type: UPDATE_USER_CALL_BLOCK_STATUS_FAIL, payload: error.response.data.message });
     }
   };
   

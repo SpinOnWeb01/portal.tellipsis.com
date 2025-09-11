@@ -9,7 +9,7 @@ export const getAdminAuditLogs = () => async (dispatch) => {
       let config = {
         method: "get",
         maxBodyLength: Infinity,
-        url: `${api.dev}/api/auditlogs`,
+        url: `${api.dev}/api/auditlog`,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token.access_token} `,

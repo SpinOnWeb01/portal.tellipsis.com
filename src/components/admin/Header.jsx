@@ -169,13 +169,6 @@ function Header({colorThem, handleClick}) {
                 style={{cursor:"pointer"}}
               />
               </>)}
-
-              {/* <img
-                src="/img/logo.png"
-                alt="Manage Logo"
-                className="img-fluid d-block"
-                style={{cursor:"pointer"}}
-              /> */}
               </a>
             </Typography>
 

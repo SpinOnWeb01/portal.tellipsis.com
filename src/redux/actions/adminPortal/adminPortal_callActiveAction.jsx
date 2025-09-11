@@ -13,12 +13,14 @@ export const getAdminCallActive = () => async (dispatch) => {
 
     // Listen for events from the server
     socket.on('call_details', (data) => {
+      
       if (data?.data !== undefined) {
         dispatch({
           type: GET_ADMIN_CALL_ACTIVE_SUCCESS,
           payload: data?.data
         });
       }
+      console.log('data', data)
     });
 
     // Clean up function

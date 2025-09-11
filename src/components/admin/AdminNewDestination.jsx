@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Close, Edit } from "@mui/icons-material";
-import NoAccountsIcon from "@mui/icons-material/NoAccounts";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import {
@@ -27,6 +26,7 @@ import {
   RadioGroup,
   InputAdornment,
   DialogContentText,
+  useMediaQuery,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
@@ -55,11 +55,14 @@ import { getAllUsers } from "../../redux/actions/adminPortal/userAction";
 import { makeStyles } from "@mui/styles";
 import { api } from "../../mockData";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import NoAccountsIcon from "@mui/icons-material/NoAccounts";
+import HowToRegIcon from "@mui/icons-material/HowToReg"; // For Un-Suspend
 import {
   getAdminResellersList,
   getAdminUsersList,
 } from "../../redux/actions/adminPortal/adminPortal_listAction";
 import { ip } from "@form-validation/validator-ip";
+import { GET_DID_SUCCESS } from "../../redux/constants/adminPortal/destinationConstants";
 const drawerWidth = 240;
 const style = {
   position: "absolute",
@@ -158,7 +161,7 @@ function AdminNewDestination({ colorThem }) {
   const [resellerUsers, setResellerUsers] = useState([]);
   const [users, setUsers] = useState([]);
   const [resellers, setResellers] = useState([]);
-  const [radioValue, setRadioValue] = useState("t");
+  const [radioValue, setRadioValue] = useState("true");
   const [searchDestination, setSearchDestination] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
   const [alertMessage, setAlertMessage] = useState(false);
@@ -297,7 +300,7 @@ function AdminNewDestination({ colorThem }) {
   const handleEdit = (data) => {
     handleEditOpen();
     setTfnNumber(data?.tfn_number);
-    setSelectedValue(data?.status === "Active" ? "t" : "f");
+    setSelectedValue(data?.is_active === "Active" ? "t" : "f");
     const stringArray = data?.details
       .replace(/[{}]/g, "") // Remove curly braces
       .split(",") // Split by commas
@@ -560,9 +563,14 @@ function AdminNewDestination({ colorThem }) {
     }
   };
 
-  useEffect(() => {
+    useEffect(() => {
     dispatch(getDid(radioValue, setLoader));
-  }, [response, deleteRow, radioValue]);
+    dispatch({
+      type: GET_DID_SUCCESS,
+      payload: [],
+    });
+  }, [radioValue, response]);
+
   useEffect(() => {
     dispatch(getExtension(""));
     dispatch(getAllUsers(""));
@@ -611,6 +619,9 @@ function AdminNewDestination({ colorThem }) {
     // Add your condition here, for example, adding border to rows where age is greater than 25
     return row.status === true;
   };
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isXs = useMediaQuery(theme.breakpoints.only("xs"));
 
   useMemo(() => {
     if (state?.getAdminUsersList?.userList) {
@@ -989,49 +1000,59 @@ function AdminNewDestination({ colorThem }) {
       valueFormatter: (params) => {},
     },
 
-    {
+     {
       field: "status",
       headerName: "Status",
-      width: 80,
       headerClassName: "custom-header",
-      headerAlign: "center",
-      align: "center",
+      width: isXs ? 70 : 80,
+      minWidth: 70,
+      maxWidth: 80,
+      headerAlign: "start",
+      align: "start",
+      renderHeader: () => (
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: "calc(0.6rem + 0.2vw)",
+            fontWeight: "bold",
+            color: "white !important",
+          }}
+        >
+          Status
+        </Typography>
+      ),
       renderCell: (params) => {
+        const { is_active, is_suspended } = params.row;
+
+        // Define the key as a string like "true_1", "false_0", etc.
+        const key = `${String(is_active)}_${String(is_suspended)}`;
+        console.log('key', key)
+
+        // Lookup map
+        const labelMap = {
+          1: { label: "Suspend", color: "orange" }, // Suspend gets priority
+          Active_0: { label: "Active", color: "green" },
+          Deactive_1: { label: "Suspend", color: "orange" },
+          Deactive_0: { label: "Deactive", color: "red" },
+        };
+
+        // Fallback in case of unknown values
+        const { label, color } = labelMap[key] || {
+          label: "Suspend",
+          color: "orange",
+        };
+
         return (
-          <div className="d-flex justify-content-between align-items-center">
-            {params.row.status === "Active" ? (
-              <>
-                <div
-                  style={{
-                    color: "green",
-                    //background: "green",
-                    padding: "7px",
-                    borderRadius: "5px",
-                    fontSize: "15px",
-                    textTransform: "capitalize",
-                    fontWeight: "600",
-                  }}
-                >
-                  Active
-                </div>
-              </>
-            ) : (
-              <>
-                <div
-                  style={{
-                    color: "red",
-                    //   background: "red",
-                    padding: "7px",
-                    borderRadius: "5px",
-                    fontSize: "15px",
-                    textTransform: "capitalize",
-                    fontWeight: "600",
-                  }}
-                >
-                  Deactive
-                </div>
-              </>
-            )}
+          <div
+            style={{
+              color,
+              padding: isMobile ? "5px" : "7px",
+              borderRadius: "5px",
+              textAlign: "center",
+              fontSize: "calc(0.6rem + 0.2vw)",
+            }}
+          >
+            {label}
           </div>
         );
       },
@@ -1054,7 +1075,7 @@ function AdminNewDestination({ colorThem }) {
           created_date: item?.created_date,
           updated_date: item?.updated_date,
           extension: item?.destination_actions,
-          status: item?.is_active,
+          status: item?.status,
           details: item?.details,
           description: item?.description,
           recording: item.recording,
@@ -1065,6 +1086,7 @@ function AdminNewDestination({ colorThem }) {
           carrier_name: item.carrier_name,
           total_call_duration: item.total_call_duration,
           Assignment: item.status,
+          is_active: item.is_active,
           is_suspended: item.is_suspended,
         });
       });
@@ -1094,15 +1116,59 @@ function AdminNewDestination({ colorThem }) {
   );
 
   const handleDelete = useCallback(() => {
+    let isSuspendedStatus = 1; // default suspend
+
+    // Find the first selected row's suspension status
+    const firstSelectedRow = filteredRows.find(
+      (row) => row.id === selectedRows[0]
+    );
+    if (firstSelectedRow) {
+      isSuspendedStatus = firstSelectedRow.is_suspended === 1 ? 0 : 1;
+    }
+
+    const selectedCallerDataSet = new Set();
+
+    selectedRows.forEach((id) => {
+      const selectedRow = filteredRows.find((row) => row.id === id);
+      if (selectedRow) {
+        selectedCallerDataSet.add(selectedRow.did_id);
+      }
+    });
+
+    const selectedCallerData = Array.from(selectedCallerDataSet);
+
     dispatch(
       suspendDestination(
-        JSON.stringify({ ids: selectedCallerData }),
+        JSON.stringify({
+          ids: selectedCallerData,
+          is_suspended: isSuspendedStatus,
+        }),
         setResponse
       )
     );
+
     setAlertMessage(false);
     setSelectedRows([]);
-  }, [dispatch, setResponse, setSelectedRows, selectedCallerData]);
+  }, [dispatch, setResponse, setSelectedRows, selectedRows, filteredRows]);
+
+    const getToggleSuspendText = () => {
+    const firstSelectedRow = filteredRows.find(
+      (row) => row.id === selectedRows[0]
+    );
+    if (firstSelectedRow?.is_suspended === 1) return "Un-Suspend";
+    return "Suspend";
+  };
+
+  const getSuspendIcon = () => {
+    const firstSelectedRow = filteredRows.find(
+      (row) => row.id === selectedRows[0]
+    );
+    return firstSelectedRow?.is_suspended === 1 ? (
+      <HowToRegIcon />
+    ) : (
+      <NoAccountsIcon />
+    );
+  };
 
 
   return (
@@ -2558,42 +2624,42 @@ function AdminNewDestination({ colorThem }) {
                                       value=""
                                       control={<Radio />}
                                       label={`All(${
-                                        radioValue === "t" ||
-                                        radioValue === "f" ||
+                                        radioValue === "true" ||
+                                        radioValue === "false" ||
                                         radioValue === "1"
                                           ? 0
                                           : rows.length
                                       })`}
                                     />
                                     <FormControlLabel
-                                      value="t"
+                                      value="true"
                                       control={<Radio />}
-                                      label={`Assigned(${
+                                      label={`Active(${
                                         radioValue === "" ||
-                                        radioValue === "f" ||
+                                        radioValue === "false" ||
                                         radioValue === "1"
                                           ? 0
                                           : rows.length
                                       })`}
                                     />
                                     <FormControlLabel
-                                      value="f"
+                                      value="false"
                                       control={<Radio />}
-                                      label={`Unassigned(${
+                                      label={`Deactive(${
                                         radioValue === "" ||
-                                        radioValue === "t" ||
+                                        radioValue === "true" ||
                                         radioValue === "1"
                                           ? 0
                                           : rows.length
                                       })`}
                                     />
                                     <FormControlLabel
-                                      value={1}
+                                      value={"1"}
                                       control={<Radio />}
                                       label={`Suspended(${
                                         radioValue === "" ||
-                                        radioValue === "t" ||
-                                        radioValue === "f"
+                                        radioValue === "true" ||
+                                        radioValue === "false"
                                           ? 0
                                           : rows.length
                                       })`}
@@ -2615,20 +2681,22 @@ function AdminNewDestination({ colorThem }) {
                                       : "orange",
                                     textTransform: "capitalize",
                                     height: "35px",
-                                    width: "110px",
+                                    width: "auto",
                                     minWidth: "90px",
                                     flexShrink: 0,
-                                    display: "inline-flex",
+                                    display:
+                                      selectedCallerData.length === 0
+                                        ? "none"
+                                        : "inline-flex",
                                     justifyContent: "space-evenly",
                                     alignItems: "center",
                                   }}
                                   className="all_button_clr"
                                   color="error"
-                                  disabled={selectedCallerData.length === 0}
                                   onClick={handleMessage}
-                                  startIcon={<NoAccountsIcon />}
+                                  startIcon={getSuspendIcon()}
                                 >
-                                  Suspend
+                                  {getToggleSuspendText()}
                                 </Button>
                               </div>
                             </div>

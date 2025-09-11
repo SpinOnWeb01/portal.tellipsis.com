@@ -10,7 +10,7 @@ export const getDid = (radioValue, setLoader) => async (dispatch) => {
       let config = {
         method: "get",
         maxBodyLength: Infinity,
-        url:  `${api.dev}/api/didresource`,
+        url:  `${api.dev}/api/didresource?is_active=${radioValue}`,
         headers: {
           "Content-Type": "application/json",
           "Authorization" : `Bearer ${token.access_token} `

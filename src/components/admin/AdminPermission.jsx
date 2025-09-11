@@ -8,7 +8,7 @@ import Grid from "@mui/material/Grid";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import TextField from "@mui/material/TextField";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "../../Switcher.scss";
 import { usersGroupRolesList } from "../../mockData";
@@ -16,6 +16,7 @@ import {
   getPermissions,
   putPermission,
 } from "../../redux/actions/adminPortal/adminPortal_permissionAction";
+import { getAdminRoles } from "../../redux/actions/adminPortal/adminPortal_rolesAction";
 
 const drawerWidth = 240;
 
@@ -147,6 +148,16 @@ function AdminPermission({ colorThem }) {
   const userRoleChange = (newValue) => {
   };
 
+  useEffect(() => {
+    dispatch(getAdminRoles());
+  }, [dispatch]);
+
+  const activeRoles = useMemo(() => {
+  return (state?.getAdminRoles?.roles || []).filter(
+    (role) => role.is_active === true
+  );
+}, [state?.getAdminRoles?.roles]);
+
   return (
     <>
       <div className={`App ${colorThem} `}>
@@ -271,8 +282,8 @@ function AdminPermission({ colorThem }) {
                       onInputChange={(event, newInputValue) => {
                         setAutoCompleteInputValue(newInputValue);
                       }}
-                      options={usersGroupRolesList}
-                      getOptionLabel={(option) => option.description}
+                      options={activeRoles}
+                      getOptionLabel={(option) => option.name}
                       sx={{ width: 300 }}
                       renderInput={(params) => (
                         <TextField {...params} label="Select Group" />

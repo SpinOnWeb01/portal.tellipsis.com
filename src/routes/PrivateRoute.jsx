@@ -80,6 +80,7 @@ import AdminPayment from "../components/admin/AdminPayment";
 import AdminAssign from "../components/admin/AdminAssign";
 import AdminCMU from "../components/admin/AdminCMU";
 import AdminNewDestination from "../components/admin/AdminNewDestination";
+import AdminRoles from "../components/admin/AdminRoles";
 
 Chart.register(CategoryScale);
 function PrivateRoute() {
@@ -285,6 +286,10 @@ function PrivateRoute() {
               <Route
                 path={Router.ADMIN_HISTORY}
                 element={<AdminHistory colorThem={colorThem} />}
+              />
+              <Route
+                path={Router.ADMIN_ROLES}
+                element={<AdminRoles colorThem={colorThem} />}
               />
               <Route
                 path={Router.ADMIN_PERMISSIONS_ACCESS}

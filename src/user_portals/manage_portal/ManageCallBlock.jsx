@@ -12,6 +12,7 @@ import {
   TextField,
   Tooltip,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import {
   DataGrid,
@@ -24,13 +25,14 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Backdrop from "@mui/material/Backdrop";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import InfoIcon from '@mui/icons-material/Info';
+import InfoIcon from "@mui/icons-material/Info";
 import { useDispatch, useSelector } from "react-redux";
 import PhoneDisabledIcon from "@mui/icons-material/PhoneDisabled";
 import {
   createManageCallBlock,
   deleteManageCallBlock,
   getManageCallBlock,
+  updateCallBlockStatus,
   updateManageCallBlock,
 } from "../../redux/actions/managePortal/managePortal_callBlockAction";
 import Dialog from "@mui/material/Dialog";
@@ -40,6 +42,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import DeleteIcon from "@mui/icons-material/Delete";
+import BlockIcon from "@mui/icons-material/Block";
+import CheckIcon from "@mui/icons-material/Check";
 import { makeStyles } from "@mui/styles";
 const style = {
   position: "absolute",
@@ -66,9 +70,9 @@ const useStyles = makeStyles({
     margin: "4px 4px 1px 4px !important",
   },
   spacedRow: {
-      // Adjust spacing here, e.g., margin, padding, etc.
-      marginBottom: '10px',
-    },
+    // Adjust spacing here, e.g., margin, padding, etc.
+    marginBottom: "10px",
+  },
   //    tooltip: {
   //     "&:hover": {
   //       backgroundColor: "red",
@@ -77,10 +81,10 @@ const useStyles = makeStyles({
   //    backgroundColor: "blue",
   // },
   tooltip: {
-    backgroundColor: '#0E397F', // Change default background color
-    color: 'white',
-    '&:hover': {
-      backgroundColor: '#0E397F', // Change background color on hover
+    backgroundColor: "#0E397F", // Change default background color
+    color: "white",
+    "&:hover": {
+      backgroundColor: "#0E397F", // Change background color on hover
     },
   },
 });
@@ -106,7 +110,7 @@ const theme = createTheme({
 function CustomToolbar() {
   return (
     <GridToolbarContainer>
-      <GridToolbarColumnsButton/>
+      <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
       <GridToolbarFilterButton />
     </GridToolbarContainer>
@@ -126,12 +130,22 @@ function ManageCallBlock() {
   const [open, setOpen] = React.useState(false);
   const [alertMessage, setAlertMessage] = useState(false);
   const [name, setName] = useState("");
+  const [value, setValue] = useState("");
+  const [selectedRows, setSelectedRows] = useState([]);
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isXs = useMediaQuery(theme.breakpoints.only("xs")); // < 600px
   const state = useSelector((state) => state);
   const handleOpen = () => setOpen(true);
+
+  const handleSelectionChange = (selection) => {
+    setSelectedRows(selection);
+  };
+
   const handleAlertClose = () => {
-    setCallBlockId("")
+    setCallBlockId("");
+    setSelectedRows([]);
     setAlertMessage(false);
-  }
+  };
 
   useEffect(() => {
     dispatch(getManageCallBlock());
@@ -212,49 +226,73 @@ function ManageCallBlock() {
     );
   };
 
-  const handleMessage = useCallback((data) => {
-    setName(data?.details)
-    setCallBlockId(data?.callBlockId)
-    setAlertMessage(true);
-  }, [setName]); // Memoize event handler
-
-  const handleDelete = useCallback(
-    (id) => {
-      dispatch(deleteManageCallBlock({ id: callBlockId }, setResponse, setCallBlockId));
-       setAlertMessage(false);
+  const handleMessage = useCallback(
+    (data) => {
+      setName(data?.details);
+      setValue(data);
+      setCallBlockId(data?.callBlockId);
+      setAlertMessage(true);
     },
-    [callBlockId,dispatch, setResponse, setCallBlockId]
+    [setName, setValue]
   ); // Memoize event handler
 
-  // =======table=======>
-  const columns = [
+  const allColumns = [
     {
       field: "edit",
       headerName: "Action",
-      width: 150,
       headerClassName: "custom-header",
-      headerAlign: "center",
-      align: "center",
+      width: isXs ? 60 : "100%",
+      minWidth: 60,
+      maxWidth: "100%",
+      flex: 1,
+      headerAlign: "left",
+      disableColumnMenu: true, // Prevents menu on hover
+      sortable: false, // Allows sorting on click but not on hover
+      align: "left",
+
+      renderHeader: () => (
+        <Typography
+          variant="body2"
+          sx={{ fontSize: "calc(0.6rem + 0.2vw)", fontWeight: "bold" }}
+        >
+          Action
+        </Typography>
+      ),
 
       renderCell: (params) => {
         return (
-          <div className="d-flex justify-content-between align-items-center">
-            <Tooltip title="edit" disableInteractive interactive>
+          <div className="d-flex justify-content-around align-items-center">
+            <Tooltip title="Edit" disableInteractive interactive>
               <IconButton
                 onClick={() => handleButtonClick(params.row)}
                 style={{
-                  fontSize: "15px",
-                  color: "#04255C",
-                  marginRight: "10px",
+                  color: "#42765f",
+                  padding: "2px",
                 }}
               >
-                <Edit index={params.row.id} />
+                <Edit
+                  index={params.row.id}
+                  style={{
+                    cursor: "pointer",
+                    color: "#42765f",
+                    fontSize: "calc(0.7rem + 0.8vw)",
+                  }}
+                />
               </IconButton>
             </Tooltip>
-            <Tooltip title="delete" disableInteractive interactive>
-            <IconButton onClick={() => handleMessage(params?.row)}>
-              <Delete style={{ cursor: "pointer", color: "red" }} />
-            </IconButton>
+            <Tooltip title="Delete" disableInteractive interactive>
+              <IconButton
+                onClick={() => handleMessage(params?.row)}
+                style={{ padding: "2px" }}
+              >
+                <Delete
+                  style={{
+                    cursor: "pointer",
+                    color: "red",
+                    fontSize: "calc(0.7rem + 0.8vw)",
+                  }}
+                />
+              </IconButton>
             </Tooltip>
           </div>
         );
@@ -263,42 +301,111 @@ function ManageCallBlock() {
     {
       field: "username",
       headerName: "User Name",
-      width: 240,
       headerClassName: "custom-header",
-      headerAlign: "center",
-      align: "center",
+      flex: 1,
+      minWidth: 70,
+      maxWidth: "100%",
+      headerAlign: "left",
+      disableColumnMenu: true, // Prevents menu on hover
+      sortable: false, // Allows sorting on click but not on hover
+      align: "left",
+      renderHeader: () => (
+        <Typography
+          variant="body2"
+          sx={{ fontSize: "calc(0.6rem + 0.2vw)", fontWeight: "bold" }}
+        >
+          User Name
+        </Typography>
+      ),
+      renderCell: (params) => {
+        return (
+          <>
+            <span style={{ textTransform: "capitalize" }}>
+              {params.row.username}
+            </span>
+          </>
+        );
+      },
     },
     {
       field: "details",
-      headerName: "Caller ID Number",
-      width: 250,
-      headerAlign: "center",
-      align: "center",
+      headerName: "Caller ID",
       headerClassName: "custom-header",
+      flex: 1,
+      width: isXs ? 90 : "100%",
+      minWidth: 90,
+      maxWidth: "100%",
+      headerAlign: "left",
+      disableColumnMenu: true, // Prevents menu on hover
+      sortable: false, // Allows sorting on click but not on hover
+      align: "left",
+      headerClassName: "custom-header",
+      renderHeader: () => (
+        <Typography
+          variant="body2"
+          sx={{ fontSize: "calc(0.6rem + 0.2vw)", fontWeight: "bold" }}
+        >
+          Caller ID
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Typography
+          variant="body2"
+          sx={{ fontSize: "calc(0.6rem + 0.2vw)" }} // Match header size or set your own
+        >
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: "type",
       headerName: "Type",
-      width: 250,
       headerClassName: "custom-header",
-      headerAlign: "center",
-      align: "center",
-    },
-    {
-      field: "description",
-      headerName: "Description",
-      width: 250,
-      headerClassName: "custom-header",
+      flex: 1,
+      width: isXs ? 60 : "100%",
+      minWidth: 60,
+      maxWidth: "100%",
       headerAlign: "left",
+      disableColumnMenu: true, // Prevents menu on hover
+      sortable: false, // Allows sorting on click but not on hover
       align: "left",
+      renderHeader: () => (
+        <Typography
+          variant="body2"
+          sx={{ fontSize: "calc(0.6rem + 0.2vw)", fontWeight: "bold" }}
+        >
+          Type
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Typography
+          variant="body2"
+          sx={{ fontSize: "calc(0.6rem + 0.2vw)" }} // Match header size or set your own
+        >
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: "is_active",
       headerName: "Status",
-      width: 180,
       headerClassName: "custom-header",
-      headerAlign: "center",
-      align: "center",
+      flex: 1,
+      width: isXs ? 60 : "100%",
+      minWidth: 60,
+      maxWidth: "100%",
+      headerAlign: "left",
+      disableColumnMenu: true, // Prevents menu on hover
+      sortable: false, // Allows sorting on click but not on hover
+      align: "left",
+      renderHeader: () => (
+        <Typography
+          variant="body2"
+          sx={{ fontSize: "calc(0.6rem + 0.2vw)", fontWeight: "bold" }}
+        >
+          Status
+        </Typography>
+      ),
       renderCell: (params) => {
         return (
           <div className="d-flex justify-content-between align-items-center">
@@ -306,11 +413,11 @@ function ManageCallBlock() {
               <>
                 <div
                   style={{
-                    color: "white",
-                    background: "green",
-                    padding: "7px",
-                    borderRadius: "5px",
-                    fontSize: "12px",
+                    color: "green",
+                    // background: "green",
+                    // padding: "7px",
+                    // borderRadius: "5px",
+                    fontSize: "calc(0.6rem + 0.2vw)",
                     textTransform: "capitalize",
                   }}
                 >
@@ -321,11 +428,8 @@ function ManageCallBlock() {
               <>
                 <div
                   style={{
-                    color: "white",
-                    background: "red",
-                    padding: "7px",
-                    borderRadius: "5px",
-                    fontSize: "12px",
+                    color: "red",
+                    fontSize: "calc(0.6rem + 0.2vw)",
                     textTransform: "capitalize",
                   }}
                 >
@@ -337,9 +441,62 @@ function ManageCallBlock() {
         );
       },
     },
-
-  
+    {
+      field: "description",
+      headerName: "Description",
+      headerClassName: "custom-header",
+      flex: 1,
+      width: isXs ? 70 : "100%",
+      minWidth: 70,
+      maxWidth: "100%",
+      headerAlign: "left",
+      disableColumnMenu: true, // Prevents menu on hover
+      sortable: false, // Allows sorting on click but not on hover
+      align: "left",
+      renderHeader: () => (
+        <Typography
+          variant="body2"
+          sx={{ fontSize: "calc(0.6rem + 0.2vw)", fontWeight: "bold" }}
+        >
+          Description
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <div
+          style={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            cursor: "pointer",
+            maxWidth: "100%",
+            fontSize: "calc(0.6rem + 0.2vw)",
+            //color: "white",
+          }}
+          //onClick={() => handleDscptnOpen(params.value)}
+          title="Click to expand"
+        >
+          {params.value && params.value.length > 50
+            ? params.value.substring(0, 50) + "..."
+            : params.value}
+        </div>
+      ),
+    },
   ];
+
+  // --------------Only Mobile View Columns Data---------------------
+  const mobileColumns = allColumns.filter((col) =>
+    [
+      "edit",
+      "details",
+      "type",
+      "is_active",
+      "recording",
+      "description",
+    ].includes(col.field)
+  );
+
+  // --------------Table Options---------------------
+  const columns = isMobile ? mobileColumns : allColumns;
 
   const rows = useMemo(() => {
     const calculatedRows = [];
@@ -357,6 +514,41 @@ function ManageCallBlock() {
       });
     return calculatedRows;
   }, [state?.getManageCallBlock?.getCallBlock?.data]);
+
+  const selectedCallerDataSet = new Set(); // Using Set to avoid duplicates
+
+  selectedRows.forEach((id) => {
+    const selectedRow = rows.find((row) => row.id === id);
+    if (selectedRow) {
+      selectedCallerDataSet.add(selectedRow.callBlockId); // Add only did_id
+    }
+  });
+
+  const selectedCallerData = Array.from(selectedCallerDataSet); // Convert to comma-separated string
+
+  const handleDelete = useCallback(() => {
+    const request = {
+      ids: selectedCallerData,
+      is_active: value,
+    };
+    if (value === "true" || value === "false") {
+      dispatch(updateCallBlockStatus(request, setResponse, setSelectedRows));
+      setAlertMessage(false);
+    } else {
+      dispatch(
+        deleteManageCallBlock({ id: callBlockId }, setResponse, setCallBlockId)
+      );
+      setAlertMessage(false);
+    }
+  }, [
+    callBlockId,
+    selectedCallerData,
+    value,
+    dispatch,
+    setResponse,
+    setCallBlockId,
+    setSelectedRows,
+  ]); // Memoize event handler
 
   return (
     <>
@@ -390,13 +582,82 @@ function ManageCallBlock() {
                           account.
                         </p> */}
                         </div>
-                        <IconButton
-                          className="all_button_clr"
-                          onClick={handleOpen}
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "end",
+                          }}
                         >
-                          Add
-                          <AddOutlinedIcon />
-                        </IconButton>
+                          <Box
+                            sx={{
+                              display: selectedRows[0] ? "block" : "none",
+                            }}
+                          >
+                            <IconButton
+                              className="all_button_clr"
+                              onClick={() => handleMessage("true")}
+                              sx={{
+                                background: "green !important",
+                                fontSize: "15px",
+                                borderRadius: "5px",
+                                border: "none",
+                                color: "#fff",
+                                px: 4,
+                                textTransform: "capitalize",
+                                height: "35px",
+                                width: "90px",
+                                alignItems: "center",
+                                position: "relative",
+                                right: isMobile ? "5px" : "-15px",
+                                textAlign: "center", // Add this line
+                              }}
+                            >
+                              Active
+                            </IconButton>
+                            <IconButton
+                              onClick={() => handleMessage("false")}
+                              className="filter_block_btn"
+                              style={{
+                                height: "35px",
+                                width: "90px",
+                                px: 4,
+                                marginLeft: "10px",
+                                background: selectedRows.length
+                                  ? "red"
+                                  : "grey",
+                              }}
+                              disabled={selectedRows.length === 0}
+                            >
+                              Deactive
+                            </IconButton>
+                          </Box>
+                          <Box>
+                            <IconButton
+                              className="all_button_clr"
+                              onClick={handleOpen}
+                              sx={{
+                                fontSize: "15px",
+                                borderRadius: "5px",
+                                border: "none",
+                                color: "#fff",
+                                px: 4,
+                                textTransform: "capitalize",
+                                height: "35px",
+                                width: "90px",
+                                minWidth: "90px",
+                                flexShrink: 0,
+                                display: "inline-flex",
+                                justifyContent: "space-evenly",
+                                alignItems: "center",
+                                position: "relative",
+                              }}
+                            >
+                              Add
+                              <AddOutlinedIcon />
+                            </IconButton>
+                          </Box>
+                        </div>
 
                         <Modal
                           aria-labelledby="transition-modal-title"
@@ -470,7 +731,7 @@ function ManageCallBlock() {
                                     </MenuItem>
                                   </Select>
                                 </FormControl>
-                               
+
                                 <br />
 
                                 <TextField
@@ -487,14 +748,32 @@ function ManageCallBlock() {
                                     setDetails(e.target.value);
                                   }}
                                 />
-                                 <InputLabel style={{textAlign:'left', fontSize: '14px',display:'flex',alignItems:'center'}}>
-                                      <Tooltip style={{color:'#fff'}} title="Sample CallerID Format +13456232323 / Sample Areacode +13" classes={{ tooltip: classes.tooltip }}>
-                                        <InfoIcon style={{fontSize:"18px",color:"#0E397F"}} />&nbsp;
-                                        </Tooltip >
-                                        Sample CallerID Format +13456232323 / Sample Areacode +13 </InputLabel>
+                                <InputLabel
+                                  style={{
+                                    textAlign: "left",
+                                    fontSize: "14px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <Tooltip
+                                    style={{ color: "#fff" }}
+                                    title="Sample CallerID Format +13456232323 / Sample Areacode +13"
+                                    classes={{ tooltip: classes.tooltip }}
+                                  >
+                                    <InfoIcon
+                                      style={{
+                                        fontSize: "18px",
+                                        color: "#0E397F",
+                                      }}
+                                    />
+                                    &nbsp;
+                                  </Tooltip>
+                                  Sample CallerID Format +13456232323 / Sample
+                                  Areacode +13{" "}
+                                </InputLabel>
                                 <br />
 
-                              
                                 <FormControl
                                   fullWidth
                                   style={{ margin: " 5px 0 5px 0" }}
@@ -665,7 +944,6 @@ function ManageCallBlock() {
                                 />
                                 <br />
 
-                               
                                 <FormControl
                                   fullWidth
                                   style={{ margin: " 5px 0 5px 0" }}
@@ -705,7 +983,6 @@ function ManageCallBlock() {
                                   }}
                                 />
 
-                            
                                 <br />
                               </form>
                             </Typography>
@@ -756,92 +1033,136 @@ function ManageCallBlock() {
                       </Dialog>
                       {/* edit-end */}
 
-
-                      {/* Delete Confirmation Modal Start  */}
+                      {/* Alert Modal Confirmation Modal Start  */}
                       <Dialog
-              open={alertMessage}
-              onClose={handleAlertClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              sx={{ textAlign: "center" }}
-              //className="bg_imagess"
-            >
-              <DialogTitle
-                id="alert-dialog-title"
-                sx={{ color: "#07285d", fontWeight: "600" }}
-              >
-                {"Delete Confirmation"}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText
-                  id="alert-dialog-description"
-                  sx={{ paddingBottom: "0px !important" }}
-                >
-                  Are you sure you want to delete {name} ?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  paddingBottom: "20px",
-                }}
-              >
-                <Button
-                  variant="contained"
-                  sx={{
-                    fontSize: "16px !impotant",
-                    background:
-                      "linear-gradient(180deg, #0E397F 0%, #001E50 100%) !important",
-                    marginTop: "20px",
-                    marginLeft: "0px !important",
-                    padding: "10px 20px !important",
-                    textTransform: "capitalize !important",
-                  }}
-                  className="all_button_clr"
-                  color="info"
-                  onClick={handleAlertClose}
-                  autoFocus
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="contained"
-                  sx={{
-                    fontSize: "16px !impotant",
-                    marginTop: "20px",
-                    padding: "10px 20px !important",
-                    textTransform: "capitalize !important",
-                    marginLeft: "0px !important",
-                    marginRight: "0px !important",
-                  }}
-                  className="all_button_clr"
-                  color="error"
-                  onClick={handleDelete}
-                  startIcon={<DeleteIcon />}
-                >
-                  Delete
-                </Button>
-              </DialogActions>
-            </Dialog>
-            {/* Delete Confirmation Modal End  */}
+                        open={alertMessage}
+                        onClose={handleAlertClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                        sx={{ textAlign: "center" }}
+                        //className="bg_imagess"
+                      >
+                        <DialogTitle
+                          id="alert-dialog-title"
+                          sx={{ color: "#133325", fontWeight: "600" }}
+                        >
+                          {value === "true"
+                            ? "Active Confirmation"
+                            : value === "false"
+                            ? "Deactive"
+                            : "Delete Confirmation"}
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText
+                            id="alert-dialog-description"
+                            sx={{ paddingBottom: "0px !important" }}
+                          >
+                            Are you sure you want to{" "}
+                            {value === "true"
+                              ? "active"
+                              : value === "false"
+                              ? "deactive"
+                              : "delete "}
+                            {name} ?
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            paddingBottom: "20px",
+                          }}
+                        >
+                          <Button
+                            variant="contained"
+                            sx={{
+                              fontSize: "16px !impotant",
+                              background:
+                                "linear-gradient(180deg, #0E397F 0%, #001E50 100%) !important",
+                              marginTop: "20px",
+                              marginLeft: "0px !important",
+                              padding: "10px 20px !important",
+                              textTransform: "capitalize !important",
+                            }}
+                            className="all_button_clr"
+                            color="info"
+                            onClick={handleAlertClose}
+                            autoFocus
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            variant="contained"
+                            sx={{
+                              fontSize: "16px !impotant",
+                              marginTop: "20px",
+                              background:
+                                value === "true"
+                                  ? "green !important"
+                                  : value === "false"
+                                  ? "red !important"
+                                  : "#f44336 !important",
+                              padding: "10px 20px !important",
+                              textTransform: "capitalize !important",
+                              marginLeft: "0px !important",
+                              marginRight: "0px !important",
+                            }}
+                            className="all_button_clr"
+                            color="error"
+                            onClick={handleDelete}
+                            startIcon={
+                              value === "true" ? (
+                                <CheckIcon />
+                              ) : value === "false" ? (
+                                <BlockIcon />
+                              ) : (
+                                <DeleteIcon />
+                              )
+                            }
+                          >
+                            {value === "true"
+                              ? "Active"
+                              : value === "false"
+                              ? "Deactive"
+                              : "Delete"}
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                      {/* Alert Modal Confirmation Modal End  */}
 
                       {/* <!--table---> */}
                       <ThemeProvider theme={theme}>
-                      <div style={{ height: '100%', width: '100%' }}>
+                        <div style={{ height: "100%", width: "100%" }}>
                           <DataGrid
-                             rows={rows}
-                             columns={columns}
-                             headerClassName="custom-header"
-                             // getRowClassName={(params) =>
-                             //   isRowBordered(params) ? 'borderedGreen' : 'borderedRed'
-                             // }
-                             components={{ Toolbar: GridToolbar }}
-                             slots={{
-                               toolbar: CustomToolbar,
-                             }}
-                                 autoHeight
-                           />
+                            rows={rows}
+                            columns={columns}
+                            checkboxSelection
+                            density="compact"
+                            headerClassName="custom-header"
+                            rowSelectionModel={selectedRows}
+                            onRowSelectionModelChange={handleSelectionChange}
+                            // getRowClassName={(params) =>
+                            //   isRowBordered(params) ? 'borderedGreen' : 'borderedRed'
+                            // }
+                            components={{ Toolbar: GridToolbar }}
+                            slots={{
+                              toolbar: CustomToolbar,
+                            }}
+                            autoHeight // Automatically adjust the height to fit all rows
+                            disableColumnResize={false} // Allow column resizing
+                            hideFooterPagination={window.innerWidth < 600} // Hide pagination for small screens
+                            sx={{
+                              "& .MuiDataGrid-cell": {
+                                fontSize: {
+                                  xs: "12px",
+                                  sm: "14px",
+                                  md: "14px",
+                                }, // Responsive font sizes
+                                wordBreak: "break-word !important", // Break long words
+                                whiteSpace: "break-spaces !important", // Allow multi-line text
+                              },
+                            }}
+                          />
                         </div>
                       </ThemeProvider>
 

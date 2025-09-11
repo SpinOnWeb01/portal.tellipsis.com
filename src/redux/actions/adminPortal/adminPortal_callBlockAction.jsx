@@ -12,6 +12,9 @@ import {
   GET_ADMIN_CALL_BLOCK_SUCCESS,
   UPDATE_ADMIN_CALL_BLOCK_FAIL,
   UPDATE_ADMIN_CALL_BLOCK_REQUEST,
+  UPDATE_ADMIN_CALL_BLOCK_STATUS_FAIL,
+  UPDATE_ADMIN_CALL_BLOCK_STATUS_REQUEST,
+  UPDATE_ADMIN_CALL_BLOCK_STATUS_SUCCESS,
   UPDATE_ADMIN_CALL_BLOCK_SUCCESS,
 } from "../../constants/adminPortal/adminPortal_callBlockConstants";
 import { toast } from "react-toastify";
@@ -205,3 +208,44 @@ export const createAdminCallBlock =
       dispatch({ type: DELETE_ADMIN_CALL_BLOCK_FAIL, payload: error.response.data.message });
     }
   };
+
+  export const updateCallBlockStaus = ( status, setResponse, setSelectedRows) => async (dispatch) => {
+  const token = JSON.parse(localStorage.getItem("admin"));
+  try {
+    dispatch({ type: UPDATE_ADMIN_CALL_BLOCK_STATUS_REQUEST });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization" : `Bearer ${token.access_token} `
+      },
+    };
+    const { data } = await axios.put(
+      
+      
+      `${api.dev}/api/multiplecallblock`,
+      JSON.stringify(status),
+      config
+    );
+   if (data?.status === 200) {
+      toast.success(data?.message, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 1500,
+      });      
+      setResponse(data);  
+      setSelectedRows([]);
+    }  else {
+      toast.error(data?.message, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2500,
+      });
+    }
+
+    dispatch({ type: UPDATE_ADMIN_CALL_BLOCK_STATUS_SUCCESS, payload: data });
+  } catch (error) {
+    toast.error(error?.response?.data?.message, {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 2500,
+    });
+    dispatch({ type: UPDATE_ADMIN_CALL_BLOCK_STATUS_FAIL, payload: error.response.data.message });
+  }
+};

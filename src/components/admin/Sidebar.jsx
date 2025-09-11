@@ -33,7 +33,7 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import PhoneDisabledIcon from "@mui/icons-material/PhoneDisabled";
 import AddCardIcon from "@mui/icons-material/AddCard";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 // ========Mobile-sidebar===============>
 import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -105,7 +105,7 @@ function Sidebar({ colorThem }) {
             User
           </MenuItem>
           
-          <SubMenu
+          {/* <SubMenu
             title="Destination"
             icon={<ReceiptOutlinedIcon />}
             onClick={() =>
@@ -139,12 +139,12 @@ function Sidebar({ colorThem }) {
             >
               Suspended
             </MenuItem>
-          </SubMenu>
+          </SubMenu> */}
           <MenuItem
             icon={<FormatOverlineIcon />}
             onClick={() => navigateTo(Router.ADMIN_DID_TFN_NUMBER_NEW)}
           >
-            Did Number
+            DID Number
           </MenuItem>
 
           <MenuItem
@@ -153,12 +153,12 @@ function Sidebar({ colorThem }) {
           >
             Extension
           </MenuItem>
-          <MenuItem
+          {/* <MenuItem
             icon={<AddCardIcon />}
             onClick={() => navigateTo(Router.ADMIN_PAYMENT)}
           >
             Payment
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem
             icon={<HelpOutlineOutlinedIcon />}
             onClick={() => navigateTo(Router.ADMIN_REPORT)}
@@ -385,6 +385,14 @@ function Sidebar({ colorThem }) {
               ACL History
             </MenuItem>
             <MenuItem
+                            icon={<PeopleAltIcon />}
+                            onClick={(event) =>
+                              handleSubMenuClick(event, Router.ADMIN_ROLES)
+                            }
+                          >
+                            Roles
+                          </MenuItem>
+            <MenuItem
               icon={<AssignmentIndIcon />}
               onClick={(event) =>
                 handleSubMenuClick(event, Router.ADMIN_PERMISSIONS_ACCESS)
@@ -503,7 +511,7 @@ function Sidebar({ colorThem }) {
 
                        
 
-                        <SubMenu
+                        {/* <SubMenu
                           title="Destination"
                           icon={<ReceiptOutlinedIcon />}
                           onClick={() =>
@@ -551,14 +559,14 @@ function Sidebar({ colorThem }) {
                               </MenuItem>
                             </>
                           )}
-                        </SubMenu>
+                        </SubMenu> */}
                          <MenuItem
                           icon={<FormatOverlineIcon />}
                           onClick={() =>
                             navigateTo(Router.ADMIN_DID_TFN_NUMBER_NEW)
                           }
                         >
-                          Did Number
+                          DID Number
                         </MenuItem>
                         <MenuItem
                           icon={<CalendarTodayOutlinedIcon />}
@@ -566,12 +574,12 @@ function Sidebar({ colorThem }) {
                         >
                           Extension
                         </MenuItem>
-                        <MenuItem
+                        {/* <MenuItem
                           icon={<AddCardIcon />}
                           onClick={() => navigateTo(Router.ADMIN_PAYMENT)}
                         >
                           Payment
-                        </MenuItem>
+                        </MenuItem> */}
                         {user.user_role === "Reseller" ? (
                           <></>
                         ) : (
@@ -865,6 +873,14 @@ function Sidebar({ colorThem }) {
                               </MenuItem>
                             </>
                           )}
+                          <MenuItem
+                            icon={<PeopleAltIcon />}
+                            onClick={(event) =>
+                              handleSubMenuClick(event, Router.ADMIN_ROLES)
+                            }
+                          >
+                            Roles
+                          </MenuItem>
                           {user.user_role === "Reseller" ? (
                             <></>
                           ) : (

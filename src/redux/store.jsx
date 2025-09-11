@@ -61,6 +61,7 @@ import {
   deleteManageCallBlockReducer,
   getManageCallBlockReducers,
   updateManageCallBlockReducer,
+  updateUserCallBlockStatusReducer,
 } from "./reducers/managePortal/managePortal_callBlockReducer";
 import {
   getManageBillingReducers,
@@ -81,7 +82,7 @@ import { getAdminAssistantReducers } from "./reducers/adminPortal/adminPortal_as
 import { createManageRecordingReducers, getManageRecordingReducers, updateManageRecordingReducers } from "./reducers/managePortal/managePortal_recordingReducer";
 import { createManageMohReducer, getManageMohReducers, updateManageMohReducer } from "./reducers/managePortal/managePortal_mohReducer";
 import { createManageQueueMemberReducer, createManageQueueReducer, deleteManageQueueMemberReducer, getManageQueueMemberReducers, getManageQueueReducers, updateManageQueueReducer } from "./reducers/managePortal/managePortal_queueReducer";
-import { createAdminCallBlockReducer, deleteAdminCallBlockReducer, getAdminCallBlockReducers, updateAdminCallBlockReducer } from "./reducers/adminPortal/adminPortal_callBlockReducer";
+import { createAdminCallBlockReducer, deleteAdminCallBlockReducer, getAdminCallBlockReducers, updateAdminCallBlockReducer, updateAdminCallBlockStatusReducer } from "./reducers/adminPortal/adminPortal_callBlockReducer";
 import { resellerDashboardBillingChartReducers, resellerDashboardChartReducers, resellerDashboardLineChartReducers } from "./reducers/resellerPortal/resellerPortal_dashboardReducer";
 import { getAdminResellersListReducers, getAdminUsersListReducers, getResellerRemainingMinutesReducers, getResellerUsersListReducers } from "./reducers/adminPortal/adminPortal_listReducer";
 import { createAdminProductsReducer, getAdminProductsReducers } from "./reducers/adminPortal/adminPortal_productsReducer";
@@ -194,6 +195,8 @@ const reducer = combineReducers({
   updateUserStatus: updateUserStatusReducer, //04-06-2025
   suspendDestination: suspendDestinationReducer, //04-06-2025
   updateAdminRoles: updateAdminRolesReducer, //26-06-2025
+  updateAdminCallBlockStatus: updateAdminCallBlockStatusReducer, //02-07-2025
+  updateUserCallBlockStatus: updateUserCallBlockStatusReducer, //02-07-2025
   //DELETE
   deleteUser: deleteUserReducer,
   deleteUserReseller: deleteUserResellerReducer,  //11-07-2024

@@ -169,9 +169,9 @@ function Navbar() {
         case 4:
           navigate(Router.MANAGE_CALL_ACTIVE);
           break;
-        case 5:
-          navigate(Router.MANAGE_ACCOUNT);
-          break;
+        // case 5:
+        //   navigate(Router.MANAGE_ACCOUNT);
+        //   break;
       default:
         break;
     }
@@ -193,7 +193,7 @@ function Navbar() {
     navigate(path); // Navigate to the specified path
   };
 
-  const filteredTabs = ["dashboard", "extensions", "did_tfn_number", "report", "active_calls", "account"]; //  Add other tabs here
+  const filteredTabs = ["dashboard", "extensions", "did_tfn_number", "report", "active_calls",]; //  Add other tabs here
 
   return (
     <>

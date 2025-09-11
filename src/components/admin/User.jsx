@@ -29,6 +29,7 @@ import {
   Radio,
   FormControlLabel,
   Grid,
+  useMediaQuery,
 } from "@mui/material";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import {
@@ -193,6 +194,8 @@ const permission = [
   },
 ];
 
+
+
 const inpVal = {
   userName: "",
   email: "",
@@ -254,6 +257,7 @@ function User({ colorThem }) {
   const [radioValue, setRadioValue] = useState("t");
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
+  const [address, setAddress] = useState("");
   const [value, setValue] = useState("t");
 
   const handleSelectionChange = (selection) => {
@@ -280,6 +284,7 @@ function User({ colorThem }) {
     setExtension("");
     setReseller("");
     setSelectedPermissions([]);
+    setAddress("");
   };
 
   const handleAlertClose = () => setAlertMessage(false);
@@ -328,6 +333,7 @@ function User({ colorThem }) {
       }
       setPassword(row.password);
       setReseller(row.reseller_id);
+      setAddress(row.address);
     },
     [setService]
   ); // Memoize event handler
@@ -343,6 +349,7 @@ function User({ colorThem }) {
     setShowPassword(false);
     setReseller("");
     setSelectedPermissions([]);
+    setAddress("");
   }, [
     setInputValues,
     setService,
@@ -353,6 +360,7 @@ function User({ colorThem }) {
     setShowPassword,
     setReseller,
     setSelectedPermissions,
+    setAddress
   ]);
 
   // =============Edit-btton-end--->
@@ -482,7 +490,7 @@ function User({ colorThem }) {
           emailid: inputValues?.email,
           password: inputValues?.password,
           extensions_limit: inputValues?.limit,
-
+          address: address,
           role_id: roleId,
           is_active: userActive,
           service_type: serviceType,
@@ -503,6 +511,8 @@ function User({ colorThem }) {
       userActive,
       reseller,
       extension,
+      address,
+      serviceType,
       selectedPermissions,
     ]
   ); // Memoize event handler
@@ -514,6 +524,7 @@ function User({ colorThem }) {
         username: inputValues?.userName,
         emailid: inputValues?.email,
         extensions_limit: JSON.parse(inputValues?.limit),
+        address: address,
         role_id: roleId,
         is_active: status.charAt(0),
         service_type: service,
@@ -534,6 +545,7 @@ function User({ colorThem }) {
       extension,
       password,
       reseller,
+      address,
       selectedPermissions,
       setOpenModal,
       setInputValues,
@@ -649,18 +661,14 @@ function User({ colorThem }) {
           } else if (values.user_role === "Reseller") {
             localStorage.setItem("reseller", JSON.stringify(values));
             window.open("/reseller_portal");
-          } else if (values.user_role === "User") {
+          } else if (values.user_role !== "Superadmin" && values.user_role !== "Admin" && values.user_role !== "Reseller") {
             localStorage.setItem(
               `user_${values.user_name}`,
               JSON.stringify(values)
             );
             localStorage.setItem("current_user", values.user_name);
             window.open("/manage_portal");
-          } else if (values.user_role === "Client") {
-            localStorage.setItem("user", JSON.stringify(values));
-            navigate("/manage_portal");
           }
-
           dispatch(login(values));
         }
       })
@@ -671,6 +679,20 @@ function User({ colorThem }) {
         });
       });
   };
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isXs = useMediaQuery(theme.breakpoints.only("xs"));
+  function stringToColor(string) {
+    let hash = 0;
+    for (let i = 0; i < string.length; i++) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let color = "#";
+    for (let i = 0; i < 3; i++) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += ("00" + value.toString(16)).slice(-2);
+    }
+    return color;
+  }
 
   const columns = [
     {
@@ -835,90 +857,65 @@ function User({ colorThem }) {
       headerClassName: "custom-header",
       headerAlign: "center",
       align: "center",
+      renderCell: (params) => {
+        return (
+          <div className=" user_bdr d-flex justify-content-between align-items-center">
+            <Tooltip  title={`Address: ${params.row.address}`} style={{fontSize: '0.875rem'}} disableInteractive interactive>
+              <span>{params.row.email}</span>
+            </Tooltip>
+            </div>)
+      }
     },
 
     {
       field: "role",
       headerName: "Role",
-      width: 100,
+      width: isXs ? 80 : 100,
+      minWidth: 80,
+      maxWidth: 100,
       headerClassName: "custom-header",
       headerAlign: "center",
       align: "center",
+      renderHeader: () => (
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: "calc(0.6rem + 0.2vw)",
+            fontWeight: "bold",
+            color: "white !important",
+          }}
+        >
+          Role
+        </Typography>
+      ),
       renderCell: (params) => {
+        const role = params.row.role;
+
+        // Predefined colors for main roles
+        const roleColors = {
+          Superadmin: "F5C6CB",
+          Admin: "#D6D8DB",
+          Reseller: "#C3E6CB",
+        };
+
+        // If role not in predefined, generate dynamic color
+        const bgColor = roleColors[role] || stringToColor(role); // Generate color for dynamic roles
+
         return (
           <div className="d-flex justify-content-between align-items-center">
-            {params.row.role === "Superadmin" ? (
-              <>
-                <div
-                  style={{
-                    color: "black",
-                    background: "#F5C6CB",
-                    padding: "7px",
-                    borderRadius: "5px",
-                    fontSize: "12px",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  {params.row.role}
-                </div>
-              </>
-            ) : (
-              <></>
-            )}
-            {params.row.role === "Admin" ? (
-              <>
-                <div
-                  style={{
-                    color: "black",
-                    background: "#D6D8DB",
-                    padding: "7px",
-                    borderRadius: "5px",
-                    fontSize: "12px",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  {params.row.role}
-                </div>
-              </>
-            ) : (
-              <></>
-            )}
-            {params.row.role === "Reseller" ? (
-              <>
-                <div
-                  style={{
-                    color: "black",
-                    background: "#C3E6CB",
-                    padding: "7px",
-                    borderRadius: "5px",
-                    fontSize: "12px",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  {params.row.role}
-                </div>
-              </>
-            ) : (
-              <></>
-            )}
-            {params.row.role === "User" ? (
-              <>
-                <div
-                  style={{
-                    color: "black",
-                    background: "#B8DAFF",
-                    padding: "7px",
-                    borderRadius: "5px",
-                    fontSize: "12px",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  {params.row.role}
-                </div>
-              </>
-            ) : (
-              <></>
-            )}
+            <div
+              className="role_box"
+              style={{
+                color: "black",
+                background: bgColor,
+                padding: isMobile ? "5px" : "7px",
+                borderRadius: "5px",
+                fontSize: "calc(0.6rem + 0.2vw)",
+                textTransform: "capitalize",
+              }}
+            >
+              {role}
+            </div>
           </div>
         );
       },
@@ -1202,12 +1199,13 @@ function User({ colorThem }) {
           did_count: item.did_count,
           subscriber_count: item.subscriber_count,
           feature: item.feature,
+          address: item.address,
         });
       });
     return calculatedRows;
   }, [state?.allUsers?.users]);
 
-    const selectedCallerDataSet = new Set(); // Using Set to avoid duplicates
+  const selectedCallerDataSet = new Set(); // Using Set to avoid duplicates
 
   selectedRows.forEach((id) => {
     const selectedRow = rows.find((row) => row.id === id);
@@ -1221,7 +1219,7 @@ function User({ colorThem }) {
   const handleUpdateStatus = useCallback(() => {
     const request = {
       id: selectedCallerData,
-      is_active: value
+      is_active: value,
     };
     dispatch(updateUserStaus(request, setResponse, setSelectedRows));
   }, [selectedCallerData, value, dispatch, setResponse, setSelectedRows]); // Memoize event handler
@@ -1642,6 +1640,19 @@ function User({ colorThem }) {
                           ))}
                         </Select>
                       </FormControl>
+                      <TextField
+      style={{
+        width: "100%",
+        margin: "5px 0 5px 0",
+      }}
+      label="Address"
+      variant="outlined"
+      name="address"
+      value={address}
+      onChange={(e) => setAddress(e.target.value)}
+      multiline
+      rows={2} // textarea ki height set karne ke liye
+    />
                     </form>
                   </Typography>
                 </form>
@@ -2205,6 +2216,19 @@ function User({ colorThem }) {
                                       )}
                                     </Select>
                                   </FormControl>
+                                  <TextField
+      style={{
+        width: "100%",
+        margin: "5px 0 5px 0",
+      }}
+      label="Address"
+      variant="outlined"
+      name="address"
+      value={address}
+      onChange={(e) => setAddress(e.target.value)}
+      multiline
+      rows={2} // textarea ki height set karne ke liye
+    />
                                 </form>
                               </Typography>
                             </form>
