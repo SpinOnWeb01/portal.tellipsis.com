@@ -339,8 +339,8 @@ function Extension() {
       ),
     },
     {
-      field: "username",
-      headerName: "UserName",
+      field: "queues",
+      headerName: "Queues",
       width: 250,
       headerClassName: "custom-header",
       headerAlign: "center",
@@ -423,6 +423,7 @@ function Extension() {
           active: item?.active,
           extensions_limit: item.extensions_limit,
           description: item.description,
+          queues: item.queues,
         });
       });
     return calculatedRows;

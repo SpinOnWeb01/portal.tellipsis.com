@@ -416,7 +416,7 @@ function User({ colorThem }) {
 
     // email validation
     // eslint-disable-next-line
-    const emailCond = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const emailCond = /^[\w.-]+@([\w-]+\.)+[a-zA-Z]{2,7}$/;
     if (!inputValues.email) {
       errors.email = "Email is required";
       isValid = false;
