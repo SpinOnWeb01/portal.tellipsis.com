@@ -38,6 +38,7 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
+import { Diversity2 } from "@mui/icons-material";
 const drawerWidth = 240;
 
 const useStyles = makeStyles({
@@ -282,6 +283,8 @@ function AdminBillingMinut({ colorThem }) {
                     aria-labelledby="pills-home-tab"
                   >
                     {/* <!--role-contet--> */}
+
+                    <div className="d-flex justify-content-between align-items-center ">
                     <div className="cntnt_title">
                       <div className="">
                         <h3>Usage Minutes</h3>
@@ -291,16 +294,31 @@ function AdminBillingMinut({ colorThem }) {
                         </p> */}
                       </div>
                     </div>
-                    <Grid
-                      container
-                      className="cdr_filter_row"
-                      style={{
-                        padding: "20px 0",
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Grid
+
+                          <div
+                          // style={{ display: "flex", justifyContent: "end" }}
+                        >
+                          <Typography
+                            style={{
+                              fontSize: "17px",
+                              fontWeight: "600",
+                              color: "#04255c",
+                            }}
+                          >
+                            Total Used Minute:-{" "}
+                            <span style={{ fontWeight: "400" }}>
+                              {tMinutes}
+                            </span>
+                          </Typography>
+                        </div>
+                      </div>        
+
+
+
+                    <div                
+                      className="cdr_filter_row d-flex justify-content-between">
+                        <div className="d-flex">
+                           <Grid
                         xl={3}
                         lg={3}
                         md={3}
@@ -329,6 +347,8 @@ function AdminBillingMinut({ colorThem }) {
                           </DemoContainer>
                         </LocalizationProvider>
                       </Grid>
+
+
                       <Grid
                         xl={3}
                         lg={3}
@@ -358,47 +378,10 @@ function AdminBillingMinut({ colorThem }) {
                           </DemoContainer>
                         </LocalizationProvider>
                       </Grid>
-                    </Grid>
-                    <Grid
-                      container
-                      className="cdr_filter_row"
-                      style={{
-                        padding: "20px 0",
-                        display: "flex",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Grid
-                        xl={12}
-                        lg={12}
-                        md={12}
-                        sm={12}
-                        xs={12}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <Box
-                          style={{ display: "flex", justifyContent: "center" }}
-                        >
-                          <Typography
-                            style={{
-                              fontSize: "17px",
-                              fontWeight: "600",
-                              color: "#04255c",
-                            }}
-                          >
-                            Total Used Minute:-{" "}
-                            <span style={{ fontWeight: "400" }}>
-                              {tMinutes}
-                            </span>
-                          </Typography>
-                        </Box>
-                      </Grid>
+                        </div>
 
-                      <Grid
+                      <div>
+                          <Grid
                         xl={12}
                         lg={12}
                         md={12}
@@ -434,7 +417,13 @@ function AdminBillingMinut({ colorThem }) {
                           <RestartAltIcon />
                         </IconButton>
                       </Grid>
-                    </Grid>
+                      </div>
+
+                    </div>
+
+
+                 
+                   
                     <div className="row">
                       <ThemeProvider theme={theme}>
                         <div style={{ height: "100%", width: "100%" }}>

@@ -4,6 +4,7 @@ import {
   FormControl,
   MenuItem,
   Select,
+  Tooltip,
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -23,6 +24,7 @@ import { api } from "../../mockData";
 import axios from "axios";
 import { makeStyles } from "@mui/styles";
 import dayjs from "dayjs";
+import { Table } from "react-bootstrap";
 const drawerWidth = 240;
 
 const useStyles = makeStyles({
@@ -136,16 +138,17 @@ function AdminCallActive({ colorThem }) {
   const [option, setOption] = useState("L");
   const [timeStamp, setTimeStamp] = useState([]);
   const [timeDifference, setTimeDifference] = useState([]);
-  
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
+
   const parseTimestamp = () => {
     return timeStamp?.map((item) => {
       const date = new Date(item.TimeStamp);
       return date; // Keep Date objects for time difference calculation
     });
   };
-  
+
   const timestampDate = parseTimestamp();
-  
+
   // Function to calculate time differences for each timestamp
   const calculateTimeDifferences = () => {
     const currentTime = new Date();
@@ -157,29 +160,29 @@ function AdminCallActive({ colorThem }) {
       const diffInDays = Math.floor(diffInHours / 24);
 
       // Format with leading zeros
-    const formattedHours = String(diffInHours).padStart(2, '0');
-    const formattedMinutes = String(diffInMinutes % 60).padStart(2, '0');
-    const formattedSeconds = String(diffInSeconds % 60).padStart(2, '0');
-  
+      const formattedHours = String(diffInHours).padStart(2, '0');
+      const formattedMinutes = String(diffInMinutes % 60).padStart(2, '0');
+      const formattedSeconds = String(diffInSeconds % 60).padStart(2, '0');
+
       return {
         days: diffInDays,
-        hours: formattedHours ,
-        minutes: formattedMinutes ,
-        seconds: formattedSeconds 
+        hours: formattedHours,
+        minutes: formattedMinutes,
+        seconds: formattedSeconds
       };
     });
-  
+
     setTimeDifference(differences);
   };
-  
+
   // Calculate time differences initially and update every 5 seconds
   useEffect(() => {
     calculateTimeDifferences(); // Initial calculation
-  
+
     const interval = setInterval(() => {
       calculateTimeDifferences(); // Recalculate every 5 seconds
     }, 5000);
-  
+
     return () => clearInterval(interval);
   }, [timeStamp]);
 
@@ -223,6 +226,9 @@ function AdminCallActive({ colorThem }) {
       });
     }
   };
+
+
+
 
   const columns = [
     {
@@ -316,7 +322,7 @@ function AdminCallActive({ colorThem }) {
       renderCell: (params) => {
         if (params.value !== null) {
           const formattedDate = dayjs(params.value).format("DD-MM-YYYY HH:mm:ss");
-    
+
           return (
             <>
               <span style={{ color: "blue" }}>{formattedDate}</span>
@@ -327,6 +333,7 @@ function AdminCallActive({ colorThem }) {
       },
     },
     {
+
       field: "CallDuration",
       headerName: "Call Duration",
       width: 150,
@@ -337,7 +344,7 @@ function AdminCallActive({ colorThem }) {
         if (params.value !== null) {
           const index = mockDataTeam.findIndex(item => item.id === params.row.id);
           const duration = timeDifference && timeDifference[index];
-          
+
           return (
             <span style={{ color: "green" }}>
               {duration ? `${duration.hours}:${duration.minutes}:${duration.seconds}` : ''}
@@ -347,8 +354,8 @@ function AdminCallActive({ colorThem }) {
         return null;
       },
     },
-   
-   
+
+
 
     // {
     //   field: "Info",
@@ -698,14 +705,19 @@ function AdminCallActive({ colorThem }) {
       align: "center",
     },
   ];
+
+
+
+
+
   // const mockDataTeam = useMemo(() => {
-    
+
   //   if (state?.getAdminCallActive?.callactive !== undefined) {
   //     return Object.keys(state?.getAdminCallActive?.callactive)
   //       .map((key) => ({
-          
+
   //         id: key,
-          
+
   //         ...state?.getAdminCallActive?.callactive[key],
   //       }))
   //       //.filter((item) => item.Status === "ANSWER");
@@ -729,18 +741,83 @@ function AdminCallActive({ colorThem }) {
           }
         })
         .filter(Boolean); // Filter out any null entries
-  
+
       // Sort data by TimeStamp in descending order
       return parsedData.sort((a, b) => {
         const dateA = dayjs(a.TimeStamp);
         const dateB = dayjs(b.TimeStamp);
         return dateB - dateA; // Descending order
-        
+
       });
     }
     return [];
   }, [state?.getAdminCallActive?.callactive]);
-  
+
+  const columns2 = [
+    { key: "sno", label: "S.No", textAlign: "center" },
+    { key: "Username", label: "Username" },
+    { key: "DIDNumber", label: "Did Number" },
+    { key: "CallerID", label: "Caller Id" },
+    { key: "Details", label: "Destination" },
+    { key: "SubType", label: "Type" },
+    { key: "TimeStamp", label: "Start Time" },
+    { key: "CallDuration", label: "Call Duration", width: 100, textAlign: "center" },
+    { key: "Status", label: "Status" },
+    { key: "CallDirection", label: "Call Direction" },
+    { key: "Extensions", label: "Extensions" },
+    { key: "Options", label: "Options" },
+    { key: "barging", label: "Barge" },
+
+
+
+
+  ];
+
+
+  const handleSort = (columnKey) => {
+    if (sortConfig.key === columnKey) {
+      if (sortConfig.direction === "asc") setSortConfig({ key: columnKey, direction: "desc" });
+      else if (sortConfig.direction === "desc") setSortConfig({ key: null, direction: null });
+      else setSortConfig({ key: columnKey, direction: "asc" });
+    } else {
+      setSortConfig({ key: columnKey, direction: "asc" });
+    }
+  };
+
+  const getSortIcon = (columnKey) => {
+    const isActive = sortConfig.key === columnKey;
+    const direction = sortConfig.direction;
+    let iconClass = "fa-solid ";
+    if (!isActive) iconClass += "fa-arrow-up";
+    else if (direction === "asc") iconClass += "fa-arrow-up";
+    else if (direction === "desc") iconClass += "fa-arrow-down";
+
+    return (
+      <i
+        className={iconClass}
+        style={{
+          opacity: isActive && direction ? 1 : 0,
+          transition: "opacity 0.3s ease",
+          color: isActive ? "#fff" : "#aaa",
+          marginLeft: "5px",
+        }}
+      ></i>
+    );
+  };
+
+  const sortedData = useMemo(() => {
+    if (!sortConfig.key) return mockDataTeam;
+    const dir = sortConfig.direction === "asc" ? 1 : -1;
+    return [...mockDataTeam].sort((a, b) => {
+      let av = a[sortConfig.key];
+      let bv = b[sortConfig.key];
+      av = String(av ?? "").toLowerCase();
+      bv = String(bv ?? "").toLowerCase();
+      if (av < bv) return -1 * dir;
+      if (av > bv) return 1 * dir;
+      return 0;
+    });
+  }, [mockDataTeam, sortConfig]);
 
   useEffect(() => {
     // Prepare timeStamp array from mockDataTeam
@@ -748,19 +825,25 @@ function AdminCallActive({ colorThem }) {
       id: item.id,
       TimeStamp: item.TimeStamp, // Assuming TimeStamp is a property of each item
     }));
-  
+
     setTimeStamp(formattedTimeStamps);
   }, [mockDataTeam]);
-  
+
 
   const rows = useMemo(() => {
     return []; // Return an empty array to prevent any rows from being displayed initially
   }, []);
 
+
+
+
+
+
+
   return (
     <>
       <div className={`App ${colorThem} `} >
-        <div className="contant_box" > 
+        <div className="contant_box" >
           <Box
             className="right_sidebox mobile_top_pddng"
             component="main"
@@ -790,7 +873,7 @@ function AdminCallActive({ colorThem }) {
                         </p> */}
                       </div>
                     </div>
-                    <div className="row">
+                    {/* <div className="row">
                       <ThemeProvider theme={theme}>
                         {state?.getAdminCallActive?.callactive !== undefined ? (
                           <>
@@ -838,8 +921,173 @@ function AdminCallActive({ colorThem }) {
                           </>
                         )}
                       </ThemeProvider>
+                    </div> */}
+
+
+                    <div className="table-wrapper">
+                      <div className="scroll-top">
+                        <div className="scroll-inner">
+                          <Table hover size="sm" bordered responsive className="call-active-table border-1">
+                            <tr className="active-table-head">
+                              {columns2.map((col) => (
+                                <th
+                                  key={col.key}
+                                  onClick={() => handleSort(col.key)}
+                                  style={{ cursor: "pointer", userSelect: "none", textAlign: col.textAlign || "left" }}
+                                >
+                                  <span>{col.label}</span>
+                                  <span className="sortingicon">{getSortIcon(col.key)}</span>
+                                </th>
+                              ))}
+                            </tr>
+
+                            <tbody>
+                              {sortedData.length === 0 ? (
+                                <tr>
+                                  <td colSpan={columns2.length} className="text-center text-muted py-2">
+                                    No rows
+                                  </td>
+                                </tr>
+                              ) : (
+                                sortedData.map((row, index) => {
+                                  console.log(row.Details)
+                                  const duration = timeDifference[index];
+                                  const date = new Date(row.TimeStamp);
+                                  const formattedDate = `${String(date.getDate()).padStart(2, "0")}/${String(
+                                    date.getMonth() + 1
+                                  ).padStart(2, "0")}/${date.getFullYear()}`;
+                                  const formattedTime = `${String(date.getHours()).padStart(2, "0")}:${String(
+                                    date.getMinutes()
+                                  ).padStart(2, "0")}:${String(date.getSeconds()).padStart(2, "0")}`;
+
+                                  return (
+                                    <tr key={row.id}>
+                                      <td className="text-center">{index + 1}</td>
+                                      <td>{row.Username}</td>
+                                      <td>{row.DIDNumber}</td>
+                                      <td>{row.CallerID}</td>   
+                                                                         
+                                     <td className="ext-cell">
+  <Tooltip 
+    title={row.Details} 
+    arrow 
+    placement="top"
+  >
+    <span style={{ cursor: "pointer" }}>
+      {
+        row.Details
+          .split(",")            // string → array
+          .slice(0, 2)           // first 2 items
+          .join(", ")            // comma-separated
+      }
+      {
+        row.Details.split(",").length > 2 && " ..."
+      }
+    </span>
+  </Tooltip>
+</td>
+
+                                      <td>{row.SubType}</td>
+                                      <td style={{ whiteSpace: 'nowrap', color: '#0000ff', }}>{dayjs(row.TimeStamp).format("DD-MM-YYYY HH:mm:ss")}
+                                      </td>
+
+                                      <td style={{ color: "green", textAlign: "center" }}>
+                                        {duration
+                                          ? `${duration.hours}:${duration.minutes}:${duration.seconds}`
+                                          : ""}
+                                      </td>
+
+                                      <td>
+                                        <span
+                                          style={{
+                                            color:
+                                              row.Status === "ANSWER"
+                                                ? "green"
+                                                : row.Status === "RINGING"
+                                                  ? "skyblue"
+                                                  : row.Status === "DIALING"
+                                                    ? "violet"
+                                                    : "grey",
+                                          }}
+                                        >
+                                          {row.Status}
+                                        </span>
+                                      </td>
+                                      <td>{row.CallDirection}</td>
+                                      <td style={{ whiteSpace: 'nowrap' }}>
+                                        {Object.entries(row.Extensions || {}).map(([key, value]) => (
+                                          <div key={key}>
+                                            <strong>{key}: </strong>
+                                            {value}
+                                          </div>
+                                        ))}
+                                      </td>
+
+                                      <td>
+                                        {row.Status === "ANSWER" && (
+                                          <FormControl fullWidth style={{ width: "100px", margin: "7px 0", }} className="table_dropdown table_slt_dropdown ">
+                                            <Select
+                                              style={{ textAlign: "left", paddingLeft: '7px !important', borderRadius: '5px', }}
+                                              defaultValue={option}
+                                              onChange={(e) => {
+                                                setOption(e.target.value);
+                                              }}
+                                              className="table_slct_drop"
+
+                                              sx={{
+                                                fontSize: "12px",
+                                                marginLeft: "7px",
+                                                padding: "5px 0px!important",
+
+                                              }}
+                                            >
+                                              <MenuItem value={"L"}>Listen</MenuItem>
+                                              <MenuItem value={"LT"}>Listen and Talk</MenuItem>
+                                            </Select>
+                                          </FormControl>
+                                        )}
+                                      </td>
+
+
+
+                                      <td>
+                                        {row.Status === "ANSWER" && (
+                                          <Button
+                                            // variant="outlined"
+                                            sx={{
+                                              ":hover": {
+                                                bgcolor: "error.main",
+                                                color: "white",
+                                              },
+                                              padding: "2px",
+                                              textTransform: "capitalize",
+                                              fontSize: "12px",
+                                              color: "error.main",
+                                              borderColor: "error.main",
+                                              border: "1px solid #d32f2f",
+                                            }}
+                                            onClick={(e) => {
+                                              handleBarging(row.Channel);
+                                            }}
+                                          >
+                                            Barge
+                                          </Button>
+                                        )}
+                                      </td>
+
+                                    </tr>
+                                  );
+                                })
+                              )}
+                            </tbody>
+                          </Table>
+                        </div>
+                      </div>
                     </div>
                   </div>
+
+                          {/* staatic table demo */}
+
 
                   {/* <!----> */}
                   {/* 

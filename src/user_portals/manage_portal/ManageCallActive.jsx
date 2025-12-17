@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormControlLabel, FormLabel, IconButton, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
+import { Box, Button, FormControl, Tooltip, FormControlLabel, FormLabel, IconButton, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
 import {
   DataGrid,
   GridToolbar,
@@ -15,6 +15,7 @@ import { getAdminCallActive } from "../../redux/actions/adminPortal/adminPortal_
 import { toast } from "react-toastify";
 import { api } from "../../mockData";
 import axios from "axios";
+import { Table } from "react-bootstrap";
 
 const theme = createTheme({
   components: {
@@ -37,7 +38,7 @@ const theme = createTheme({
 function CustomToolbar() {
   return (
     <GridToolbarContainer>
-      <GridToolbarColumnsButton/>
+      <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
       <GridToolbarFilterButton />
     </GridToolbarContainer>
@@ -70,16 +71,18 @@ function ManageCallActive() {
   const [timeStamp, setTimeStamp] = useState([]);
   const [timeDifference, setTimeDifference] = useState([]);
   const [queueRows, setQueueRows] = useState([]);
-  
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
+
+
   const parseTimestamp = () => {
     return timeStamp?.map((item) => {
       const date = new Date(item.TimeStamp);
       return date; // Keep Date objects for time difference calculation
     });
   };
-  
+
   const timestampDate = parseTimestamp();
-  
+
   // Function to calculate time differences for each timestamp
   const calculateTimeDifferences = () => {
     const currentTime = new Date();
@@ -91,29 +94,29 @@ function ManageCallActive() {
       const diffInDays = Math.floor(diffInHours / 24);
 
       // Format with leading zeros
-    const formattedHours = String(diffInHours).padStart(2, '0');
-    const formattedMinutes = String(diffInMinutes % 60).padStart(2, '0');
-    const formattedSeconds = String(diffInSeconds % 60).padStart(2, '0');
-  
+      const formattedHours = String(diffInHours).padStart(2, '0');
+      const formattedMinutes = String(diffInMinutes % 60).padStart(2, '0');
+      const formattedSeconds = String(diffInSeconds % 60).padStart(2, '0');
+
       return {
         days: diffInDays,
-        hours: formattedHours ,
-        minutes: formattedMinutes ,
-        seconds: formattedSeconds 
+        hours: formattedHours,
+        minutes: formattedMinutes,
+        seconds: formattedSeconds
       };
     });
-  
+
     setTimeDifference(differences);
   };
-  
+
   // Calculate time differences initially and update every 5 seconds
   useEffect(() => {
     calculateTimeDifferences(); // Initial calculation
-  
+
     const interval = setInterval(() => {
       calculateTimeDifferences(); // Recalculate every 5 seconds
     }, 5000);
-  
+
     return () => clearInterval(interval);
   }, [timeStamp]);
 
@@ -203,7 +206,7 @@ function ManageCallActive() {
     }
     return [];
   }, [callDetails, userId.uid]);
-  
+
 
   // const activeRows = useMemo(() => {
   //   return Object.keys(callDetails)
@@ -221,7 +224,7 @@ function ManageCallActive() {
       id: item.id,
       TimeStamp: item.TimeStamp, // Assuming TimeStamp is a property of each item
     }));
-  
+
     setTimeStamp(formattedTimeStamps);
   }, [activeRows]);
 
@@ -332,7 +335,7 @@ function ManageCallActive() {
         if (params.value !== null) {
           const index = activeRows.findIndex(item => item.id === params.row.id);
           const duration = timeDifference && timeDifference[index];
-          
+
           return (
             <span style={{ color: "green" }}>
               {duration ? `${duration.hours}:${duration.minutes}:${duration.seconds}` : ''}
@@ -661,7 +664,7 @@ function ManageCallActive() {
   ];
 
   // const queueRows = useMemo(() => {
-   
+
   //   return Object.keys(callDetails)
   //     .filter((key) => callDetails[key].UserId === userId.uid)
   //     .map((key) => ({
@@ -670,45 +673,49 @@ function ManageCallActive() {
   //     })).filter(item => item.SubType === "QUEUE");;
   // }, [callDetails, userId.uid]);
 
+
+
+
+
   const mockDataTeam = useMemo(() => {
     let rows = [];
     const uniqueIdSet = new Set();
-    
-    if (callDetails !== undefined) {
-      
-      Object.keys(callDetails).forEach((key) => {
-        if(callDetails[key].UserId === userId.uid){
-        const { Extensions, Uniqueid, ...rest } = callDetails[key];
 
-         // Handle cases where Extensions is empty
-         if (!Extensions || Object.keys(Extensions).length === 0) {
-          const uniqueId = `${Uniqueid}-default`;
-          if (!uniqueIdSet.has(uniqueId)) {
+    if (callDetails !== undefined) {
+
+      Object.keys(callDetails).forEach((key) => {
+        if (callDetails[key].UserId === userId.uid) {
+          const { Extensions, Uniqueid, ...rest } = callDetails[key];
+
+          // Handle cases where Extensions is empty
+          if (!Extensions || Object.keys(Extensions).length === 0) {
+            const uniqueId = `${Uniqueid}-default`;
+            if (!uniqueIdSet.has(uniqueId)) {
               uniqueIdSet.add(uniqueId);
               rows.push({
+                id: uniqueId,
+                Uniqueid: Uniqueid,
+                ...rest,
+                Extensions: [{ key: '', value: null }],
+              });
+            }
+          } else {
+            // Handle cases where Extensions has entries
+            Object.entries(Extensions).forEach(([extKey, value]) => {
+              const uniqueId = `${Uniqueid}-${extKey}`;
+              if (!uniqueIdSet.has(uniqueId)) {
+                uniqueIdSet.add(uniqueId);
+                rows.push({
                   id: uniqueId,
                   Uniqueid: Uniqueid,
                   ...rest,
-                  Extensions: [{ key: '', value: null }],
-              });
-          }
-      } else {
-          // Handle cases where Extensions has entries
-          Object.entries(Extensions).forEach(([extKey, value]) => {
-              const uniqueId = `${Uniqueid}-${extKey}`;
-              if (!uniqueIdSet.has(uniqueId)) {
-                  uniqueIdSet.add(uniqueId);
-                  rows.push({
-                      id: uniqueId,
-                      Uniqueid: Uniqueid,
-                      ...rest,
-                      Extensions: [{ key: extKey, value }],
-                  });
+                  Extensions: [{ key: extKey, value }],
+                });
               }
-          });
-      }
- 
-      }
+            });
+          }
+
+        }
       });
     }
 
@@ -716,6 +723,73 @@ function ManageCallActive() {
     setQueueRows(filteredRows);
     return filteredRows;
   }, [callDetails, userId.uid]);
+
+
+  const columns2 = [
+    { key: "sno", label: "S.No", textAlign: "center" },
+
+    { key: "DIDNumber", label: "Did Number" },
+    { key: "CallerID", label: "Caller Id" },
+    { key: "Extension", label: "Extension" },
+    { key: "CallDirection", label: "Call Direction" },
+    { key: "CallDuration", label: "Call Duration", width: 100, textAlign: "center" },
+    { key: "Status", label: "Status" },
+    { key: "Extensions", label: "Extensions" },
+    { key: "barging", label: "Barge" },
+    { key: "Options", label: "Options" },
+
+
+  ];
+
+
+  const handleSort = (columnKey) => {
+    if (sortConfig.key === columnKey) {
+      if (sortConfig.direction === "asc") setSortConfig({ key: columnKey, direction: "desc" });
+      else if (sortConfig.direction === "desc") setSortConfig({ key: null, direction: null });
+      else setSortConfig({ key: columnKey, direction: "asc" });
+    } else {
+      setSortConfig({ key: columnKey, direction: "asc" });
+    }
+  };
+
+  const getSortIcon = (columnKey) => {
+    const isActive = sortConfig.key === columnKey;
+    const direction = sortConfig.direction;
+    let iconClass = "fa-solid ";
+    if (!isActive) iconClass += "fa-arrow-up";
+    else if (direction === "asc") iconClass += "fa-arrow-up";
+    else if (direction === "desc") iconClass += "fa-arrow-down";
+
+    return (
+      <i
+        className={iconClass}
+        style={{
+          opacity: isActive && direction ? 1 : 0,
+          transition: "opacity 0.3s ease",
+          color: isActive ? "#fff" : "#aaa",
+          marginLeft: "5px",
+        }}
+      ></i>
+    );
+  };
+
+  const displayData = useMemo(() => {
+    return selectedValue === "Active" ? activeRows : queueRows;
+  }, [selectedValue, activeRows, queueRows]);
+
+  const sortedData = useMemo(() => {
+    if (!sortConfig.key) return displayData;
+    const dir = sortConfig.direction === "asc" ? 1 : -1;
+    return [...displayData].sort((a, b) => {
+      let av = a[sortConfig.key];
+      let bv = b[sortConfig.key];
+      av = String(av ?? "").toLowerCase();
+      bv = String(bv ?? "").toLowerCase();
+      if (av < bv) return -1 * dir;
+      if (av > bv) return 1 * dir;
+      return 0;
+    });
+  }, [displayData, sortConfig]);
 
   return (
     <>
@@ -732,7 +806,7 @@ function ManageCallActive() {
                     role="tabpanel"
                     aria-labelledby="pills-home-tab"
                   >
-                     
+
 
                     {/* <!--active-calls-contet--> */}
                     <div className="tab_cntnt_box">
@@ -757,59 +831,210 @@ function ManageCallActive() {
         <FormControlLabel value="Queue" control={<Radio />} label="Queue Calls" />
       </RadioGroup>
     </FormControl> */}
-                       
-                      </div>
-                      {selectedValue === "Active"  ? (<> <div className="cntnt_title">
-                          <h3>Live Calls</h3>
-                        </div>
-                      {/* <!--table---> */}
-                      <ThemeProvider theme={theme}>
-                        <div style={{ height: "100%", width: "100%" }}>
-                          <DataGrid
-                            rows={activeRows}
-                            columns={activeColumns}
-                            headerClassName="custom-header"
-                            components={{ Toolbar: GridToolbar }}
-                            slots={{
-                              toolbar: CustomToolbar,
-                              footer: CustomFooterStatusComponent,
-                            }}
-                            autoHeight
-                          />
-                        </div>
-                      </ThemeProvider></>) : (<>
-                        <div className="cntnt_title">
-                          <h3>Queue Calls</h3>
-                        </div>
-                      {/* <!--table---> */}
-                      <ThemeProvider theme={theme}>
-                        <div style={{ height: "100%", width: "100%" }}>
-                          <DataGrid
-                            rows={queueRows}
-                            columns={queueColumns}
-                            headerClassName="custom-header"
-                            components={{ Toolbar: GridToolbar }}
-                            slots={{
-                              toolbar: CustomToolbar,
-                              footer: CustomFooterStatusComponent,
-                            }}
-                            autoHeight
-                          />
-                        </div>
-                      </ThemeProvider>
-                      </>)}
-                     
 
-                      {/* <!--table-end--> */}
+                      </div>
+                      {/* {selectedValue === "Active" ? (<> <div className="cntnt_title">
+                        <h3>Live Calls</h3>
+                      </div>
+                        <ThemeProvider theme={theme}>
+                          <div style={{ height: "100%", width: "100%" }}>
+                            <DataGrid
+                              rows={activeRows}
+                              columns={activeColumns}
+                              headerClassName="custom-header"
+                              components={{ Toolbar: GridToolbar }}
+                              slots={{
+                                toolbar: CustomToolbar,
+                                footer: CustomFooterStatusComponent,
+                              }}
+                              autoHeight
+                            />
+                          </div>
+                        </ThemeProvider></>) : (<>
+                          <div className="cntnt_title">
+                            <h3>Queue Calls</h3>
+                          </div>
+                          <ThemeProvider theme={theme}>
+                            <div style={{ height: "100%", width: "100%" }}>
+                              <DataGrid
+                                rows={queueRows}
+                                columns={queueColumns}
+                                headerClassName="custom-header"
+                                components={{ Toolbar: GridToolbar }}
+                                slots={{
+                                  toolbar: CustomToolbar,
+                                  footer: CustomFooterStatusComponent,
+                                }}
+                                autoHeight
+                              />
+                            </div>
+                          </ThemeProvider>
+                        </>)} */}
+
+
+                      
+                    </div>
+
+                    <div className="table-wrapper">
+                      <div className="scroll-top">
+                        <div className="scroll-inner">
+                          <Table hover size="sm" bordered responsive className="call-active-table border-1">
+                            <tr className="active-table-head">
+                              {columns2.map((col) => (
+                                <th
+                                  key={col.key}
+                                  onClick={() => handleSort(col.key)}
+                                  style={{ cursor: "pointer", userSelect: "none", textAlign: col.textAlign || "left" }}
+                                >
+                                  <span>{col.label}</span>
+                                  <span className="sortingicon">{getSortIcon(col.key)}</span>
+                                </th>
+                              ))}
+                            </tr>
+
+                            <tbody>
+                              {sortedData.length === 0 ? (
+                                <tr>
+                                  <td colSpan={columns2.length} className="text-center text-muted py-2">
+                                    No rows
+                                  </td>
+                                </tr>
+                              ) : (
+                                sortedData.map((row, index) => {
+                                  const duration = timeDifference[index];
+                                  const date = new Date(row.TimeStamp);
+                                  const formattedDate = `${String(date.getDate()).padStart(2, "0")}/${String(
+                                    date.getMonth() + 1
+                                  ).padStart(2, "0")}/${date.getFullYear()}`;
+                                  const formattedTime = `${String(date.getHours()).padStart(2, "0")}:${String(
+                                    date.getMinutes()
+                                  ).padStart(2, "0")}:${String(date.getSeconds()).padStart(2, "0")}`;
+
+                                  return (
+                                    <tr key={row.id}>
+                                      <td className="text-center">{index + 1}</td>
+                                      
+                                      <td>{row.DIDNumber}</td>
+                                      <td>{row.CallerID}</td>
+                                      {/* <td>{row.Details}</td> */}
+
+                                       <td className="ext-cell">
+                                        <Tooltip 
+                                          title={row.Details} 
+                                          arrow 
+                                          placement="top"
+                                        >
+                                          <span style={{ cursor: "pointer" }}>
+                                            {
+                                              row.Details
+                                                .split(",")            // string → array
+                                                .slice(0, 2)           // first 2 items
+                                                .join(", ")            // comma-separated
+                                            }
+                                            {
+                                              row.Details.split(",").length > 2 && " ..."
+                                            }
+                                          </span>
+                                        </Tooltip>
+                                      </td>
+                                      <td>{row.CallDirection}</td>
+                                      <td style={{ color: "green", textAlign: "center" }}>
+                                        {duration
+                                          ? `${duration.hours}:${duration.minutes}:${duration.seconds}`
+                                          : ""}
+                                      </td>
+                                        
+                                      <td>
+                                        <span
+                                          style={{
+                                            color:
+                                              row.Status === "ANSWER"
+                                                ? "green"
+                                                : row.Status === "RINGING"
+                                                  ? "skyblue"
+                                                  : row.Status === "DIALING"
+                                                    ? "violet"
+                                                    : "grey",
+                                          }}
+                                        >
+                                          {row.Status}
+                                        </span>
+                                      </td>
+                                      <td>
+                                        {Object.entries(row.Extensions || {}).map(([key, value]) => (
+                                          <div key={key}>
+                                            <strong>{key}: </strong>
+                                            {value}
+                                          </div>
+                                        ))}
+                                      </td>
+
+                                           <td>
+                                        {row.Status === "ANSWER" && (
+                                          <Button
+                                            // variant="outlined"
+                                            sx={{
+                                              ":hover": {
+                                                bgcolor: "error.main",
+                                                color: "white",
+                                              },
+                                              padding: "2px",
+                                              textTransform: "capitalize",
+                                              fontSize: "12px",
+                                              color: "error.main",
+                                              borderColor: "error.main",
+                                              border: "1px solid #d32f2f",
+                                            }}
+                                            onClick={(e) => {
+                                              handleBarging(row.Channel);
+                                            }}
+                                          >
+                                            Barge
+                                          </Button>
+                                        )}
+                                      </td>
+                                      <td>
+                                        {row.Status === "ANSWER" && (
+                                          <FormControl fullWidth style={{ width: "100%", margin: "7px 0",   }} className="table_dropdown">
+                                            <Select
+                                              style={{ textAlign: "left", paddingLeft:'7px !important', borderRadius: '5px', }}
+                                              defaultValue={option}
+                                              onChange={(e) => {
+                                                setOption(e.target.value);
+                                              }}
+                                              className="table_slct_drop"
+
+                                              sx={{
+                                                
+                                                fontSize: "12px",
+                                                 marginLeft: "7px",
+                                              padding: "5px 0px!important",
+                                            
+                                            }}
+                                            >
+                                              <MenuItem value={"L"}>Listen</MenuItem>
+                                              <MenuItem value={"LT"}>Listen and Talk</MenuItem>
+                                            </Select>
+                                          </FormControl>
+                                        )}
+                                      </td>
+
+
+
+                                   
+
+                                    </tr>
+                                  );
+                                })
+                              )}
+                            </tbody>
+                          </Table>
+                        </div>
+                      </div>
                     </div>
                     {/* <!--active-calls-content--> */}
                   </div>
-                  <div
-                    className="tab-pane fade"
-                    id="pills-profile"
-                    role="tabpanel"
-                    aria-labelledby="pills-profile-tab"
-                  ></div>
+
                 </div>
               </div>
             </div>

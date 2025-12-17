@@ -350,11 +350,11 @@ function AdminAclHistory({colorThem}) {
                         container
                         className="cdr_filter_row"
                         style={{
-                          padding: "20px 0",
+                          padding: "10px 0",
                           display: "flex",
                           justifyContent: "center",
                         }}
-                      >
+                         >
                      
                      
                         <Grid
@@ -432,49 +432,17 @@ function AdminAclHistory({colorThem}) {
                           </LocalizationProvider>
                         </Grid>
 
-                        <Grid
-                          xl={3}
-                          lg={3}
-                          md={3}
-                          sm={12}
-                          xs={12}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            height: "53px",
-                            
-                          }}
-                        ></Grid>
-                        <Grid
-                          xl={3}
-                          lg={3}
-                          md={3}
-                          sm={12}
-                          xs={12}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            height: "53px",
-                            
-                          }}
-                        ></Grid>
-                      </Grid>
                       <Grid
-                        container
-                        className="cdr_filter_row"
-                        style={{ padding: "20px 0" }}
-                      >
-                        <Grid
-                          xl={12}
-                          lg={12}
-                          md={12}
-                          sm={12}
+                          xl={6}
+                          lg={6}
+                          md={6}
+                          sm={6}
                           xs={12}
                           style={{
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "end",
-                            padding: "20px 0",
+                            padding: "0px 0",
                           }}
                         >
                           <IconButton
@@ -501,6 +469,7 @@ function AdminAclHistory({colorThem}) {
                           </IconButton>
                         </Grid>
                       </Grid>
+
 
                      
                       <ThemeProvider theme={theme}>

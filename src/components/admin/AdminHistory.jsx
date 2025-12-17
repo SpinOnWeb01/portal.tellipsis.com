@@ -452,7 +452,7 @@ function AdminHistory({ colorThem }) {
             component="main"
             sx={{
               flexGrow: 1,
-              p: 3,
+              p: 0,
               width: { sm: `calc(100% - ${drawerWidth}px)` },
             }}
           >
@@ -493,7 +493,7 @@ function AdminHistory({ colorThem }) {
                             onClose={handleClose}
                             aria-labelledby="child-modal-title"
                             aria-describedby="child-modal-description"
-                          >
+                           >
                             <Fade in={open} className="bg_imagess">
                               <Box sx={{ ...style, width: 700 }}>
                                 <IconButton
@@ -769,15 +769,15 @@ function AdminHistory({ colorThem }) {
                           container
                           className="cdr_filter_row"
                           style={{
-                            padding: "20px 0",
+                            padding: "0px 0",
                             display: "flex",
-                            justifyContent: "center",
+                            justifyContent: "start",
                           }}
                         >
                           <Grid
-                            xl={3}
-                            lg={3}
-                            md={3}
+                            xl={2}
+                            lg={2}
+                            md={2}
                             sm={12}
                             xs={12}
                             style={{ display: "flex", alignItems: "center" }}
@@ -813,9 +813,9 @@ function AdminHistory({ colorThem }) {
                             </FormControl>
                           </Grid>
                           <Grid
-                            xl={3}
-                            lg={3}
-                            md={3}
+                            xl={2}
+                            lg={2}
+                            md={2}
                             sm={12}
                             xs={12}
                             style={{ display: "flex", alignItems: "center" }}
@@ -854,9 +854,9 @@ function AdminHistory({ colorThem }) {
                             </FormControl>
                           </Grid>
                           <Grid
-                            xl={3}
-                            lg={3}
-                            md={3}
+                            xl={2.5}
+                            lg={2.5}
+                            md={2.5}
                             sm={12}
                             xs={12}
                             style={{
@@ -892,9 +892,9 @@ function AdminHistory({ colorThem }) {
                             </LocalizationProvider>
                           </Grid>
                           <Grid
-                            xl={3}
-                            lg={3}
-                            md={3}
+                            xl={2.5}
+                            lg={2.5}
+                            md={2.5}
                             sm={12}
                             xs={12}
                             style={{
@@ -926,23 +926,18 @@ function AdminHistory({ colorThem }) {
                               </DemoContainer>
                             </LocalizationProvider>
                           </Grid>
-                        </Grid>
-                        <Grid
-                          container
-                          className="cdr_filter_row"
-                          style={{ padding: "20px 0" }}
-                        >
-                          <Grid
-                            xl={12}
-                            lg={12}
-                            md={12}
-                            sm={12}
-                            xs={12}
+
+                         <Grid
+                            xl={3}
+                            lg={3}
+                            md={3}
+                            sm={3}
+                            xs={3}
                             style={{
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "end",
-                              padding: "20px 0",
+                              padding: "0px 0",
                             }}
                           >
                             <IconButton
@@ -968,7 +963,9 @@ function AdminHistory({ colorThem }) {
                               <RestartAltIcon />
                             </IconButton>
                           </Grid>
+
                         </Grid>
+                       
 
                         <Box
                           style={{ display: "flex", justifyContent: "left" }}

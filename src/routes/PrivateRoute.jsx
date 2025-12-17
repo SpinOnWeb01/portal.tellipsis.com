@@ -81,6 +81,7 @@ import AdminAssign from "../components/admin/AdminAssign";
 import AdminCMU from "../components/admin/AdminCMU";
 import AdminNewDestination from "../components/admin/AdminNewDestination";
 import AdminRoles from "../components/admin/AdminRoles";
+import AdminDestination from "../components/admin/Destination";
 
 Chart.register(CategoryScale);
 function PrivateRoute() {
@@ -191,7 +192,7 @@ function PrivateRoute() {
               />
               <Route
                 path={Router.ADMIN_DID_TFN_NUMBER_NEW}
-                element={<AdminNewDestination colorThem={colorThem} />}
+                element={<AdminDestination colorThem={colorThem} />}
               />
               <Route
                 path={Router.ADMIN_REPORT}

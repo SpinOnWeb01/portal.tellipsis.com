@@ -5,7 +5,7 @@ const domain = window.location.host;
 
 
 export const api ={
-    dev:dev,
+    dev:prod,
 }
 
 export const usersGroupRolesList = [

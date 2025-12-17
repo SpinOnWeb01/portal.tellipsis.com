@@ -247,7 +247,7 @@ function ManageCallBlock() {
       flex: 1,
       headerAlign: "left",
       disableColumnMenu: true, // Prevents menu on hover
-      sortable: false, // Allows sorting on click but not on hover
+      sortable: true, // Allows sorting on click but not on hover
       align: "left",
 
       renderHeader: () => (
@@ -307,7 +307,7 @@ function ManageCallBlock() {
       maxWidth: "100%",
       headerAlign: "left",
       disableColumnMenu: true, // Prevents menu on hover
-      sortable: false, // Allows sorting on click but not on hover
+      sortable: true, // Allows sorting on click but not on hover
       align: "left",
       renderHeader: () => (
         <Typography
@@ -337,7 +337,7 @@ function ManageCallBlock() {
       maxWidth: "100%",
       headerAlign: "left",
       disableColumnMenu: true, // Prevents menu on hover
-      sortable: false, // Allows sorting on click but not on hover
+      sortable: true, // Allows sorting on click but not on hover
       align: "left",
       headerClassName: "custom-header",
       renderHeader: () => (
@@ -367,7 +367,7 @@ function ManageCallBlock() {
       maxWidth: "100%",
       headerAlign: "left",
       disableColumnMenu: true, // Prevents menu on hover
-      sortable: false, // Allows sorting on click but not on hover
+      sortable: true, // Allows sorting on click but not on hover
       align: "left",
       renderHeader: () => (
         <Typography
@@ -396,7 +396,7 @@ function ManageCallBlock() {
       maxWidth: "100%",
       headerAlign: "left",
       disableColumnMenu: true, // Prevents menu on hover
-      sortable: false, // Allows sorting on click but not on hover
+      sortable: true, // Allows sorting on click but not on hover
       align: "left",
       renderHeader: () => (
         <Typography
@@ -451,7 +451,7 @@ function ManageCallBlock() {
       maxWidth: "100%",
       headerAlign: "left",
       disableColumnMenu: true, // Prevents menu on hover
-      sortable: false, // Allows sorting on click but not on hover
+      sortable: true, // Allows sorting on click but not on hover
       align: "left",
       renderHeader: () => (
         <Typography

@@ -304,7 +304,7 @@ function Header() {
                 aria-describedby="profile-dialog-description"
                 maxWidth="sm"
                 fullWidth
-              >
+                >
                 <DialogTitle id="profile-dialog-title">
                   Profile
                   <IconButton
@@ -366,26 +366,7 @@ function Header() {
                 </DialogActions>
               </Dialog>
               {/* modal-end */}
-              <Dropdown>
-                <Dropdown.Toggle
-                  className="dropbtn"
-                  id="dropdown-basic"
-                  style={{
-                    color: "#000",
-                    textTransform: "capitalize",
-                    fontSize: "14px",
-                  }}
-                >
-                  Services
-                </Dropdown.Toggle>
-
-                <Dropdown.Menu>
-                  <Dropdown.Item href="/redirect_portal">
-                    Redirect
-                  </Dropdown.Item>
-                  <Dropdown.Item href="/sip_portal">Sip</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+           
 
               <IconButton
                 size="large"

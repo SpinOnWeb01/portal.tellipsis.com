@@ -823,6 +823,22 @@ function User({ colorThem }) {
       align: "center",
     },
     {
+      field: "remaining_minutes",
+      headerName: "R.Minutes",
+      width: 80,
+      headerClassName: "custom-header",
+      headerAlign: "center",
+      align: "center",
+    },
+    {
+      field: "billing_type",
+      headerName: "Billing Type",
+      width: 110,
+      headerClassName: "custom-header",
+      headerAlign: "center",
+      align: "center",
+    },
+    {
       field: "reseller_id",
       headerName: "Reseller",
       width: 100,
@@ -865,6 +881,51 @@ function User({ colorThem }) {
             </Tooltip>
             </div>)
       }
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 80,
+      headerClassName: "custom-header",
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">
+            {params.row.status === "t" ? (
+              <>
+                <div
+                  style={{
+                    color: "white",
+                    background: "green",
+                    padding: "7px",
+                    borderRadius: "5px",
+                    fontSize: "12px",
+                    textTransform: "capitalize",
+                  }}
+                >
+                  Active
+                </div>
+              </>
+            ) : (
+              <>
+                <div
+                  style={{
+                    color: "white",
+                    background: "red",
+                    padding: "7px",
+                    borderRadius: "5px",
+                    fontSize: "12px",
+                    textTransform: "capitalize",
+                  }}
+                >
+                  Deactive
+                </div>
+              </>
+            )}
+          </div>
+        );
+      },
     },
 
     {
@@ -1053,51 +1114,7 @@ function User({ colorThem }) {
         );
       },
     },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 80,
-      headerClassName: "custom-header",
-      headerAlign: "center",
-      align: "center",
-      renderCell: (params) => {
-        return (
-          <div className="d-flex justify-content-between align-items-center">
-            {params.row.status === "t" ? (
-              <>
-                <div
-                  style={{
-                    color: "white",
-                    background: "green",
-                    padding: "7px",
-                    borderRadius: "5px",
-                    fontSize: "12px",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Active
-                </div>
-              </>
-            ) : (
-              <>
-                <div
-                  style={{
-                    color: "white",
-                    background: "red",
-                    padding: "7px",
-                    borderRadius: "5px",
-                    fontSize: "12px",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Deactive
-                </div>
-              </>
-            )}
-          </div>
-        );
-      },
-    },
+    
     {
       field: "status_changed_by",
       headerName: "Changed By",
@@ -1200,6 +1217,8 @@ function User({ colorThem }) {
           subscriber_count: item.subscriber_count,
           feature: item.feature,
           address: item.address,
+          billing_type: item.billing_type,
+          remaining_minutes: item.remaining_minutes,
         });
       });
     return calculatedRows;
@@ -1818,6 +1837,7 @@ function User({ colorThem }) {
 
                         {/* ============Start========== */}
                         <Dialog
+                        className="custom_dailog_box_user"
                           open={open}
                           onClose={handleClose}
                           sx={{ textAlign: "center", borderRadius: "10px" }}
@@ -1846,7 +1866,7 @@ function User({ colorThem }) {
                               {" "}
                               <img src="/img/mdl_icon.png" alt="user icon" />
                             </Box>
-                            Add User
+                            Add User 
                           </DialogTitle>
 
                           <DialogContent>

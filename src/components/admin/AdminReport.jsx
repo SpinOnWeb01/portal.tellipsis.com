@@ -801,15 +801,15 @@ function AdminReport({ colorThem }) {
                         <Grid
                           container
                           className="cdr_filter_row"
-                          style={{ padding: "20px 0" }}
+                          style={{ padding: "0px 0" }}
                         >
                           <Grid
-                            xl={3}
-                            lg={3}
+                            xl={2}
+                            lg={2}
                             md={3}
                             sm={12}
                             xs={12}
-                            style={{ display: "flex", alignItems: "center" }}
+                            style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
                           >
                             <FormControl
                               fullWidth
@@ -842,9 +842,9 @@ function AdminReport({ colorThem }) {
                             </FormControl>
                           </Grid>
                           <Grid
-                            xl={3}
-                            lg={3}
-                            md={3}
+                            xl={2}
+                            lg={2}
+                            md={2}
                             sm={12}
                             xs={12}
                             style={{ display: "flex", alignItems: "center" }}
@@ -863,9 +863,9 @@ function AdminReport({ colorThem }) {
                             />
                           </Grid>
                           <Grid
-                            xl={3}
-                            lg={3}
-                            md={3}
+                            xl={2}
+                            lg={2}
+                            md={2}
                             sm={12}
                             xs={12}
                             style={{ display: "flex", alignItems: "center" }}
@@ -885,9 +885,9 @@ function AdminReport({ colorThem }) {
                           </Grid>
 
                           <Grid
-                            xl={3}
-                            lg={3}
-                            md={3}
+                            xl={2}
+                            lg={2}
+                            md={2}
                             sm={12}
                             xs={12}
                             style={{ display: "flex", alignItems: "center" }}
@@ -908,9 +908,9 @@ function AdminReport({ colorThem }) {
                             />
                           </Grid>
                           <Grid
-                            xl={3}
-                            lg={3}
-                            md={3}
+                            xl={2}
+                            lg={2}
+                            md={2}
                             sm={12}
                             xs={12}
                             style={{ display: "flex", alignItems: "center" }}
@@ -931,9 +931,9 @@ function AdminReport({ colorThem }) {
                             />
                           </Grid>
                           <Grid
-                            xl={3}
-                            lg={3}
-                            md={3}
+                            xl={2}
+                            lg={2}
+                            md={2}
                             sm={12}
                             xs={12}
                             style={{ display: "flex", alignItems: "center" }}
@@ -964,9 +964,9 @@ function AdminReport({ colorThem }) {
                             </FormControl>
                           </Grid>
                           <Grid
-                            xl={3}
-                            lg={3}
-                            md={3}
+                            xl={2}
+                            lg={2}
+                            md={2}
                             sm={12}
                             xs={12}
                             style={{ display: "flex", alignItems: "center" }}
@@ -1002,7 +1002,7 @@ function AdminReport({ colorThem }) {
                             md={3}
                             sm={12}
                             xs={12}
-                            style={{ display: "flex", alignItems: "center" }}
+                            style={{ display: "flex", alignItems: "center", margin: "7px 0" }}
                           >
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <DateTimePicker
@@ -1028,7 +1028,7 @@ function AdminReport({ colorThem }) {
                             md={3}
                             sm={12}
                             xs={12}
-                            style={{ display: "flex", alignItems: "center" }}
+                            style={{ display: "flex", alignItems: "center", margin: "7px 0" }}
                           >
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <DateTimePicker
@@ -1050,9 +1050,9 @@ function AdminReport({ colorThem }) {
                           </Grid>
 
                           <Grid
-                            xl={12}
-                            lg={12}
-                            md={12}
+                            xl={4}
+                            lg={4}
+                            md={4}
                             sm={12}
                             xs={12}
                             style={{
@@ -1086,16 +1086,15 @@ function AdminReport({ colorThem }) {
                                 <RestartAltIcon />
                               </IconButton>
                             </div>
-                          </Grid>
 
-                          <div>
+                                 <div>
                             <IconButton
                               className="filter_block_btn"
                               style={{
                                 marginLeft: "0 !important",
                                 background: selectedCallerData.length
                                   ? "red"
-                                  : "grey",
+                                  : "black",
                               }}
                               onClick={handleBlockCallerIds}
                             >
@@ -1103,6 +1102,9 @@ function AdminReport({ colorThem }) {
                               <BlockIcon />
                             </IconButton>
                           </div>
+                          </Grid>
+
+                     
                         </Grid>
 
                         <ThemeProvider theme={theme}>

@@ -1285,6 +1285,7 @@ function DID_TFN_number({ colorThem }) {
                                 </Box>
                                 <DialogTitle
                                   sx={{
+                                    padding: '0px',
                                     color: "#07285d",
                                     fontWeight: "600",
                                     width: "500px",
