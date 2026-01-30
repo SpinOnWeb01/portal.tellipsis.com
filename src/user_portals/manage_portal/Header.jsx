@@ -38,6 +38,8 @@ import CallIcon from "@mui/icons-material/Call";
 import { Close } from "@mui/icons-material";
 import { getManageBilling } from "../../redux/actions/managePortal/managePortal_billingAction";
 import { getManageProfileExtension } from "../../redux/actions/managePortal/managePortal_extensionAction";
+import LiveCall from "../../pages/LiveCall";
+import socketIOClient from "socket.io-client";
 
 const style = {
   position: "absolute",
@@ -64,6 +66,7 @@ function Header() {
   const [cnfPassword, setCnfPassword] = useState("");
   const [extension, setExtension] = useState("");
   const [openmodal, setOpen] = React.useState(false);
+  const [number, setNumber] = useState(0);
   const handleOpen = () => {
     setOpen(true);
     setAnchorEl(null);
@@ -90,6 +93,46 @@ function Header() {
 
   const [data, setData] = useState([]);
   const location = useLocation();
+
+  useEffect(() => {
+    const socket = socketIOClient(`${api.dev}`);
+
+    // Get the current user information from localStorage
+    const current_user = localStorage.getItem("current_user");
+    const user = JSON.parse(localStorage.getItem(`user_${current_user}`));
+
+    // Listen for events from the server
+    socket.on("call_details", (data) => {
+      // Handle the received data (e.g., update state, trigger a re-fetch)
+      if (data?.data !== undefined) {
+        // Filter the data based on UserId matching user.uid
+        const filteredData = Object.keys(data?.data)
+          .map((key) => {
+            try {
+              const parsedValue = JSON.parse(data?.data[key]); // Parse JSON string
+              return {
+                id: key, // Add the key as 'id'
+                ...parsedValue, // Spread the parsed object
+              };
+            } catch (error) {
+              console.error(`Failed to parse JSON for key: ${key}`, error);
+              return null; // Return null or handle error as needed
+            }
+          })
+          .filter(Boolean) // Filter out any null entries
+          .filter((row) => row.UserId === user.uid); // Filter rows where UserId matches userId.uid
+
+        // Get the count of filtered objects
+        const newDataCount = filteredData.length;
+        setNumber(newDataCount);
+      }
+    });
+
+    return () => {
+      // Disconnect the socket when the component unmounts
+      socket.disconnect();
+    };
+  }, []); // Empty dependency array ensures this effect runs once on mount
 
   const logout = async () => {
     const config = {
@@ -220,8 +263,11 @@ function Header() {
 
             <div className="manage_rgiht_bdr d-flex align-items-center">
               <div className="dshbrd_hdr_icon">
-                <div>
-                  <Typography
+                
+                <div className="d-flex gap-2 align-items-center"> 
+                  
+                    <div>
+                      <Typography
                     style={{
                       color: "black",
                       fontSize: "14px",
@@ -240,6 +286,21 @@ function Header() {
                       );
                     })}
                   </Typography>
+                    </div>
+                    <div>
+                     <IconButton
+                      size="large"
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      className="manage_call"
+                    > 
+                      <CallIcon className="call_icon" style={{color:"#07285d!important", }} />
+                        <span className="livecalnow">{number}</span>
+                      Live
+                      
+                    </IconButton>
+                  </div>
                 </div>
               </div>
               <ul className="hdr_profile">

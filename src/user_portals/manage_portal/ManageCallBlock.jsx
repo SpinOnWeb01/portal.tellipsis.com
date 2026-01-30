@@ -171,7 +171,7 @@ function ManageCallBlock() {
       setDetails(row.details);
       setType(row.type);
     },
-    [setIsActive, setCallBlockId, setDescription, setDetails, setType]
+    [setIsActive, setCallBlockId, setDescription, setDetails, setType],
   ); // Memoize event handler
 
   const handleCloseModal = useCallback(() => {
@@ -199,8 +199,8 @@ function ManageCallBlock() {
         setDescription,
         setDetails,
         setType,
-        setIsActive
-      )
+        setIsActive,
+      ),
     );
   };
 
@@ -221,8 +221,8 @@ function ManageCallBlock() {
         setDescription,
         setDetails,
         setType,
-        setIsActive
-      )
+        setIsActive,
+      ),
     );
   };
 
@@ -233,7 +233,7 @@ function ManageCallBlock() {
       setCallBlockId(data?.callBlockId);
       setAlertMessage(true);
     },
-    [setName, setValue]
+    [setName, setValue],
   ); // Memoize event handler
 
   const allColumns = [
@@ -492,7 +492,7 @@ function ManageCallBlock() {
       "is_active",
       "recording",
       "description",
-    ].includes(col.field)
+    ].includes(col.field),
   );
 
   // --------------Table Options---------------------
@@ -536,7 +536,7 @@ function ManageCallBlock() {
       setAlertMessage(false);
     } else {
       dispatch(
-        deleteManageCallBlock({ id: callBlockId }, setResponse, setCallBlockId)
+        deleteManageCallBlock({ id: callBlockId }, setResponse, setCallBlockId),
       );
       setAlertMessage(false);
     }
@@ -671,20 +671,20 @@ function ManageCallBlock() {
                             },
                           }}
                         >
-                          <Fade in={open} className="bg_imagess">
+                          <Fade in={open} className="bg_imagess pt-4">
                             <Box
                               sx={style}
                               borderRadius="10px"
                               textAlign="center"
                             >
                               <IconButton
+                                className="close-icon pt-0"
                                 onClick={handleClose}
                                 sx={{ float: "inline-end" }}
                               >
                                 <Close />
                               </IconButton>
-                              <br />
-                              <br />
+
                               <Typography
                                 id="transition-modal-title"
                                 variant="h6"
@@ -859,34 +859,37 @@ function ManageCallBlock() {
                         //onClose={handleCloseModal}
                         sx={{ textAlign: "center" }}
                       >
-                        <Box>
-                          <IconButton
-                            onClick={handleCloseModal}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            paddingTop: "10px",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Typography
                             sx={{
-                              float: "inline-end",
-                              marginRight: "20px",
-                              marginTop: "20px",
+                              color: "#07285d",
+                              margin: "0 auto",
+                              fontSize: "20px",
+                              fontWeight: "600",
+                              width: "auto",
+                              textAlign: "center",
                             }}
+                            className="extension_title"
+                          >
+                            Edit
+                          </Typography>
+                          <IconButton
+                            className="close_icon"
+                            onClick={handleCloseModal}
+                            sx={{ float: "inline-end" }}
                           >
                             <Close />
                           </IconButton>
                         </Box>
 
-                        <DialogTitle
-                          sx={{
-                            color: "#07285d",
-                            fontWeight: "600",
-                            width: "500px",
-                          }}
-                          className="mobile_view"
-                        >
-                          {/* <Box>
-                  {" "}
-                  <img src="/img/mdl_icon.png" alt="user icon" />
-                </Box> */}
-                          Edit
-                        </DialogTitle>
-                        <DialogContent>
+                        <DialogContent sx={{ pt: "0" }}>
                           <form>
                             {/* <SelectComponent handleClose={handleClose} /> */}
                             <Typography variant="body1">
@@ -1049,8 +1052,8 @@ function ManageCallBlock() {
                           {value === "true"
                             ? "Active Confirmation"
                             : value === "false"
-                            ? "Deactive"
-                            : "Delete Confirmation"}
+                              ? "Deactive"
+                              : "Delete Confirmation"}
                         </DialogTitle>
                         <DialogContent>
                           <DialogContentText
@@ -1061,8 +1064,8 @@ function ManageCallBlock() {
                             {value === "true"
                               ? "active"
                               : value === "false"
-                              ? "deactive"
-                              : "delete "}
+                                ? "deactive"
+                                : "delete "}
                             {name} ?
                           </DialogContentText>
                         </DialogContent>
@@ -1100,8 +1103,8 @@ function ManageCallBlock() {
                                 value === "true"
                                   ? "green !important"
                                   : value === "false"
-                                  ? "red !important"
-                                  : "#f44336 !important",
+                                    ? "red !important"
+                                    : "#f44336 !important",
                               padding: "10px 20px !important",
                               textTransform: "capitalize !important",
                               marginLeft: "0px !important",
@@ -1123,8 +1126,8 @@ function ManageCallBlock() {
                             {value === "true"
                               ? "Active"
                               : value === "false"
-                              ? "Deactive"
-                              : "Delete"}
+                                ? "Deactive"
+                                : "Delete"}
                           </Button>
                         </DialogActions>
                       </Dialog>

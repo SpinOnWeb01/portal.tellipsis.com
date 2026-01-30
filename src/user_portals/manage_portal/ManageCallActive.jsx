@@ -1,17 +1,20 @@
-import { Box, Button, FormControl, Tooltip, FormControlLabel, FormLabel, IconButton, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
 import {
-  DataGrid,
-  GridToolbar,
+  Button,
+  FormControl,
+  Tooltip,
+  MenuItem,
+  Select,
+} from "@mui/material";
+import {
   GridToolbarColumnsButton,
   GridToolbarContainer,
   GridToolbarDensitySelector,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import {useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import socketIOClient from "socket.io-client";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { getAdminCallActive } from "../../redux/actions/adminPortal/adminPortal_callActiveAction";
+import { createTheme, } from "@mui/material/styles";
 import { toast } from "react-toastify";
 import { api } from "../../mockData";
 import axios from "axios";
@@ -35,18 +38,10 @@ const theme = createTheme({
   },
 });
 
-function CustomToolbar() {
-  return (
-    <GridToolbarContainer>
-      <GridToolbarColumnsButton />
-      <GridToolbarDensitySelector />
-      <GridToolbarFilterButton />
-    </GridToolbarContainer>
-  );
-}
 
 export function CustomFooterStatusComponent(props) {
-  return (<></>
+  return (
+    <></>
     // <Box sx={{ p: 1, display: 'flex' }}>
     //   <FiberManualRecordIcon
     //     fontSize="small"
@@ -66,13 +61,12 @@ function ManageCallActive() {
   const current_user = localStorage.getItem("current_user");
   const userId = JSON.parse(localStorage.getItem(`user_${current_user}`));
   const [callDetails, setCallDetails] = useState("");
-  const [selectedValue, setSelectedValue] = useState('Active'); // Initialize state for selected radio value
+  const [selectedValue, setSelectedValue] = useState("Active"); // Initialize state for selected radio value
   const [option, setOption] = useState("L");
   const [timeStamp, setTimeStamp] = useState([]);
   const [timeDifference, setTimeDifference] = useState([]);
   const [queueRows, setQueueRows] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-
 
   const parseTimestamp = () => {
     return timeStamp?.map((item) => {
@@ -94,15 +88,15 @@ function ManageCallActive() {
       const diffInDays = Math.floor(diffInHours / 24);
 
       // Format with leading zeros
-      const formattedHours = String(diffInHours).padStart(2, '0');
-      const formattedMinutes = String(diffInMinutes % 60).padStart(2, '0');
-      const formattedSeconds = String(diffInSeconds % 60).padStart(2, '0');
+      const formattedHours = String(diffInHours).padStart(2, "0");
+      const formattedMinutes = String(diffInMinutes % 60).padStart(2, "0");
+      const formattedSeconds = String(diffInSeconds % 60).padStart(2, "0");
 
       return {
         days: diffInDays,
         hours: formattedHours,
         minutes: formattedMinutes,
-        seconds: formattedSeconds
+        seconds: formattedSeconds,
       };
     });
 
@@ -124,7 +118,6 @@ function ManageCallActive() {
     setSelectedValue(event.target.value); // Update state with the selected radio value
   };
 
-
   useEffect(() => {
     const socket = socketIOClient(`${api.dev}`);
 
@@ -145,8 +138,6 @@ function ManageCallActive() {
     // dispatch(getReport());
   }, [selectedValue]); // Empty dependency array ensures this effect runs once on mount
 
-
-
   const handleBarging = async (data) => {
     const current_user = localStorage.getItem("current_user");
     const token = JSON.parse(localStorage.getItem(`user_${current_user}`));
@@ -164,7 +155,7 @@ function ManageCallActive() {
       const { data } = await axios.post(
         `${api.dev}/api/callbarge`,
         values,
-        config
+        config,
       );
       if (data?.status === 200) {
         toast.success(data?.message, {
@@ -206,7 +197,6 @@ function ManageCallActive() {
     }
     return [];
   }, [callDetails, userId.uid]);
-
 
   // const activeRows = useMemo(() => {
   //   return Object.keys(callDetails)
@@ -333,12 +323,16 @@ function ManageCallActive() {
       align: "center",
       renderCell: (params) => {
         if (params.value !== null) {
-          const index = activeRows.findIndex(item => item.id === params.row.id);
+          const index = activeRows.findIndex(
+            (item) => item.id === params.row.id,
+          );
           const duration = timeDifference && timeDifference[index];
 
           return (
             <span style={{ color: "green" }}>
-              {duration ? `${duration.hours}:${duration.minutes}:${duration.seconds}` : ''}
+              {duration
+                ? `${duration.hours}:${duration.minutes}:${duration.seconds}`
+                : ""}
             </span>
           );
         }
@@ -578,12 +572,13 @@ function ManageCallActive() {
       align: "center",
       renderCell: (params) => (
         <div>
-          {params.row.Extensions && params.row.Extensions.map((extension, index) => (
-            <div key={index}>
-              <strong>{extension.key}: </strong>
-              {extension.value}
-            </div>
-          ))}
+          {params.row.Extensions &&
+            params.row.Extensions.map((extension, index) => (
+              <div key={index}>
+                <strong>{extension.key}: </strong>
+                {extension.value}
+              </div>
+            ))}
           {!params.row.Extensions && <span>No Extensions</span>}
         </div>
       ),
@@ -673,16 +668,11 @@ function ManageCallActive() {
   //     })).filter(item => item.SubType === "QUEUE");;
   // }, [callDetails, userId.uid]);
 
-
-
-
-
   const mockDataTeam = useMemo(() => {
     let rows = [];
     const uniqueIdSet = new Set();
 
     if (callDetails !== undefined) {
-
       Object.keys(callDetails).forEach((key) => {
         if (callDetails[key].UserId === userId.uid) {
           const { Extensions, Uniqueid, ...rest } = callDetails[key];
@@ -696,7 +686,7 @@ function ManageCallActive() {
                 id: uniqueId,
                 Uniqueid: Uniqueid,
                 ...rest,
-                Extensions: [{ key: '', value: null }],
+                Extensions: [{ key: "", value: null }],
               });
             }
           } else {
@@ -714,38 +704,39 @@ function ManageCallActive() {
               }
             });
           }
-
         }
       });
     }
 
-    const filteredRows = rows.filter(item => item.Status !== "ANSWER");
+    const filteredRows = rows.filter((item) => item.Status !== "ANSWER");
     setQueueRows(filteredRows);
     return filteredRows;
   }, [callDetails, userId.uid]);
 
-
   const columns2 = [
     { key: "sno", label: "S.No", textAlign: "center" },
-
     { key: "DIDNumber", label: "Did Number" },
     { key: "CallerID", label: "Caller Id" },
     { key: "Extension", label: "Extension" },
     { key: "CallDirection", label: "Call Direction" },
-    { key: "CallDuration", label: "Call Duration", width: 100, textAlign: "center" },
+    {
+      key: "CallDuration",
+      label: "Call Duration",
+      width: 100,
+      textAlign: "center",
+    },
     { key: "Status", label: "Status" },
     { key: "Extensions", label: "Extensions" },
     { key: "barging", label: "Barge" },
     { key: "Options", label: "Options" },
-
-
   ];
-
 
   const handleSort = (columnKey) => {
     if (sortConfig.key === columnKey) {
-      if (sortConfig.direction === "asc") setSortConfig({ key: columnKey, direction: "desc" });
-      else if (sortConfig.direction === "desc") setSortConfig({ key: null, direction: null });
+      if (sortConfig.direction === "asc")
+        setSortConfig({ key: columnKey, direction: "desc" });
+      else if (sortConfig.direction === "desc")
+        setSortConfig({ key: null, direction: null });
       else setSortConfig({ key: columnKey, direction: "asc" });
     } else {
       setSortConfig({ key: columnKey, direction: "asc" });
@@ -806,8 +797,6 @@ function ManageCallActive() {
                     role="tabpanel"
                     aria-labelledby="pills-home-tab"
                   >
-
-
                     {/* <!--active-calls-contet--> */}
                     <div className="tab_cntnt_box">
                       <div
@@ -831,7 +820,6 @@ function ManageCallActive() {
         <FormControlLabel value="Queue" control={<Radio />} label="Queue Calls" />
       </RadioGroup>
     </FormControl> */}
-
                       </div>
                       {/* {selectedValue === "Active" ? (<> <div className="cntnt_title">
                         <h3>Live Calls</h3>
@@ -870,24 +858,33 @@ function ManageCallActive() {
                             </div>
                           </ThemeProvider>
                         </>)} */}
-
-
-                      
                     </div>
 
                     <div className="table-wrapper">
                       <div className="scroll-top">
                         <div className="scroll-inner">
-                          <Table hover size="sm" bordered responsive className="call-active-table border-1">
+                          <Table
+                            hover
+                            size="sm"
+                            bordered
+                            responsive
+                            className="call-active-table border-1"
+                          >
                             <tr className="active-table-head">
                               {columns2.map((col) => (
                                 <th
                                   key={col.key}
                                   onClick={() => handleSort(col.key)}
-                                  style={{ cursor: "pointer", userSelect: "none", textAlign: col.textAlign || "left" }}
+                                  style={{
+                                    cursor: "pointer",
+                                    userSelect: "none",
+                                    textAlign: col.textAlign || "left",
+                                  }}
                                 >
                                   <span>{col.label}</span>
-                                  <span className="sortingicon">{getSortIcon(col.key)}</span>
+                                  <span className="sortingicon">
+                                    {getSortIcon(col.key)}
+                                  </span>
                                 </th>
                               ))}
                             </tr>
@@ -895,7 +892,10 @@ function ManageCallActive() {
                             <tbody>
                               {sortedData.length === 0 ? (
                                 <tr>
-                                  <td colSpan={columns2.length} className="text-center text-muted py-2">
+                                  <td
+                                    colSpan={columns2.length}
+                                    className="text-center text-muted py-2"
+                                  >
                                     No rows
                                   </td>
                                 </tr>
@@ -904,46 +904,54 @@ function ManageCallActive() {
                                   const duration = timeDifference[index];
                                   const date = new Date(row.TimeStamp);
                                   const formattedDate = `${String(date.getDate()).padStart(2, "0")}/${String(
-                                    date.getMonth() + 1
+                                    date.getMonth() + 1,
                                   ).padStart(2, "0")}/${date.getFullYear()}`;
                                   const formattedTime = `${String(date.getHours()).padStart(2, "0")}:${String(
-                                    date.getMinutes()
-                                  ).padStart(2, "0")}:${String(date.getSeconds()).padStart(2, "0")}`;
+                                    date.getMinutes(),
+                                  ).padStart(
+                                    2,
+                                    "0",
+                                  )}:${String(date.getSeconds()).padStart(2, "0")}`;
 
                                   return (
                                     <tr key={row.id}>
-                                      <td className="text-center">{index + 1}</td>
-                                      
+                                      <td className="text-center">
+                                        {index + 1}
+                                      </td>
+
                                       <td>{row.DIDNumber}</td>
                                       <td>{row.CallerID}</td>
                                       {/* <td>{row.Details}</td> */}
 
-                                       <td className="ext-cell">
-                                        <Tooltip 
-                                          title={row.Details} 
-                                          arrow 
+                                      <td className="ext-cell">
+                                        <Tooltip
+                                          title={row.Details}
+                                          arrow
                                           placement="top"
                                         >
                                           <span style={{ cursor: "pointer" }}>
                                             {
-                                              row.Details
-                                                .split(",")            // string → array
-                                                .slice(0, 2)           // first 2 items
-                                                .join(", ")            // comma-separated
+                                              row.Details.split(",") // string → array
+                                                .slice(0, 2) // first 2 items
+                                                .join(", ") // comma-separated
                                             }
-                                            {
-                                              row.Details.split(",").length > 2 && " ..."
-                                            }
+                                            {row.Details.split(",").length >
+                                              2 && " ..."}
                                           </span>
                                         </Tooltip>
                                       </td>
                                       <td>{row.CallDirection}</td>
-                                      <td style={{ color: "green", textAlign: "center" }}>
+                                      <td
+                                        style={{
+                                          color: "green",
+                                          textAlign: "center",
+                                        }}
+                                      >
                                         {duration
                                           ? `${duration.hours}:${duration.minutes}:${duration.seconds}`
                                           : ""}
                                       </td>
-                                        
+
                                       <td>
                                         <span
                                           style={{
@@ -960,8 +968,11 @@ function ManageCallActive() {
                                           {row.Status}
                                         </span>
                                       </td>
+
                                       <td>
-                                        {Object.entries(row.Extensions || {}).map(([key, value]) => (
+                                        {Object.entries(
+                                          row.Extensions || {},
+                                        ).map(([key, value]) => (
                                           <div key={key}>
                                             <strong>{key}: </strong>
                                             {value}
@@ -969,7 +980,7 @@ function ManageCallActive() {
                                         ))}
                                       </td>
 
-                                           <td>
+                                      <td>
                                         {row.Status === "ANSWER" && (
                                           <Button
                                             // variant="outlined"
@@ -995,34 +1006,41 @@ function ManageCallActive() {
                                       </td>
                                       <td>
                                         {row.Status === "ANSWER" && (
-                                          <FormControl fullWidth style={{ width: "100%", margin: "7px 0",   }} className="table_dropdown">
+                                          <FormControl
+                                            fullWidth
+                                            style={{
+                                              width: "100%",
+                                              margin: "7px 0",
+                                            }}
+                                            className="table_dropdown"
+                                          >
                                             <Select
-                                              style={{ textAlign: "left", paddingLeft:'7px !important', borderRadius: '5px', }}
+                                              style={{
+                                                textAlign: "left",
+                                                paddingLeft: "7px !important",
+                                                borderRadius: "5px",
+                                              }}
                                               defaultValue={option}
                                               onChange={(e) => {
                                                 setOption(e.target.value);
                                               }}
                                               className="table_slct_drop"
-
                                               sx={{
-                                                
                                                 fontSize: "12px",
-                                                 marginLeft: "7px",
-                                              padding: "5px 0px!important",
-                                            
-                                            }}
+                                                marginLeft: "7px",
+                                                padding: "5px 0px!important",
+                                              }}
                                             >
-                                              <MenuItem value={"L"}>Listen</MenuItem>
-                                              <MenuItem value={"LT"}>Listen and Talk</MenuItem>
+                                              <MenuItem value={"L"}>
+                                                Listen
+                                              </MenuItem>
+                                              <MenuItem value={"LT"}>
+                                                Listen and Talk
+                                              </MenuItem>
                                             </Select>
                                           </FormControl>
                                         )}
                                       </td>
-
-
-
-                                   
-
                                     </tr>
                                   );
                                 })
@@ -1034,7 +1052,6 @@ function ManageCallActive() {
                     </div>
                     {/* <!--active-calls-content--> */}
                   </div>
-
                 </div>
               </div>
             </div>

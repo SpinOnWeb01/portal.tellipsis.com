@@ -113,7 +113,8 @@ function ManageCallActive() {
     {
       field: "added_time",
       headerName: "Time",
-      width: 300,
+      // width: 300,
+      flex: 1,
       headerClassName: "custom-header",
       headerAlign: "center",
       align: "center",

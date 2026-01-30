@@ -453,19 +453,20 @@ function AdminCarrier({ colorThem }) {
                                 },
                               }}
                             >
-                              <Fade in={open} className="bg_imagess">
+                              <Fade in={open} className="bg_imagess pt-4">
                                 <Box
                                   sx={style}
                                   borderRadius="10px"
                                   textAlign="center"
                                 >
                                   <IconButton
+                                  className="close_icon pt-0"
                                     onClick={handleClose}
                                     sx={{ float: "inline-end" }}
                                   >
                                     <Close />
                                   </IconButton>
-                                  <br />
+                                
                                   <Typography
                                     id="transition-modal-title"
                                     variant="h6"
@@ -487,7 +488,7 @@ function AdminCarrier({ colorThem }) {
                                       paddingTop: "10px",
                                       padding: "5px",
                                     }}
-                                  >
+                                   >
                                     <TextField
                                       style={{
                                         width: "100%",
@@ -746,17 +747,43 @@ function AdminCarrier({ colorThem }) {
                             onClose={handleCloseModal}
                             sx={{ textAlign: "center" }}
                           >
-                            <DialogTitle
-                              sx={{
-                                color: "#07285d",
-                                fontWeight: "600",
-                                width: "500px",
-                              }}
-                            >
-                              <br />
-                              Edit Carrier
-                            </DialogTitle>
-                            <DialogContent>
+                         
+                             <Box sx={{
+                                                                 display: "flex",
+                                                                 paddingTop: "10px",
+                                                                alignItems: "center",
+                                                                justifyContent: "space-between",
+                                                            }}>
+                                                                
+                                                            <Typography
+                                                              sx={{
+                                                                color: "#07285d",
+                                                                margin: "0 auto",
+                                                                fontSize: "20px",
+                                                                fontWeight: "600",
+                                                                width: "auto",
+                                                                textAlign: "center",
+                                                             
+                               
+                                                                                             
+                            
+                                                              }}
+                                                              className="extension_title"
+                                                            >
+                                                             Edit
+                                                            </Typography>
+                                                              <IconButton
+                                                                className="close_icon"
+                                                                onClick={handleCloseModal}
+                                                                sx={{ float: "inline-end" }}
+                                                              >
+                                                                <Close />
+                                                              </IconButton>
+                                                              
+                                                            </Box>
+                                                         
+                            
+                                                            <DialogContent sx={{pt: "0",}}>
                               <form>
                                 {/* <SelectComponent handleClose={handleClose} /> */}
                                 <Typography variant="body1">

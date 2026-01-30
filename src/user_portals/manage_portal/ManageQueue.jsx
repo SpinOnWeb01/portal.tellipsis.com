@@ -71,7 +71,7 @@ const theme = createTheme({
 function CustomToolbar() {
   return (
     <GridToolbarContainer>
-      <GridToolbarColumnsButton/>
+      <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
       <GridToolbarFilterButton />
     </GridToolbarContainer>
@@ -126,7 +126,7 @@ function ManageQueue() {
     setQueueName(row.name);
     setStrategy(row.strategy);
     setMoh(row.moh);
-    setRingtimeout(row.ringtimeout)
+    setRingtimeout(row.ringtimeout);
     setRingInUse(row.ringinuse);
   }, []); // Memoize event handler
 
@@ -137,7 +137,7 @@ function ManageQueue() {
       ringtimeout: ringtimeout,
       strategy: strategy,
       moh: moh,
-      ringinuse: ringInUse
+      ringinuse: ringInUse,
     });
 
     dispatch(
@@ -147,8 +147,8 @@ function ManageQueue() {
         setResponse,
         setQueueName,
         setMoh,
-        setRingtimeout
-      )
+        setRingtimeout,
+      ),
     );
   };
 
@@ -160,7 +160,7 @@ function ManageQueue() {
         ringtimeout: ringtimeout,
         strategy: strategy,
         moh: moh,
-        ringinuse: ringInUse
+        ringinuse: ringInUse,
       });
       dispatch(
         updateManageQueue(
@@ -169,8 +169,8 @@ function ManageQueue() {
           setResponse,
           setQueueName,
           setMoh,
-          setRingtimeout
-        )
+          setRingtimeout,
+        ),
       );
     },
     [
@@ -185,7 +185,7 @@ function ManageQueue() {
       setQueueName,
       setMoh,
       setRingtimeout,
-    ]
+    ],
   );
 
   const getMenuItemContent = (name) => {
@@ -306,11 +306,10 @@ function ManageQueue() {
       headerName: "Ring In Use",
       headerClassName: "custom-header",
       headerAlign: "center",
-      width: 80,
+      // width: 80,
+      flex: 1,
       align: "center",
     },
-
-   
   ];
 
   const rows = useMemo(() => {
@@ -382,20 +381,20 @@ function ManageQueue() {
                             },
                           }}
                         >
-                          <Fade in={open} className="bg_imagess">
+                          <Fade in={open} className="bg_imagess pt-4">
                             <Box
                               sx={style}
                               borderRadius="10px"
                               textAlign="center"
                             >
                               <IconButton
+                                className="close-icon pt-0"
                                 onClick={handleClose}
                                 sx={{ float: "inline-end" }}
                               >
                                 <Close />
                               </IconButton>
-                              <br />
-                              <br />
+
                               <Typography
                                 id="transition-modal-title"
                                 variant="h6"
@@ -442,7 +441,7 @@ function ManageQueue() {
                                   onChange={(e) => {
                                     const numericValue = e.target.value.replace(
                                       /[^0-9]/g,
-                                      ""
+                                      "",
                                     );
                                     setRingtimeout(numericValue);
                                   }}
@@ -514,35 +513,29 @@ function ManageQueue() {
                                   </Select>
                                 </FormControl>
                                 <br />
-<FormControl
-                                      fullWidth
-                                      style={{ width: "100%", margin: "7px 0" }}
-                                    >
-                                      <InputLabel id="demo-simple-select-label">
-                                      Ring In Use
-                                      </InputLabel>
+                                <FormControl
+                                  fullWidth
+                                  style={{ width: "100%", margin: "7px 0" }}
+                                >
+                                  <InputLabel id="demo-simple-select-label">
+                                    Ring In Use
+                                  </InputLabel>
 
-                                      <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        label="Ring In Use"
-                                        style={{ textAlign: "left" }}
-                                        value={ringInUse}
-                                        onChange={(e) => {
-                                          setRingInUse(e.target.value);
-                                        }}
-                                        required
-                                      >
-                                        
-                                            <MenuItem  value={"yes"}>
-                                              Yes
-                                            </MenuItem>
-                                            <MenuItem  value={"no"}>
-                                              No
-                                            </MenuItem>
-                                          
-                                      </Select>
-                                    </FormControl>
+                                  <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    label="Ring In Use"
+                                    style={{ textAlign: "left" }}
+                                    value={ringInUse}
+                                    onChange={(e) => {
+                                      setRingInUse(e.target.value);
+                                    }}
+                                    required
+                                  >
+                                    <MenuItem value={"yes"}>Yes</MenuItem>
+                                    <MenuItem value={"no"}>No</MenuItem>
+                                  </Select>
+                                </FormControl>
                                 <Button
                                   variant="contained"
                                   className="all_button_clr"
@@ -585,30 +578,37 @@ function ManageQueue() {
                         onClose={handleCloseModal}
                         sx={{ textAlign: "center" }}
                       >
-                        <Box>
-                          <IconButton
-                            onClick={handleCloseModal}
+                        <Box
+                          sx={{
+                            display: "flex",
+                            paddingTop: "10px",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Typography
                             sx={{
-                              float: "inline-end",
-                              margin: "10px 10px 0px 0px",
+                              color: "#07285d",
+                              margin: "0 auto",
+                              fontSize: "20px",
+                              fontWeight: "600",
+                              width: "auto",
+                              textAlign: "center",
                             }}
+                            className="extension_title"
+                          >
+                            Edit
+                          </Typography>
+                          <IconButton
+                            className="close_icon"
+                            onClick={handleCloseModal}
+                            sx={{ float: "inline-end" }}
                           >
                             <Close />
                           </IconButton>
                         </Box>
-                        <DialogTitle
-                          sx={{
-                            color: "#07285d",
-                            fontWeight: "600",
-                            width: "500px",
-                          }}
-                        >
-                          <Box>
-                            <img src="/img/mdl_icon.png" alt="user icon" />
-                          </Box>
-                          Edit
-                        </DialogTitle>
-                        <DialogContent>
+
+                        <DialogContent sx={{ pt: "0" }}>
                           <form>
                             {/* <SelectComponent handleClose={handleClose} /> */}
                             <Typography variant="body1">
@@ -653,7 +653,7 @@ function ManageQueue() {
                                   onChange={(e) => {
                                     const numericValue = e.target.value.replace(
                                       /[^0-9]/g,
-                                      ""
+                                      "",
                                     );
                                     setRingtimeout(numericValue);
                                   }}
@@ -727,34 +727,28 @@ function ManageQueue() {
                                   </Select>
                                 </FormControl>
                                 <FormControl
-                                                                      fullWidth
-                                                                      style={{ width: "100%", margin: "7px 0" }}
-                                                                    >
-                                                                      <InputLabel id="demo-simple-select-label">
-                                                                      Ring In Use
-                                                                      </InputLabel>
-                                
-                                                                      <Select
-                                                                        labelId="demo-simple-select-label"
-                                                                        id="demo-simple-select"
-                                                                        label="Ring In Use"
-                                                                        style={{ textAlign: "left" }}
-                                                                        value={ringInUse}
-                                                                        onChange={(e) => {
-                                                                          setRingInUse(e.target.value);
-                                                                        }}
-                                                                        required
-                                                                      >
-                                                                        
-                                                                            <MenuItem  value={"yes"}>
-                                                                              Yes
-                                                                            </MenuItem>
-                                                                            <MenuItem  value={"no"}>
-                                                                              No
-                                                                            </MenuItem>
-                                                                          
-                                                                      </Select>
-                                                                    </FormControl>
+                                  fullWidth
+                                  style={{ width: "100%", margin: "7px 0" }}
+                                >
+                                  <InputLabel id="demo-simple-select-label">
+                                    Ring In Use
+                                  </InputLabel>
+
+                                  <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    label="Ring In Use"
+                                    style={{ textAlign: "left" }}
+                                    value={ringInUse}
+                                    onChange={(e) => {
+                                      setRingInUse(e.target.value);
+                                    }}
+                                    required
+                                  >
+                                    <MenuItem value={"yes"}>Yes</MenuItem>
+                                    <MenuItem value={"no"}>No</MenuItem>
+                                  </Select>
+                                </FormControl>
                                 <br />
                               </form>
                             </Typography>
@@ -806,7 +800,7 @@ function ManageQueue() {
                       {/* end-edit-modal*/}
                       {/* <!--table---> */}
                       <ThemeProvider theme={theme}>
-                      <div style={{ height: '100%', width: '100%' }}>
+                        <div style={{ height: "100%", width: "100%" }}>
                           <DataGrid
                             rows={rows}
                             columns={columns}
@@ -818,7 +812,7 @@ function ManageQueue() {
                             slots={{
                               toolbar: CustomToolbar,
                             }}
-                                autoHeight
+                            autoHeight
                           />
                         </div>
                       </ThemeProvider>

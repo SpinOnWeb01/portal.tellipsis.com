@@ -86,9 +86,9 @@ const theme = createTheme({
 
 const useStyles = makeStyles({
   spacedRow: {
-      // Adjust spacing here, e.g., margin, padding, etc.
-      marginBottom: '10px',
-    },
+    // Adjust spacing here, e.g., margin, padding, etc.
+    marginBottom: '10px',
+  },
   borderedGreen: {
     borderLeft: "3px solid green", // Add your border styling here
     boxShadow: "2px -1px 4px -3px #686868",
@@ -154,7 +154,7 @@ const useStyles = makeStyles({
 function CustomToolbar() {
   return (
     <GridToolbarContainer>
-      <GridToolbarColumnsButton/>
+      <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
       <GridToolbarFilterButton />
     </GridToolbarContainer>
@@ -249,7 +249,7 @@ function AdminProduct({ colorThem }) {
       description: description,
       type: type,
       is_active: isActive?.toString()?.charAt(0),
-      
+
     });
     dispatch(
       updateAdminCallBlock(
@@ -273,9 +273,9 @@ function AdminProduct({ colorThem }) {
   const handleDelete = useCallback(
     (id) => {
       dispatch(deleteAdminCallBlock({ id: callBlockId }, setResponse, setCallBlockId));
-       setAlertMessage(false);
+      setAlertMessage(false);
     },
-    [callBlockId,dispatch, setResponse, setCallBlockId]
+    [callBlockId, dispatch, setResponse, setCallBlockId]
   ); // Memoize event handler
 
   // =======table=======>
@@ -289,7 +289,7 @@ function AdminProduct({ colorThem }) {
       headerAlign: "center",
       align: "center",
     },
- 
+
     {
       field: "name",
       headerName: "Name",
@@ -314,7 +314,7 @@ function AdminProduct({ colorThem }) {
       headerAlign: "center",
       align: "center",
     },
-   
+
   ];
 
   const rows = useMemo(() => {
@@ -335,7 +335,7 @@ function AdminProduct({ colorThem }) {
   return (
     <>
       <div className={`App ${colorThem} `}>
-        <div className="contant_box" style={{height:"100vh"}}>
+        <div className="contant_box" style={{ height: "100vh" }}>
           <Box
             className="right_sidebox mobile_top_pddng"
             component="main"
@@ -367,7 +367,7 @@ function AdminProduct({ colorThem }) {
                       >
                         <div>
                           <h3>Product</h3>
-                        
+
                         </div>
                         <IconButton
                           className="all_button_clr"
@@ -389,20 +389,20 @@ function AdminProduct({ colorThem }) {
                             },
                           }}
                         >
-                          <Fade in={open} className="bg_imagess">
+                          <Fade in={open} className="bg_imagess pt-4">
                             <Box
                               sx={style}
                               borderRadius="10px"
                               textAlign="center"
                             >
                               <IconButton
+                                className="close_icon pt-0"
                                 onClick={handleClose}
                                 sx={{ float: "inline-end" }}
                               >
                                 <Close />
                               </IconButton>
-                              <br />
-                              <br />
+
                               <Typography
                                 id="transition-modal-title"
                                 variant="h6"
@@ -424,7 +424,7 @@ function AdminProduct({ colorThem }) {
                                   padding: "5px",
                                 }}
                               >
-                                  <TextField
+                                <TextField
                                   style={{
                                     width: "100%",
                                     margin: " 5px 0 5px 0",
@@ -439,7 +439,7 @@ function AdminProduct({ colorThem }) {
                                   }}
                                 />
 
-                              
+
                                 <br />
 
                                 <TextField
@@ -458,7 +458,7 @@ function AdminProduct({ colorThem }) {
                                 />
                                 <br />
 
-                               
+
                                 <TextField
                                   style={{
                                     width: "100%",
@@ -474,7 +474,7 @@ function AdminProduct({ colorThem }) {
                                   }}
                                 />
 
-                                
+
                                 <br />
 
                                 <Button
@@ -520,34 +520,42 @@ function AdminProduct({ colorThem }) {
                         //onClose={handleCloseModal}
                         sx={{ textAlign: "center" }}
                       >
-                        <Box>
-                          <IconButton
-                            onClick={handleCloseModal}
+                        <Box sx={{
+                          display: "flex",
+                          paddingTop: "10px",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}>
+
+                          <Typography
                             sx={{
-                              float: "inline-end",
-                              marginRight: "20px",
-                              marginTop: "20px",
+                              color: "#07285d",
+                              margin: "0 auto",
+                              fontSize: "20px",
+                              fontWeight: "600",
+                              width: "auto",
+                              textAlign: "center",
+
+
+
+
                             }}
+                            className="extension_title"
+                          >
+                            Edit
+                          </Typography>
+                          <IconButton
+                            className="close_icon"
+                            onClick={handleCloseModal}
+                            sx={{ float: "inline-end" }}
                           >
                             <Close />
                           </IconButton>
+
                         </Box>
 
-                        <DialogTitle
-                          sx={{
-                            color: "#07285d",
-                            fontWeight: "600",
-                            width: "500px",
-                          }}
-                          className="mobile_view"
-                        >
-                          {/* <Box>
-                  {" "}
-                  <img src="/img/mdl_icon.png" alt="user icon" />
-                </Box> */}
-                          Edit
-                        </DialogTitle>
-                        <DialogContent>
+
+                        <DialogContent sx={{ pt: "0", }}>
                           <form>
                             {/* <SelectComponent handleClose={handleClose} /> */}
                             <Typography variant="body1">
@@ -605,7 +613,7 @@ function AdminProduct({ colorThem }) {
                                 />
                                 <br />
 
-                               
+
                                 <FormControl
                                   fullWidth
                                   style={{ margin: " 5px 0 5px 0" }}
@@ -645,7 +653,7 @@ function AdminProduct({ colorThem }) {
                                   }}
                                 />
 
-                                
+
                                 <br />
                               </form>
                             </Typography>
@@ -698,76 +706,76 @@ function AdminProduct({ colorThem }) {
 
                       {/* Delete Confirmation Modal Start  */}
                       <Dialog
-              open={alertMessage}
-              onClose={handleAlertClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              sx={{ textAlign: "center" }}
-              //className="bg_imagess"
-            >
-              <DialogTitle
-                id="alert-dialog-title"
-                sx={{ color: "#07285d", fontWeight: "600" }}
-              >
-                {"Delete Confirmation"}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText
-                  id="alert-dialog-description"
-                  sx={{ paddingBottom: "0px !important" }}
-                >
-                  Are you sure you want to delete {name} ?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  paddingBottom: "20px",
-                }}
-              >
-                <Button
-                  variant="contained"
-                  sx={{
-                    fontSize: "16px !impotant",
-                    background:
-                      "linear-gradient(180deg, #0E397F 0%, #001E50 100%) !important",
-                    marginTop: "20px",
-                    marginLeft: "0px !important",
-                    padding: "10px 20px !important",
-                    textTransform: "capitalize !important",
-                  }}
-                  className="all_button_clr"
-                  color="info"
-                  onClick={handleAlertClose}
-                  autoFocus
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="contained"
-                  sx={{
-                    fontSize: "16px !impotant",
-                    marginTop: "20px",
-                    padding: "10px 20px !important",
-                    textTransform: "capitalize !important",
-                    marginLeft: "0px !important",
-                    marginRight: "0px !important",
-                  }}
-                  className="all_button_clr"
-                  color="error"
-                  onClick={handleDelete}
-                  startIcon={<DeleteIcon />}
-                >
-                  Delete
-                </Button>
-              </DialogActions>
-            </Dialog>
-            {/* Delete Confirmation Modal End  */}
+                        open={alertMessage}
+                        onClose={handleAlertClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                        sx={{ textAlign: "center" }}
+                      //className="bg_imagess"
+                      >
+                        <DialogTitle
+                          id="alert-dialog-title"
+                          sx={{ color: "#07285d", fontWeight: "600" }}
+                        >
+                          {"Delete Confirmation"}
+                        </DialogTitle>
+                        <DialogContent>
+                          <DialogContentText
+                            id="alert-dialog-description"
+                            sx={{ paddingBottom: "0px !important" }}
+                          >
+                            Are you sure you want to delete {name} ?
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            paddingBottom: "20px",
+                          }}
+                        >
+                          <Button
+                            variant="contained"
+                            sx={{
+                              fontSize: "16px !impotant",
+                              background:
+                                "linear-gradient(180deg, #0E397F 0%, #001E50 100%) !important",
+                              marginTop: "20px",
+                              marginLeft: "0px !important",
+                              padding: "10px 20px !important",
+                              textTransform: "capitalize !important",
+                            }}
+                            className="all_button_clr"
+                            color="info"
+                            onClick={handleAlertClose}
+                            autoFocus
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            variant="contained"
+                            sx={{
+                              fontSize: "16px !impotant",
+                              marginTop: "20px",
+                              padding: "10px 20px !important",
+                              textTransform: "capitalize !important",
+                              marginLeft: "0px !important",
+                              marginRight: "0px !important",
+                            }}
+                            className="all_button_clr"
+                            color="error"
+                            onClick={handleDelete}
+                            startIcon={<DeleteIcon />}
+                          >
+                            Delete
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                      {/* Delete Confirmation Modal End  */}
 
                       {/* <!--table---> */}
                       <ThemeProvider theme={theme}>
-                      <div style={{ height: '100%', width: '100%' }}>
+                        <div style={{ height: '100%', width: '100%' }}>
                           <DataGrid
                             rows={rows}
                             columns={columns}
@@ -789,8 +797,8 @@ function AdminProduct({ colorThem }) {
               </div>
             </div>
           </Box>
-        </div>
-      </div>
+        </div >
+      </div >
     </>
   );
 }

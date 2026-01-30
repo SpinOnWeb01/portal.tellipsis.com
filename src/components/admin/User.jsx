@@ -694,7 +694,8 @@ function User({ colorThem }) {
     return color;
   }
 
-  const columns = [
+  const baseColumns = [
+    //-----Login------
     {
       field: "login",
       headerName: "User Signin",
@@ -729,6 +730,7 @@ function User({ colorThem }) {
         );
       },
     },
+    //-----Action-----
     {
       field: "action",
       headerName: "Action",
@@ -773,6 +775,7 @@ function User({ colorThem }) {
         );
       },
     },
+    //-----User Name----
     {
       field: "username",
       headerName: "User Name",
@@ -806,6 +809,7 @@ function User({ colorThem }) {
         );
       },
     },
+    //-----No. of TFN----
     {
       field: "did_count",
       headerName: "No. of TFN",
@@ -814,6 +818,7 @@ function User({ colorThem }) {
       headerAlign: "center",
       align: "center",
     },
+    //-----No. of Extension-----
     {
       field: "subscriber_count",
       headerName: "No. of Extension",
@@ -821,7 +826,15 @@ function User({ colorThem }) {
       headerClassName: "custom-header",
       headerAlign: "center",
       align: "center",
+      renderCell: (params) => {
+        return (
+          <div className=" user_bdr d-flex justify-content-between align-items-center">
+            <span>{params.row.subscriber_count}/{params.row.extensions_limit}</span>
+          </div>
+        );
+      },
     },
+    //------R.Minutes-------
     {
       field: "remaining_minutes",
       headerName: "R.Minutes",
@@ -830,6 +843,7 @@ function User({ colorThem }) {
       headerAlign: "center",
       align: "center",
     },
+    //-----Billing Type-----
     {
       field: "billing_type",
       headerName: "Billing Type",
@@ -838,6 +852,7 @@ function User({ colorThem }) {
       headerAlign: "center",
       align: "center",
     },
+    //-----Reseller--------
     {
       field: "reseller_id",
       headerName: "Reseller",
@@ -852,8 +867,8 @@ function User({ colorThem }) {
               if (name?.role === "Reseller") {
                 return (
                   <span key={index}>
-                    {name.id === params.row.reseller_id ? (
-                      <>{name.username}</>
+                    {name?.id === params?.row?.reseller_id ? (
+                      <>{name?.username}</>
                     ) : (
                       <></>
                     )}
@@ -882,52 +897,51 @@ function User({ colorThem }) {
             </div>)
       }
     },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 80,
-      headerClassName: "custom-header",
-      headerAlign: "center",
-      align: "center",
-      renderCell: (params) => {
-        return (
-          <div className="d-flex justify-content-between align-items-center">
-            {params.row.status === "t" ? (
-              <>
-                <div
-                  style={{
-                    color: "white",
-                    background: "green",
-                    padding: "7px",
-                    borderRadius: "5px",
-                    fontSize: "12px",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Active
-                </div>
-              </>
-            ) : (
-              <>
-                <div
-                  style={{
-                    color: "white",
-                    background: "red",
-                    padding: "7px",
-                    borderRadius: "5px",
-                    fontSize: "12px",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  Deactive
-                </div>
-              </>
-            )}
-          </div>
-        );
-      },
-    },
-
+    // {
+    //   field: "status",
+    //   headerName: "Status",
+    //   width: 80,
+    //   headerClassName: "custom-header",
+    //   headerAlign: "center",
+    //   align: "center",
+    //   renderCell: (params) => {
+    //     return (
+    //       <div className="d-flex justify-content-between align-items-center">
+    //         {params.row.status === "t" ? (
+    //           <>
+    //             <div
+    //               style={{
+    //                 color: "white",
+    //                 background: "green",
+    //                 padding: "7px",
+    //                 borderRadius: "5px",
+    //                 fontSize: "12px",
+    //                 textTransform: "capitalize",
+    //               }}
+    //             >
+    //               Active
+    //             </div>
+    //           </>
+    //         ) : (
+    //           <>
+    //             <div
+    //               style={{
+    //                 color: "white",
+    //                 background: "red",
+    //                 padding: "7px",
+    //                 borderRadius: "5px",
+    //                 fontSize: "12px",
+    //                 textTransform: "capitalize",
+    //               }}
+    //             >
+    //               Deactive
+    //             </div>
+    //           </>
+    //         )}
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       field: "role",
       headerName: "Role",
@@ -989,14 +1003,8 @@ function User({ colorThem }) {
     //   headerAlign: "center",
     //   align: "center",
     // },
-    {
-      field: "extensions_limit",
-      headerName: "Ext Limit",
-      width: 100,
-      headerClassName: "custom-header",
-      headerAlign: "center",
-      align: "center",
-    },
+    
+    //-----Date------
     {
       field: "created_date",
       headerName: "Date",
@@ -1028,7 +1036,7 @@ function User({ colorThem }) {
         }
       },
     },
-
+    //-----Extension------
     {
       field: "extension",
       headerName: "Extension",
@@ -1146,6 +1154,91 @@ function User({ colorThem }) {
     },
   ];
 
+  const suspendDateColumn = {
+  //-----Suspend Date-------
+      field: "suspended_at",
+      headerName: "Sus Date",
+      width: 100,
+      headerClassName: "custom-header",
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params) => {
+        if (params.value !== null) {
+          const date = new Date(params.value);
+          var day = date.getUTCDate();
+          var month = date.getUTCMonth() + 1; // Month starts from 0
+          var year = date.getUTCFullYear();
+
+          // Formatting single-digit day/month with leading zero if needed
+          day = (day < 10 ? "0" : "") + day;
+          month = (month < 10 ? "0" : "") + month;
+
+          // Formatting single-digit hours/minutes/seconds with leading zero if needed
+
+          var formattedDate = day + "/" + month + "/" + year + " ";
+          return (
+            <>
+              <span style={{ color: "blue" }}>
+                {day}/{month}/{year}
+              </span>
+            </>
+          );
+        }
+      },
+  }
+
+  const statusColumn = {
+  field: "status",
+  headerName: "Status",
+  width: 140,
+  headerClassName: "custom-header",
+      headerAlign: "center",
+      align: "center",
+  renderCell: (params) => (
+   <span
+  className={`badge ${
+    params.row.status === "t"
+      ? "bg-success"
+      : params.row.status === "f"
+      ? "bg-danger"
+      : params.row.status === "s"
+      ? "bg-warning"
+      : "bg-secondary"
+  }`}
+  style={{
+    color: params.row.status === "s" ? "#000" : "#fff",
+    padding: "7px 10px",
+    borderRadius: "5px",
+    fontSize: "12px",
+    textTransform: "capitalize",
+    fontWeight: 400,
+  }}
+>
+  {params.row.status === "t"
+    ? "Active"
+    : params.row.status === "f"
+    ? "Deactivated"
+    : params.row.status === "s"
+    ? "Suspended"
+    : "Unknown"}
+</span>
+
+  ),
+};
+
+  const columns = useMemo(() => {
+  if (radioValue === "") {
+    // Sirf "All" par status column add karo
+    return [...baseColumns, statusColumn];
+  }
+
+  if (radioValue === "s") {
+    // Sirf "All" par status column add karo
+    return [...baseColumns, suspendDateColumn];
+  }
+  return baseColumns; // baaki sab par status hide
+}, [radioValue, baseColumns]);
+
   useEffect(() => {
     if (uId !== "") {
       let config = {
@@ -1219,6 +1312,7 @@ function User({ colorThem }) {
           address: item.address,
           billing_type: item.billing_type,
           remaining_minutes: item.remaining_minutes,
+          suspended_at: item?.suspended_at
         });
       });
     return calculatedRows;
@@ -1261,37 +1355,52 @@ function User({ colorThem }) {
               onClose={handleCloseModal}
               sx={{ textAlign: "center", borderRadius: "10px" }}
             >
-              <Box>
-                <IconButton
-                  onClick={handleCloseModal}
-                  sx={{
-                    float: "inline-end",
-                    display: "flex",
-                    justifyContent: "end",
-                    margin: "10px 10px 0px 0px",
-                  }}
-                >
-                  <Close />
-                </IconButton>
-              </Box>
-              <DialogTitle
-                sx={{ color: "#07285d", fontWeight: "600", width: "500px" }}
-              >
-                <Box>
-                  {" "}
-                  <img src="/img/mdl_icon.png" alt="user icon" />
-                </Box>
-                User Edit
-              </DialogTitle>
+              
+             
 
-              <DialogContent>
+                 <Box sx={{
+                                     display: "flex",
+                                     paddingTop: "10px",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                }}>
+                                    
+                                <Typography
+                                  sx={{
+                                    color: "#07285d",
+                                    margin: "0 auto",
+                                    fontSize: "20px",
+                                    fontWeight: "600",
+                                    width: "auto",
+                                    textAlign: "center",
+                                 
+   
+                                                                 
+
+                                  }}
+                                  className="extension_title"
+                                >
+                                  User Edit
+                                </Typography>
+                                  <IconButton
+                                    className="close_icon"
+                                    onClick={handleCloseModal}
+                                    sx={{ float: "inline-end" }}
+                                  >
+                                    <Close />
+                                  </IconButton>
+                                  
+                                </Box>
+                             
+
+                                <DialogContent sx={{pt: "0",}}>
                 <form>
                   {/* <SelectComponent handleClose={handleClose} /> */}
                   <Typography variant="body1">
                     <form
                       style={{
                         textAlign: "center",
-                        height: "348px",
+                        
                         // overflow: "auto",
                         paddingTop: "10px",
                         padding: "5px",
@@ -1841,42 +1950,51 @@ function User({ colorThem }) {
                           open={open}
                           onClose={handleClose}
                           sx={{ textAlign: "center", borderRadius: "10px" }}
-                        >
-                          <Box>
-                            <IconButton
-                              onClick={handleClose}
-                              sx={{
-                                float: "inline-end",
-                                display: "flex",
-                                justifyContent: "end",
-                                margin: "10px 10px 0px 0px",
-                              }}
-                            >
-                              <Close />
-                            </IconButton>
-                          </Box>
-                          <DialogTitle
-                            sx={{
-                              color: "#07285d",
-                              fontWeight: "600",
-                              width: "500px",
-                            }}
-                          >
-                            <Box>
-                              {" "}
-                              <img src="/img/mdl_icon.png" alt="user icon" />
-                            </Box>
-                            Add User 
-                          </DialogTitle>
+                        >                        
 
-                          <DialogContent>
+                               <Box sx={{
+                                     display: "flex",
+                                     paddingTop: "10px",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                }}>
+                                    
+                                <Typography
+                                  sx={{
+                                    color: "#07285d",
+                                    margin: "0 auto",
+                                    fontSize: "20px",
+                                    fontWeight: "600",
+                                    width: "auto",
+                                    textAlign: "center",
+                                 
+   
+                                                                 
+
+                                  }}
+                                  className="extension_title"
+                                >
+                                  Add User
+                                </Typography>
+                                  <IconButton
+                                    className="close_icon"
+                                    onClick={handleClose}
+                                    sx={{ float: "inline-end" }}
+                                  >
+                                    <Close />
+                                  </IconButton>
+                                  
+                                </Box>
+                             
+
+                                <DialogContent sx={{pt: "0",}}>
                             <form>
                               {/* <SelectComponent handleClose={handleClose} /> */}
                               <Typography variant="body1">
                                 <form
                                   style={{
                                     textAlign: "center",
-                                    height: "348px",
+                                 
                                     // overflow: "auto",
                                     paddingTop: "10px",
                                     padding: "5px",

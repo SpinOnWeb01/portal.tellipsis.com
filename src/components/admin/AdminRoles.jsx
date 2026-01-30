@@ -422,36 +422,50 @@ function AdminRoles({ colorThem }) {
                           onClose={handleClose}
                           sx={{ textAlign: "center" }}
                         >
-                          <Box>
-                            <IconButton
-                              onClick={handleClose}
-                              sx={{
-                                float: "inline-end",
-                                display: "flex",
-                                justifyContent: "end",
-                                margin: "10px 10px 0px 0px",
-                              }}
-                            >
-                              <Close />
-                            </IconButton>
-                          </Box>
-                          <DialogTitle
-                            className="modal_heading"
-                            sx={{
-                              color: "#133325",
-                              fontWeight: "600",
-                              width: "500px",
-                            }}
-                          >
-                            Add Role
-                          </DialogTitle>
-                          <DialogContent>
+                          
+                          
+                           <Box sx={{
+                                     display: "flex",
+                                     paddingTop: "10px",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                }}>
+                                    
+                                <Typography
+                                  sx={{
+                                    color: "#07285d",
+                                    margin: "0 auto",
+                                    fontSize: "20px",
+                                    fontWeight: "600",
+                                    width: "auto",
+                                    textAlign: "center",
+                                 
+   
+                                                                 
+
+                                  }}
+                                  className="extension_title"
+                                >
+                                  Add Role
+                                </Typography>
+                                  <IconButton
+                                    className="close_icon"
+                                    onClick={handleClose}
+                                    sx={{ float: "inline-end" }}
+                                  >
+                                    <Close />
+                                  </IconButton>
+                                  
+                                </Box>
+                             
+
+                                <DialogContent sx={{pt: "0",}}>
                             <form>
                               <form
                                 style={{
                                   textAlign: "center",
                                   // height: "348px",
-                                  height: "230px",
+                                 
                                   // overflow: "auto",
                                   paddingTop: "10px",
                                   padding: "5px",
@@ -566,36 +580,50 @@ function AdminRoles({ colorThem }) {
                     onClose={handleEditCampaignClose}
                     sx={{ textAlign: "center" }}
                   >
-                    <Box>
-                      <IconButton
-                        onClick={handleEditCampaignClose}
-                        sx={{
-                          float: "inline-end",
-                          display: "flex",
-                          justifyContent: "end",
-                          margin: "10px 10px 0px 0px",
-                        }}
-                      >
-                        <Close />
-                      </IconButton>
-                    </Box>
-                    <DialogTitle
-                      className="modal_heading"
-                      sx={{
-                        color: "#133325",
-                        fontWeight: "600",
-                        width: "500px",
-                      }}
-                    >
-                      Update Role
-                    </DialogTitle>
-                    <DialogContent>
+                  
+                  
+                    <Box sx={{
+                                                        display: "flex",
+                                                        paddingTop: "10px",
+                                                       alignItems: "center",
+                                                       justifyContent: "space-between",
+                                                   }}>
+                                                       
+                                                   <Typography
+                                                     sx={{
+                                                       color: "#07285d",
+                                                       margin: "0 auto",
+                                                       fontSize: "20px",
+                                                       fontWeight: "600",
+                                                       width: "auto",
+                                                       textAlign: "center",
+                                                    
+                      
+                                                                                    
+                   
+                                                     }}
+                                                     className="extension_title"
+                                                   >
+                                                     Update Role
+                                                   </Typography>
+                                                     <IconButton
+                                                       className="close_icon"
+                                                       onClick={handleEditCampaignClose}
+                                                       sx={{ float: "inline-end" }}
+                                                     >
+                                                       <Close />
+                                                     </IconButton>
+                                                     
+                                                   </Box>
+                                                
+                   
+                                                   <DialogContent sx={{pt: "0",}}>
                       <form>
                         <form
                           style={{
                             textAlign: "center",
                             // height: "348px",
-                            height: "200px",
+                           
                             // overflow: "auto",
                             paddingTop: "10px",
                             padding: "5px",

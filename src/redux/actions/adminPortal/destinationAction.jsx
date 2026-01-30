@@ -86,7 +86,7 @@ export const getDid = (radioValue, setLoader) => async (dispatch) => {
       }
     };
     
-export const updateDestination = (updateDid, setResponse, setEdit, setTfnNumber ,setDestinationDescription, setSelectedValue, setUserId, setSubType, setRecording, setDestinationAction, setSuspendValue, setCarrierName) => async (dispatch) => {
+export const updateDestination = (updateDid, setField, setEdit) => async (dispatch) => {
     
       const token = JSON.parse(localStorage.getItem("admin"));
         try {
@@ -109,17 +109,8 @@ export const updateDestination = (updateDid, setResponse, setEdit, setTfnNumber 
               position: toast.POSITION.TOP_RIGHT,
               autoClose: 1500,
             });
-            setResponse(data);   
-            setEdit(false)
-            setTfnNumber("")  
-            setDestinationDescription("") 
-            setSelectedValue("")
-            setUserId("") 
-            setSubType("")
-            setRecording("") 
-            setDestinationAction([])
-            setSuspendValue("")
-            setCarrierName("")  
+            setField(data);   
+            setEdit(false) 
           }  else {
             toast.error(data?.message, {
               position: toast.POSITION.TOP_RIGHT,

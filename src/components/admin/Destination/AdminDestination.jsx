@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useReducer } from "react";
+import React, { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Box, useMediaQuery } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -65,7 +65,9 @@ function AdminDestination({ colorThem }) {
   const token = JSON.parse(localStorage.getItem("admin"));
   const user = JSON.parse(localStorage.getItem("admin"));
   const state = useSelector((state) => state);
-  
+
+  const [response, setResponse] = useState("");
+
   const [stateReducer, dispatchReducer] = useReducer(destinationReducer, initialState);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isXs = useMediaQuery(theme.breakpoints.only("xs"));
@@ -81,7 +83,6 @@ function AdminDestination({ colorThem }) {
     openimport,
     file,
     open,
-    response,
     edit,
     tfnNumber,
     userId,
@@ -132,8 +133,8 @@ function AdminDestination({ colorThem }) {
       didId: data?.did_id || "",
       recording: data?.recording?.toString() || "",
       userId: data.user_id || "",
-      service: data?.service_type === "IP" 
-        ? data?.service_type 
+      service: data?.service_type === "IP"
+        ? data?.service_type
         : data?.service_type?.charAt(0).toUpperCase() + data?.service_type?.slice(1).toLowerCase() || "",
       ipAddress: data?.service_type === "IP" ? data.details : "",
       resellerId: data?.reseller_id === null ? "" : data?.reseller_id,
@@ -145,8 +146,8 @@ function AdminDestination({ colorThem }) {
   }, []);
 
   // DataGrid configuration
-  const memoizedColumns = useMemo(() => 
-    columns({ isMobile, isXs, user, handleEdit }), 
+  const memoizedColumns = useMemo(() =>
+    columns({ isMobile, isXs, user, handleEdit }),
     [isMobile, isXs, user, handleEdit]
   );
 
@@ -154,7 +155,7 @@ function AdminDestination({ colorThem }) {
     return state?.allDid?.alldid?.map((item, index) => ({
       id: index + 1,
       did_id: item?.id,
-      tfn_number: item?.didnumber,
+      tfn_number: String(item?.didnumber),
       username: item?.username,
       record: item?.destination_record,
       service_type: item?.service_type,
@@ -177,7 +178,7 @@ function AdminDestination({ colorThem }) {
     })) || [];
   }, [state?.allDid?.alldid]);
 
-  const filteredRows = useMemo(() => 
+  const filteredRows = useMemo(() =>
     rows.filter((row) =>
       row.tfn_number?.toLowerCase().includes(searchDestination.toLowerCase())
     ),
@@ -200,8 +201,8 @@ function AdminDestination({ colorThem }) {
   // Effects
   useEffect(() => {
     dispatch(getDid(radioValue, (loader) => setField('loader', loader)));
-    dispatch({ type: GET_DID_SUCCESS, payload: [] });
-  }, [radioValue, dispatch, setField]);
+    //dispatch({ type: GET_DID_SUCCESS, payload: [] });
+  }, [radioValue, response, dispatch, setField]);
 
   useEffect(() => {
     dispatch(getExtension(""));
@@ -260,6 +261,7 @@ function AdminDestination({ colorThem }) {
                         queue={queue}
                         validation={validation}
                         error={error}
+                        setResponse={setResponse}
                       />
 
                       <EditDestinationModal
@@ -274,6 +276,7 @@ function AdminDestination({ colorThem }) {
                         queue={queue}
                         validation={validation}
                         error={error}
+                        setResponse={setResponse}
                       />
 
                       <ImportModal

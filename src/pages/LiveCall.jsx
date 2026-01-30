@@ -1,28 +1,30 @@
 import React, { useEffect, useState } from "react";
 import "../../src/style.css";
 import { useSelector } from "react-redux";
-
+import socketIOClient from 'socket.io-client';
+import { api } from "../mockData";
 function LiveCall() {
     const state = useSelector((state) => state?.user?.user);
     const [number, setNumber] = useState(0);
 
-    const generateRandomNumber = () => {
-      const randomNumberTimeout = setTimeout(() => {
-        let x = Math.floor(Math.random() * 100 + 1);
-        setNumber(x);
-      }, 7000);
+   useEffect(() => {
+      const socket = socketIOClient(`${api.dev}`);
   
-      return randomNumberTimeout; // Return the timeout ID
-    };
-  
-    useEffect(() => {
-      const randomNumberTimeout = generateRandomNumber();
+      // Listen for events from the server
+      socket.on("call_details", (data) => {
+          // Handle the received data (e.g., update state, trigger a re-fetch)
+          if (data?.data !== undefined) {
+              // Get the count of objects in the received data
+               const newDataCount = Object.keys(data.data).length;
+               setNumber(newDataCount)
+          }
+      });
   
       return () => {
-        // Clear the timeout when the component unmounts or when `number` changes
-        clearTimeout(randomNumberTimeout);
+          // Disconnect the socket when the component unmounts
+          socket.disconnect();
       };
-    }, [number]);
+  }, []); // Empty dependency array ensures this effect runs once on mount
 
   // const randomNumber = (()=>{
   //   setTimeout(() => {

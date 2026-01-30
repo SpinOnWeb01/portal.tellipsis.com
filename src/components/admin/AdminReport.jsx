@@ -330,7 +330,7 @@ function AdminReport({ colorThem }) {
               <span
                 onClick={handleClick}
                 style={{
-                  fontSize: "14px",
+                  fontSize: "12.215px",
                   color: "#1976d2",
                   display: "block",
                   whiteSpace: "nowrap",
@@ -356,7 +356,7 @@ function AdminReport({ colorThem }) {
                   horizontal: "center",
                 }}
               >
-                <Typography sx={{ p: 2, maxWidth: "200px", fontSize: "12px" }}>
+                <Typography sx={{ p: 2, maxWidth: "200px", fontSize: "12.215px", }}>
                   {getStatusMessage(statusKey)}
                 </Typography>
               </Popover>
@@ -366,7 +366,7 @@ function AdminReport({ colorThem }) {
             <Tooltip title={getStatusMessage(statusKey)} arrow>
               <span
                 style={{
-                  fontSize: "14px",
+                  fontSize: "12.215px",
                   color: "#1976d2",
                   display: "block",
                   whiteSpace: "nowrap",
@@ -411,11 +411,11 @@ function AdminReport({ colorThem }) {
           seconds = (seconds < 10 ? "0" : "") + seconds;
           return (
             <>
-              <span style={{ color: "blue" }}>
+              <span style={{ color: "blue", fontSize: "12.215px", }}>
                 {day}/{month}/{year}
               </span>
               &nbsp;
-              <span style={{ color: "green" }}>
+              <span style={{ color: "green", fontSize: "12.215px", }}>
                 {hours}:{minutes}:{seconds}
               </span>
             </>
@@ -431,6 +431,13 @@ function AdminReport({ colorThem }) {
       headerAlign: "center",
       align: "center",
       cellClassName: "super-app-theme--cell",
+          renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.username}</span>            
+          </div>
+        );
+      },
     },
     {
       field: "caller_id_number",
@@ -440,6 +447,13 @@ function AdminReport({ colorThem }) {
       headerAlign: "center",
       align: "center",
       cellClassName: "super-app-theme--cell",
+         renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.caller_id_number}</span>            
+          </div>
+        );
+      },
     },
     {
       field: "did_tfn",
@@ -451,7 +465,15 @@ function AdminReport({ colorThem }) {
       headerAlign: "center",
       align: "center",
       // editable: true
+        renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.did_tfn}</span>            
+          </div>
+        );
+      },
     },
+    
     {
       field: "call_direction",
       headerName: "Call Direction",
@@ -468,6 +490,7 @@ function AdminReport({ colorThem }) {
                   fontWeight: "500",
                   color: "#17a2b8",
                   margin: "0",
+                  fontSize: "12.215px",
                   textTransform: "capitalize",
                 }}
               >
@@ -492,13 +515,48 @@ function AdminReport({ colorThem }) {
 
     {
       field: "hangup_reason",
+      headerName: "Hangup Reason",
+      width: 220,
+      headerAlign: "center",
+      align: "center",
+      headerClassName: "custom-header",
+      renderCell: (params) => <CallStatusTooltip statusKey={params.value} style={{ fontSize: "12.215px", }} />
+    },
+
+    {
+      field: "call_result",
       headerName: "Status",
       width: 220,
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
-      renderCell: (params) => <CallStatusTooltip statusKey={params.value} />
+      renderHeader: () => (
+        <Typography
+          variant="body2"
+          sx={{ fontSize: "calc(0.6rem + 0.15vw)", fontWeight: "bold" }}
+        >
+          Status
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <span
+          style={{
+            color:
+              params.row.call_result === "ANSWERED"
+                ? "green"
+                : params.row.call_result === "Missed"
+                  ? "orange"
+                  : params.row.call_result === "Failed"
+                    ? "red"
+                    : "red",
+            fontSize: "calc(0.5rem + 0.2vw)",
+          }}
+        >
+          {params.row.call_result}
+        </span>
+      ),
     },
+    
     {
       field: "destination_number",
       headerName: "Service",
@@ -517,6 +575,8 @@ function AdminReport({ colorThem }) {
                 fontWeight: "500",
                 color: "orange",
                 margin: "0",
+                fontSize: "12.215px",
+                
                 textTransform: "capitalize",
               }}
             >
@@ -532,8 +592,18 @@ function AdminReport({ colorThem }) {
       width: 150,
       headerClassName: "custom-header",
       headerAlign: "center",
+      fontSize: "12.215px",
       align: "center",
+         renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.destination_type}</span>            
+          </div>
+        );
+      },
+      
     },
+    
     {
       field: "destination",
       headerName: "Destination",
@@ -541,6 +611,13 @@ function AdminReport({ colorThem }) {
       headerClassName: "custom-header",
       headerAlign: "center",
       align: "center",
+        renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.destination}</span>            
+          </div>
+        );
+      },
     },
     {
       field: "duration",
@@ -549,6 +626,13 @@ function AdminReport({ colorThem }) {
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
+        renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.duration}</span>            
+          </div>
+        );
+      },
     },
 
     {
@@ -558,6 +642,13 @@ function AdminReport({ colorThem }) {
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
+        renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.billsec}</span>            
+          </div>
+        );
+      },
     },
 
     {
@@ -607,6 +698,13 @@ function AdminReport({ colorThem }) {
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
+        renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.answered_by}</span>            
+          </div>
+        );
+      },
     },
     {
       field: "transfered_to",
@@ -615,6 +713,13 @@ function AdminReport({ colorThem }) {
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
+        renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.transfered_to}</span>            
+          </div>
+        );
+      },
     },
     {
       field: "answer_at",
@@ -643,11 +748,11 @@ function AdminReport({ colorThem }) {
           seconds = (seconds < 10 ? "0" : "") + seconds;
           return (
             <>
-              <span style={{ color: "blue" }}>
+              <span style={{ color: "blue", fontSize: "12.215px", }}>
                 {day}/{month}/{year}
               </span>
               &nbsp;
-              <span style={{ color: "green" }}>
+              <span style={{ color: "green", fontSize: "12.215px", }}>
                 {hours}:{minutes}:{seconds}
               </span>
             </>
@@ -684,11 +789,11 @@ function AdminReport({ colorThem }) {
 
           return (
             <>
-              <span style={{ color: "blue" }}>
+              <span style={{ color: "blue", fontSize: "12.215px", }}>
                 {day}/{month}/{year}
               </span>
               &nbsp;
-              <span style={{ color: "green" }}>
+              <span style={{ color: "green", fontSize: "12.215px", }}>
                 {hours}:{minutes}:{seconds}
               </span>
             </>
@@ -704,6 +809,13 @@ function AdminReport({ colorThem }) {
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
+        renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.uniqueid}</span>            
+          </div>
+        );
+      },
     },
   ];
 
@@ -734,6 +846,7 @@ function AdminReport({ colorThem }) {
         username: item.username,
         answered_by: item.answered_by,
         transfered_to: item.transfered_to,
+        call_result: item.call_result,
       });
     });
 

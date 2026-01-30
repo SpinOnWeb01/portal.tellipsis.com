@@ -2,8 +2,6 @@ const dev = "https://dev.tellipsis.com";
 const prod = "https://portal.tellipsis.com";
 const domain = window.location.host;
 
-
-
 export const api ={
     dev:prod,
 }
@@ -27,6 +25,5 @@ export const usersGroupRolesList = [
         description: 'User',
         isActive: true
     }
-
 ]
 

@@ -270,7 +270,7 @@ function Report() {
             <span
               onClick={handleClick}
               style={{
-                fontSize: "14px",
+                fontSize: "12.215px",
                 color: "#1976d2",
                 display: "block",
                 whiteSpace: "nowrap",
@@ -296,7 +296,7 @@ function Report() {
                 horizontal: "center",
               }}
             >
-              <Typography sx={{ p: 2, maxWidth: "200px", fontSize: "12px" }}>
+              <Typography sx={{ p: 2, maxWidth: "200px", fontSize: "12.215px" }}>
                 {getStatusMessage(statusKey)}
               </Typography>
             </Popover>
@@ -306,7 +306,7 @@ function Report() {
           <Tooltip title={getStatusMessage(statusKey)} arrow>
             <span
               style={{
-                fontSize: "14px",
+                fontSize: "12.215px",
                 color: "#1976d2",
                 display: "block",
                 whiteSpace: "nowrap",
@@ -330,6 +330,13 @@ function Report() {
       width: 200,
       headerAlign: "center",
       align: "center",
+        renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.caller_id_number}</span>            
+          </div>
+        );
+      },
     },
     {
       field: "did_tfn",
@@ -338,6 +345,13 @@ function Report() {
       headerClassName: "custom-header",
       headerAlign: "center",
       align: "center",
+        renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.did_tfn}</span>            
+          </div>
+        );
+      },
     },
     {
       field: "call_direction",
@@ -355,6 +369,7 @@ function Report() {
                   fontWeight: "500",
                   color: "#17a2b8",
                   margin: "0",
+                  fontSize: "12.215px",
                   textTransform: "capitalize",
                 }}
               >
@@ -364,6 +379,7 @@ function Report() {
               <span
                 style={{
                   fontWeight: "500",
+                  fontSize: "12.215px",
                   color: "#fd7e14",
                   margin: "0",
                   textTransform: "capitalize",
@@ -377,43 +393,78 @@ function Report() {
       },
     },
 
-    {
-      field: "hangup_reason",
+    // {
+    //   field: "hangup_reason",
+    //   headerName: "Status",
+    //   width: 210,
+    //   headerAlign: "center",
+    //   align: "center",
+    //   headerClassName: "custom-header",
+    //   renderCell: (params) => <CallStatusTooltip statusKey={params.value} />
+    // },
+
+     {
+      field: "call_result",
       headerName: "Status",
-      width: 210,
+      width: 220,
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
-      renderCell: (params) => <CallStatusTooltip statusKey={params.value} />
+      renderHeader: () => (
+        <Typography
+          variant="body2"
+          sx={{ fontSize: "calc(0.6rem + 0.15vw)", fontWeight: "bold" }}
+        >
+          Status
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <span
+          style={{
+            color:
+              params.row.call_result === "ANSWERED"
+                ? "green"
+                : params.row.call_result === "Missed"
+                  ? "orange"
+                  : params.row.call_result === "Failed"
+                    ? "red"
+                    : "red",
+            fontSize: "calc(0.5rem + 0.2vw)",
+          }}
+        >
+          {params.row.call_result}
+        </span>
+      ),
     },
 
-    {
-      field: "destination_number",
-      headerName: "Service",
-      //type: "number",
-      width: 120,
-      headerAlign: "center",
-      align: "center",
-      // headerAlign: "center",
-      // align: "center",
-      headerClassName: "custom-header",
-      renderCell: (params) => {
-        return (
-          <div className="d-flex justify-content-between align-items-center">
-            <p
-              style={{
-                fontWeight: "500",
-                color: "orange",
-                margin: "0",
-                textTransform: "capitalize",
-              }}
-            >
-              {params?.row?.destination_number}
-            </p>
-          </div>
-        );
-      },
-    },
+    // {
+    //   field: "destination_number",
+    //   headerName: "Service",
+    //   //type: "number",
+    //   width: 120,
+    //   headerAlign: "center",
+    //   align: "center",
+    //   // headerAlign: "center",
+    //   // align: "center",
+    //   headerClassName: "custom-header",
+    //   renderCell: (params) => {
+    //     return (
+    //       <div className="d-flex justify-content-between align-items-center">
+    //         <p
+    //           style={{
+    //             fontWeight: "500",
+    //             fontSize:"12.215px",
+    //             color: "orange",
+    //             margin: "0",
+    //             textTransform: "capitalize",
+    //           }}
+    //         >
+    //           {params?.row?.destination_number}
+    //         </p>
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       field: "destination_type",
       headerName: "Destination Type",
@@ -421,6 +472,14 @@ function Report() {
       headerClassName: "custom-header",
       headerAlign: "center",
       align: "center",
+        renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.destination_type}</span>            
+          </div>
+        );
+      },
+      
     },
     {
       field: "destination",
@@ -429,6 +488,13 @@ function Report() {
       headerClassName: "custom-header",
       headerAlign: "center",
       align: "center",
+        renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.destination}</span>            
+          </div>
+        );
+      },
     },
     {
       field: "answered_by",
@@ -437,6 +503,13 @@ function Report() {
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
+        renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.answered_by}</span>            
+          </div>
+        );
+      },
     },
 
     {
@@ -446,6 +519,13 @@ function Report() {
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
+        renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.duration}</span>            
+          </div>
+        );
+      },
     },
     // {
     //   field: "billsec",
@@ -503,6 +583,13 @@ function Report() {
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
+        renderCell: (params) => {
+        return (
+          <div className="d-flex justify-content-between align-items-center">            
+             <span style={{ fontSize: "12.215px", }}>  {params?.row?.transfered_to}</span>            
+          </div>
+        );
+      },
     },
     // {
     //   field: "disposition",
@@ -631,11 +718,11 @@ function Report() {
           seconds = (seconds < 10 ? "0" : "") + seconds;
           return (
             <>
-              <span style={{ color: "blue" }}>
+              <span style={{ color: "blue", fontSize: "12.215px", }}>
                 {day}/{month}/{year}
               </span>
               &nbsp;
-              <span style={{ color: "green" }}>
+              <span style={{ color: "green", fontSize: "12.215px", }}>
                 {hours}:{minutes}:{seconds}
               </span>
             </>
@@ -671,11 +758,11 @@ function Report() {
           seconds = (seconds < 10 ? "0" : "") + seconds;
           return (
             <>
-              <span style={{ color: "blue" }}>
+              <span style={{ color: "blue", fontSize: "12.215px", }}>
                 {day}/{month}/{year}
               </span>
               &nbsp;
-              <span style={{ color: "green" }}>
+              <span style={{ color: "green", fontSize: "12.215px", }}>
                 {hours}:{minutes}:{seconds}
               </span>
             </>
@@ -711,6 +798,7 @@ function Report() {
         destination: item.destination,
         answered_by: item.answered_by,
         transfered_to: item.transfered_to,
+        call_result: item.call_result,
       });
     });
 

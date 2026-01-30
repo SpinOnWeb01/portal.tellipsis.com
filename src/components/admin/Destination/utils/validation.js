@@ -31,3 +31,26 @@ export const validateIpWithPort = (value) => {
 
   return { valid: true };
 };
+
+// ==============================
+// ✅ TFN / Destination Number Validation
+// ==============================
+
+export const validateTfnNumber = (value) => {
+  if (!value || value.trim() === "") {
+    return {
+      valid: false,
+      message: "Destination number is required",
+    };
+  }
+
+  // Only digits & max 11 length
+  if (!/^\d{1,11}$/.test(value)) {
+    return {
+      valid: false,
+      message: "Destination number must be 11 digits",
+    };
+  }
+
+  return { valid: true };
+};

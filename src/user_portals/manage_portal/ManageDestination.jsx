@@ -204,7 +204,7 @@ function ManageDestination() {
       data?.service_type === "IP"
         ? data?.service_type
         : data?.service_type.charAt(0).toUpperCase() +
-            data?.service_type.slice(1).toLowerCase()
+        data?.service_type.slice(1).toLowerCase()
     );
     setDidId(data?.did_id);
     setDescription(data?.description);
@@ -265,14 +265,23 @@ function ManageDestination() {
     dispatch(getManageExtension());
   }, [response, dispatch]);
 
+  const cleanDetails = (value) => {
+  if (!value) return "";
+
+  if (Array.isArray(value)) {
+    return value.join(",").replace(/^,*/, "");
+  }
+
+  return value.replace(/^,*/, "");
+};
+
   const handleUpdate = (e) => {
     e.preventDefault();
+    const cleanedDetails = cleanDetails(destinationAction);
     const request = JSON.stringify({
       id: didId,
       is_active: enable.toString().charAt(0),
-      details: Array.isArray(destinationAction)
-        ? destinationAction.join(",")
-        : destinationAction,
+      details: cleanedDetails,
       description: description,
       recording: recording?.charAt(0),
       service_type: service?.toUpperCase(),
@@ -347,14 +356,6 @@ function ManageDestination() {
     },
 
     {
-      field: "description",
-      headerName: "Description",
-      width: 150,
-      headerClassName: "custom-header",
-      headerAlign: "left",
-      align: "left",
-    },
-    {
       field: "created_date",
       headerName: "Create Date",
       headerClassName: "custom-header",
@@ -364,9 +365,8 @@ function ManageDestination() {
       renderCell: (params) => {
         const valueFormatter = (params) => {
           const date = new Date(params.value);
-          return `${date.getDate()}/${
-            date.getMonth() + 1
-          }/${date.getFullYear()}`;
+          return `${date.getDate()}/${date.getMonth() + 1
+            }/${date.getFullYear()}`;
         };
 
         return (
@@ -395,9 +395,8 @@ function ManageDestination() {
       renderCell: (params) => {
         const valueFormatter = (params) => {
           const date = new Date(params.value);
-          return `${date.getDate()}/${
-            date.getMonth() + 1
-          }/${date.getFullYear()}`;
+          return `${date.getDate()}/${date.getMonth() + 1
+            }/${date.getFullYear()}`;
         };
 
         return (
@@ -429,14 +428,7 @@ function ManageDestination() {
             {params.row.status === true ? (
               <>
                 <div
-                  // style={{
-                  //   color: "white",
-                  //   background: "green",
-                  //   padding: "7px",
-                  //   borderRadius: "5px",
-                  //   fontSize: "12px",
-                  //   textTransform: "capitalize",
-                  // }}
+              
                   style={{
                     color: "green",
                     //background: "green",
@@ -453,14 +445,7 @@ function ManageDestination() {
             ) : (
               <>
                 <div
-                  // style={{
-                  //   color: "white",
-                  //   background: "red",
-                  //   padding: "7px",
-                  //   borderRadius: "5px",
-                  //   fontSize: "12px",
-                  //   textTransform: "capitalize",
-                  // }}
+                
                   style={{
                     color: "red",
                     //   background: "red",
@@ -478,6 +463,15 @@ function ManageDestination() {
           </div>
         );
       },
+    },
+    
+    {
+      field: "description",
+      headerName: "Description",
+      flex: 1,
+      headerClassName: "custom-header",
+      headerAlign: "left",
+      align: "left",
     },
   ];
 
@@ -592,20 +586,20 @@ function ManageDestination() {
                             },
                           }}
                         >
-                          <Fade in={edit} className="mobile_width bg_imagess">
+                          <Fade in={edit} className="mobile_width bg_imagess p-4">
                             <Box
                               sx={style}
                               borderRadius="10px"
                               textAlign="center"
                             >
                               <IconButton
+                                className="close-icon pt-0"
                                 onClick={handleEditClose}
                                 sx={{ float: "inline-end" }}
                               >
                                 <Close />
                               </IconButton>
-                              <br />
-                              <br />
+
                               <Typography
                                 id="transition-modal-title"
                                 variant="h6"
@@ -695,13 +689,13 @@ function ManageDestination() {
                                             setDestinationAction([]);
                                           }
                                         }}
-                                        // input={
-                                        //   <OutlinedInput label="Sub Type" />
-                                        // }
-                                        // renderValue={(selected) =>
-                                        //   selected.join(", ")
-                                        // }
-                                        // MenuProps={MenuProps}
+                                      // input={
+                                      //   <OutlinedInput label="Sub Type" />
+                                      // }
+                                      // renderValue={(selected) =>
+                                      //   selected.join(", ")
+                                      // }
+                                      // MenuProps={MenuProps}
                                       >
                                         {sub_type.map((name) => {
                                           if (

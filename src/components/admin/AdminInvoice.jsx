@@ -571,20 +571,20 @@ function AdminInvoice({ colorThem }) {
                             },
                           }}
                         >
-                          <Fade in={open} className="bg_imagess">
+                          <Fade in={open} className="bg_imagess pt-4">
                             <Box
                               sx={style}
                               borderRadius="10px"
                               textAlign="center"
                             >
                               <IconButton
+                              className="close_icon pt-0"
                                 onClick={handleClose}
                                 sx={{ float: "inline-end" }}
                               >
                                 <Close />
                               </IconButton>
-                              <br />
-                              <br />
+                              
                               <Typography
                                 id="transition-modal-title"
                                 variant="h6"

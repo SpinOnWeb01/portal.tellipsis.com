@@ -161,7 +161,8 @@ function ManageLiveExtension() {
       headerName: "Application",
       headerClassName: "custom-header",
       headerAlign: "center",
-      width: 270,
+      // width: 270,
+      flex: 1,
       align: "center",
     },
   ];

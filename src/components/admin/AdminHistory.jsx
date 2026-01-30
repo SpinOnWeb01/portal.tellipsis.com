@@ -494,15 +494,16 @@ function AdminHistory({ colorThem }) {
                             aria-labelledby="child-modal-title"
                             aria-describedby="child-modal-description"
                            >
-                            <Fade in={open} className="bg_imagess">
+                            <Fade in={open} className="bg_imagess pt-4">
                               <Box sx={{ ...style, width: 700 }}>
                                 <IconButton
+                                className="close_icon pt-0"
                                   onClick={handleClose}
                                   sx={{ float: "inline-end" }}
                                 >
                                   <Close />
                                 </IconButton>
-                                <br />
+                                
                                 <Typography
                                   id="transition-modal-title"
                                   variant="h6"

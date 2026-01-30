@@ -13,7 +13,7 @@ import {
 import { Close } from "@mui/icons-material";
 import { updateDestination } from "../../../../redux/actions/adminPortal/destinationAction";
 import DestinationForm from "./DestinationForm";
-import { validateIpWithPort } from "../utils/validation";
+import { validateIpWithPort, validateTfnNumber } from "../utils/validation";
 
 const EditDestinationModal = React.memo(({
   edit,
@@ -27,6 +27,7 @@ const EditDestinationModal = React.memo(({
   queue,
   validation,
   error,
+  setResponse,
 }) => {
   const dispatch = useDispatch();
 
@@ -50,10 +51,11 @@ const EditDestinationModal = React.memo(({
     const errors = {};
     let isValid = true;
 
-    if (!tfnNumber) {
-      errors.tfnNumber = "Field is required";
-      isValid = false;
-    }
+    const tfnValidation = validateTfnNumber(tfnNumber);
+        if (!tfnValidation.valid) {
+        errors.tfnNumber = tfnValidation.message;
+        isValid = false;
+      }
 
     if (!carrierName) {
       errors.carrierName = "Field is required";
@@ -72,10 +74,21 @@ const EditDestinationModal = React.memo(({
     setField('error', validationResult.valid ? "" : validationResult.message);
   }, [setField]);
 
+  const cleanDetails = (value) => {
+  if (!value) return "";
+
+  if (Array.isArray(value)) {
+    return value.join(",").replace(/^,*/, "");
+  }
+
+  return value.replace(/^,*/, "");
+};
+
   const handleUpdate = useCallback((e) => {
     e.preventDefault();
     const isValid = checkValidation();
     if (isValid && error === "") {
+      const cleanedDetails = cleanDetails(destinationAction);
       const data = JSON.stringify({
         description: destinationDescription,
         is_active: selectedValue?.charAt(0),
@@ -84,7 +97,7 @@ const EditDestinationModal = React.memo(({
         service_type: service?.toUpperCase(),
         sub_type: subType?.toUpperCase(),
         recording: recording?.charAt(0),
-        details: Array.isArray(destinationAction) ? destinationAction.join(",") : destinationAction,
+        details: cleanedDetails,
         is_suspended: suspendValue,
         carrier_name: carrierName,
         reseller_id: resellerId,
@@ -95,7 +108,7 @@ const EditDestinationModal = React.memo(({
       dispatch(
         updateDestination(
           data,
-          (response) => setField('response', response),
+          setResponse,
           onClose
         )
       );
@@ -103,7 +116,7 @@ const EditDestinationModal = React.memo(({
   }, [
     checkValidation, error, destinationDescription, selectedValue, didId, userId,
     service, subType, recording, destinationAction, suspendValue, carrierName,
-    resellerId, tfnNumber, ipAddress, dispatch, setField, onClose
+    resellerId, tfnNumber, ipAddress, dispatch, setResponse, onClose
   ]);
 
   if (!edit) return null;
@@ -111,7 +124,7 @@ const EditDestinationModal = React.memo(({
   return (
     <Dialog open={edit} onClose={onClose} sx={{ textAlign: "center", borderRadius: "0px" }} className="custom_dialog_box_did">
 
-            <Box
+      <Box
         sx={{
           display: "flex",
           alignItems: "center",
@@ -121,7 +134,7 @@ const EditDestinationModal = React.memo(({
         }}
       >
         <Typography
-          
+
           sx={{
             color: "#07285d",
             fontWeight: 600,
@@ -133,7 +146,7 @@ const EditDestinationModal = React.memo(({
         >
           Update Destination
         </Typography>
-      
+
         <IconButton
           onClick={onClose}
           sx={{

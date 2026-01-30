@@ -13,7 +13,14 @@ import {
   Typography,
 } from "@mui/material";
 import { toast } from "react-toastify";
-import { DataGrid, GridToolbar, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarFilterButton } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridToolbar,
+  GridToolbarColumnsButton,
+  GridToolbarContainer,
+  GridToolbarDensitySelector,
+  GridToolbarFilterButton,
+} from "@mui/x-data-grid";
 import React, { useMemo, useState } from "react";
 import { Close, Edit } from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
@@ -57,9 +64,9 @@ const theme = createTheme({
 function CustomToolbar() {
   return (
     <GridToolbarContainer>
-      <GridToolbarColumnsButton/>
+      <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
-      <GridToolbarFilterButton/>
+      <GridToolbarFilterButton />
     </GridToolbarContainer>
   );
 }
@@ -68,7 +75,7 @@ function ManageRecording() {
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
   const current_user = localStorage.getItem("current_user");
-    const data = localStorage.getItem(`user_${current_user}`)
+  const data = localStorage.getItem(`user_${current_user}`);
   const [file, setFile] = useState();
   const [fileName, setFileName] = useState("");
   const [id, setId] = useState("");
@@ -99,7 +106,7 @@ function ManageRecording() {
 
     if (file) {
       const current_user = localStorage.getItem("current_user");
-    const token = localStorage.getItem(`user_${current_user}`)
+      const token = localStorage.getItem(`user_${current_user}`);
       const formData = new FormData();
       formData.append("file", file);
       formData.append("name", name);
@@ -114,7 +121,7 @@ function ManageRecording() {
               "Content-Type": "multipart/form-data",
               Authorization: `Bearer ${JSON.parse(token).access_token} `,
             },
-          }
+          },
         );
         if (response.data.status === 200) {
           toast.success(response.data.message, {
@@ -146,7 +153,7 @@ function ManageRecording() {
       e.preventDefault();
       if (file) {
         const current_user = localStorage.getItem("current_user");
-    const token = localStorage.getItem(`user_${current_user}`)
+        const token = localStorage.getItem(`user_${current_user}`);
         const formData = new FormData();
         formData.append("file", file);
         formData.append("id", id);
@@ -161,7 +168,7 @@ function ManageRecording() {
                 "Content-Type": "multipart/form-data",
                 Authorization: `Bearer ${token.access_token} `,
               },
-            }
+            },
           );
           if (response.data.status === 200) {
             toast.success(response.data.message, {
@@ -187,7 +194,7 @@ function ManageRecording() {
         console.warn("No file selected.");
       }
     },
-    [file, id, handleCloseModal, setResponse]
+    [file, id, handleCloseModal, setResponse],
   );
 
   const handleOnChange = (event) => {
@@ -232,9 +239,12 @@ function ManageRecording() {
                   style={{ cursor: "pointer", color: "#0e397f" }}
                 />
               </IconButton> */}
-              <audio controls style={{padding:"12px"}}>
-            <source src={`${api.dev}/api/getuserrecording/${params.row.recordingId}`} type="audio/wav"/>
-            </audio>
+              <audio controls style={{ padding: "12px" }}>
+                <source
+                  src={`${api.dev}/api/getuserrecording/${params.row.recordingId}`}
+                  type="audio/wav"
+                />
+              </audio>
             </Tooltip>
             {/* <IconButton onClick={() => handleMessage(params?.row?.username)}>
                 <Delete style={{ cursor: "pointer", color: "red" }} />
@@ -244,13 +254,13 @@ function ManageRecording() {
       },
     },
     {
-        field: "username",
-        headerName: "UserName",
-        width: 200,
-        headerClassName: "custom-header",
-        headerAlign: "center",
-        align: "center",
-      },
+      field: "username",
+      headerName: "UserName",
+      width: 200,
+      headerClassName: "custom-header",
+      headerAlign: "center",
+      align: "center",
+    },
     {
       field: "name",
       headerName: "Announcement Recordings",
@@ -302,7 +312,8 @@ function ManageRecording() {
     {
       field: "updated_date",
       headerName: "Updated Date",
-      width: 200,
+      // width: 200,
+      flex: 1,
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
@@ -330,20 +341,20 @@ function ManageRecording() {
         );
       },
     },
-  
-    {
-      field: "barging",
-      headerName: "",
-      width: 120,
-      headerClassName: "custom-header",
-      headerAlign: "center",
-      align: "center",
-      renderCell: (params) => {
-        return (
-          <div className="d-flex justify-content-between align-items-center"></div>
-        );
-      },
-    },
+
+    // {
+    //   field: "barging",
+    //   headerName: "",
+    //   width: 120,
+    //   headerClassName: "custom-header",
+    //   headerAlign: "center",
+    //   align: "center",
+    //   renderCell: (params) => {
+    //     return (
+    //       <div className="d-flex justify-content-between align-items-center"></div>
+    //     );
+    //   },
+    // },
   ];
 
   const rows = useMemo(() => {
@@ -413,20 +424,20 @@ function ManageRecording() {
                             },
                           }}
                         >
-                          <Fade in={open} className="bg_imagess">
+                          <Fade in={open} className="bg_imagess pt-4">
                             <Box
                               sx={style}
                               borderRadius="10px"
                               textAlign="center"
                             >
                               <IconButton
+                                className="close-icon pt-0"
                                 onClick={handleClose}
                                 sx={{ float: "inline-end" }}
                               >
                                 <Close />
                               </IconButton>
-                              <br />
-                              <br />
+
                               <Typography
                                 id="transition-modal-title"
                                 variant="h6"
@@ -513,7 +524,7 @@ function ManageRecording() {
                       </div>
                       {/* <!--table---> */}
                       <ThemeProvider theme={theme}>
-                      <div style={{ height: '100%', width: '100%' }}>
+                        <div style={{ height: "100%", width: "100%" }}>
                           <DataGrid
                             rows={rows}
                             columns={columns}
@@ -525,7 +536,7 @@ function ManageRecording() {
                             slots={{
                               toolbar: CustomToolbar,
                             }}
-                                autoHeight
+                            autoHeight
                           />
                         </div>
                       </ThemeProvider>
@@ -533,8 +544,27 @@ function ManageRecording() {
                       <Dialog
                         open={openModal} //onClose={handleCloseModal}
                       >
-                        <Box>
-                          <br />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            paddingTop: "10px",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              color: "#07285d",
+                              margin: "0 auto",
+                              fontSize: "20px",
+                              fontWeight: "600",
+                              width: "auto",
+                              textAlign: "center",
+                            }}
+                            className="extension_title"
+                          >
+                            Edit Recording
+                          </Typography>
                           <IconButton
                             className="close_icon"
                             onClick={handleCloseModal}
@@ -544,21 +574,8 @@ function ManageRecording() {
                           </IconButton>
                         </Box>
 
-                        <DialogTitle
-                          sx={{
-                            color: "#07285d",
-                            fontWeight: "600",
-                            width: "500px",
-                            textAlign: "center",
-                          }}
-                          className="extension_title"
-                        >
-                          Edit Recording
-                        </DialogTitle>
-
-                        <DialogContent>
+                        <DialogContent sx={{ pt: "0" }}>
                           <Typography variant="body1">
-                            <br />
                             <form
                               style={{
                                 textAlign: "center",

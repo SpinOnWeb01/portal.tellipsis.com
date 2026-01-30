@@ -33,7 +33,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useCallback } from "react";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaFileExcel } from "react-icons/fa";
 import axios from "axios";
 import {
   createManageExtension,
@@ -354,15 +354,7 @@ function Extension() {
       width: 250,
       align: "center",
     },
-    {
-      field: "description",
-      headerName: "Description",
-      headerClassName: "custom-header",
-      headerAlign: "center",
-      width: 150,
-      align: "center",
-    },
-    {
+     {
       field: "active",
       headerName: "Status",
       width: 150,
@@ -407,6 +399,16 @@ function Extension() {
         );
       },
     },
+    {
+      field: "description",
+      headerName: "Description",
+      headerClassName: "custom-header",
+      headerAlign: "center",
+      // width: 150,
+      align: "center",
+      flex: 1
+    },
+   
   ];
 
   const rows = useMemo(() => {
@@ -477,20 +479,20 @@ function Extension() {
                           },
                         }}
                       >
-                        <Fade in={open} className="bg_imagess">
+                        <Fade in={open} className="bg_imagess pt-4">
                           <Box
                             sx={style}
                             borderRadius="10px"
                             textAlign="center"
                           >
                             <IconButton
+                             className="close-icon pt-0"
                               onClick={handleClose}
                               sx={{ float: "inline-end" }}
                             >
                               <Close />
                             </IconButton>
-                            <br />
-                            <br />
+                           
                             <Typography
                               id="transition-modal-title"
                               variant="h6"
@@ -658,30 +660,44 @@ function Extension() {
                     <Dialog
                       open={openModal} //onClose={handleCloseModal}
                     >
-                      <Box>
-                        <br />
-                        <IconButton
-                          className="close_icon"
-                          onClick={handleCloseModal}
-                          sx={{ float: "inline-end" }}
-                        >
-                          <Close />
-                        </IconButton>
-                      </Box>
+                     
 
-                      <DialogTitle
-                        sx={{
-                          color: "#07285d",
-                          fontWeight: "600",
-                          width: "500px",
-                          textAlign: "center",
-                        }}
-                        className="extension_title"
-                      >
-                        Edit Extension
-                      </DialogTitle>
-
-                      <DialogContent>
+                     <Box sx={{
+                                                                             display: "flex",
+                                                                             paddingTop: "10px",
+                                                                            alignItems: "center",
+                                                                            justifyContent: "space-between",
+                                                                        }}>
+                                                                            
+                                                                        <Typography
+                                                                          sx={{
+                                                                            color: "#07285d",
+                                                                            margin: "0 auto",
+                                                                            fontSize: "20px",
+                                                                            fontWeight: "600",
+                                                                            width: "auto",
+                                                                            textAlign: "center",
+                                                                         
+                                           
+                                                                                                         
+                                        
+                                                                          }}
+                                                                          className="extension_title"
+                                                                        >
+                                                                         Edit Extension
+                                                                        </Typography>
+                                                                          <IconButton
+                                                                            className="close_icon"
+                                                                            onClick={handleCloseModal}
+                                                                            sx={{ float: "inline-end" }}
+                                                                          >
+                                                                            <Close />
+                                                                          </IconButton>
+                                                                          
+                                                                        </Box>
+                                                                     
+                                        
+                                                                        <DialogContent sx={{pt: "0",}}>
                         <Typography variant="body1">
                           <br />
                           <form

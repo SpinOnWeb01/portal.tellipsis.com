@@ -13,7 +13,7 @@ import {
 import { Close } from "@mui/icons-material";
 import { createDestination } from "../../../../redux/actions/adminPortal/destinationAction";
 import DestinationForm from "./DestinationForm";
-import { validateIpWithPort } from "../utils/validation";
+import { validateIpWithPort, validateTfnNumber } from "../utils/validation";
 
 const AddDestinationModal = React.memo(({
   open,
@@ -27,6 +27,7 @@ const AddDestinationModal = React.memo(({
   queue,
   validation,
   error,
+  setResponse,
 }) => {
   const dispatch = useDispatch();
 
@@ -48,10 +49,11 @@ const AddDestinationModal = React.memo(({
     const errors = {};
     let isValid = true;
 
-    if (!tfnNumber) {
-      errors.tfnNumber = "Field is required";
-      isValid = false;
-    }
+    const tfnValidation = validateTfnNumber(tfnNumber);
+    if (!tfnValidation.valid) {
+    errors.tfnNumber = tfnValidation.message;
+    isValid = false;
+  }
 
     if (!carrierName) {
       errors.carrierName = "Field is required";
@@ -70,15 +72,26 @@ const AddDestinationModal = React.memo(({
     setField('error', validationResult.valid ? "" : validationResult.message);
   }, [setField]);
 
+    const cleanDetails = (value) => {
+  if (!value) return "";
+
+  if (Array.isArray(value)) {
+    return value.join(",").replace(/^,*/, "");
+  }
+
+  return value.replace(/^,*/, "");
+};
+
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
     const isValid = checkValidation();
     if (isValid && error === "") {
+      const cleanedDetails = cleanDetails(destinationAction);
       const data = JSON.stringify({
         user_id: userId,
         reseller_id: resellerId,
         didnumber: tfnNumber,
-        details: Array.isArray(destinationAction) ? destinationAction.join(",") : destinationAction,
+        details: cleanedDetails,
         description: destinationDescription,
         is_active: selectedValue,
         service_type: serviceType[0]?.toUpperCase() || "",
@@ -88,7 +101,7 @@ const AddDestinationModal = React.memo(({
         ip_address: ipAddress,
       });
 
-      dispatch(createDestination(data, onClose, (response) => setField('response', response)));
+      dispatch(createDestination(data, onClose, setResponse));
     }
   }, [
     checkValidation, error, userId, resellerId, tfnNumber, destinationAction,

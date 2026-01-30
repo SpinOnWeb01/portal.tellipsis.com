@@ -198,11 +198,22 @@ function Navbar() {
   return (
     <>
       <Box sx={{ width: "100%", backgroundColor: "#0e397f" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", display: "flex" }}>
+        <Box sx={{  display: "flex" }}>
           <Tabs
             value={value}
             onChange={handleTabChange}
             aria-label="basic tabs example"
+             sx={{
+              "& .Mui-selected": {
+        backgroundColor: "#f97316", // 🔥 orange
+        color: "#fff !important",
+            padding: "12px 9px",
+      },
+
+      "& .MuiTabs-indicator": {
+        display: "none", // remove default underline
+      },
+          }}
           >
             {filteredTabs.map((key) => (
               <Tab

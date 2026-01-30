@@ -8,7 +8,7 @@ export const useDestinationData = (token, userId, resellerId) => {
   const [resellerUsersData, setResellerUsersData] = React.useState([]);
 
   useEffect(() => {
-    if (userId) {
+    if (userId && token?.access_token) {
       const fetchUserData = async () => {
         try {
           const [extensionsResponse, queuesResponse] = await Promise.all([
@@ -33,10 +33,10 @@ export const useDestinationData = (token, userId, resellerId) => {
       };
       fetchUserData();
     }
-  }, [userId, token]);
+  }, [userId, token?.access_token]);
 
   useEffect(() => {
-    if (resellerId && resellerId !== "None") {
+    if (resellerId && resellerId !== "None" && token?.access_token) {
       const fetchResellerUsers = async () => {
         try {
           const response = await axios.get(
@@ -55,7 +55,7 @@ export const useDestinationData = (token, userId, resellerId) => {
       };
       fetchResellerUsers();
     }
-  }, [resellerId, token]);
+  }, [resellerId, token?.access_token]);
 
   return { extensionNumber, queue, resellerUsersData };
 };

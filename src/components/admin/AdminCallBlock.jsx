@@ -774,20 +774,20 @@ function AdminCallBlock({ colorThem }) {
                             },
                           }}
                         >
-                          <Fade in={open} className="bg_imagess">
+                          <Fade in={open} className="bg_imagess pt-4">
                             <Box
                               sx={style}
                               borderRadius="10px"
                               textAlign="center"
                             >
                               <IconButton
+                              className="close_icon pt-0"
                                 onClick={handleClose}
                                 sx={{ float: "inline-end" }}
                               >
                                 <Close />
                               </IconButton>
-                              <br />
-                              <br />
+                              
                               <Typography
                                 id="transition-modal-title"
                                 variant="h6"
@@ -995,34 +995,43 @@ function AdminCallBlock({ colorThem }) {
                         //onClose={handleCloseModal}
                         sx={{ textAlign: "center" }}
                       >
-                        <Box>
-                          <IconButton
-                            onClick={handleCloseModal}
-                            sx={{
-                              float: "inline-end",
-                              marginRight: "20px",
-                              marginTop: "20px",
-                            }}
-                          >
-                            <Close />
-                          </IconButton>
-                        </Box>
+                        
+                         <Box sx={{
+                                     display: "flex",
+                                     paddingTop: "10px",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                }}>
+                                    
+                                <Typography
+                                  sx={{
+                                    color: "#07285d",
+                                    margin: "0 auto",
+                                    fontSize: "20px",
+                                    fontWeight: "600",
+                                    width: "auto",
+                                    textAlign: "center",
+                                 
+   
+                                                                 
 
-                        <DialogTitle
-                          sx={{
-                            color: "#07285d",
-                            fontWeight: "600",
-                            width: "500px",
-                          }}
-                          className="mobile_view"
-                        >
-                          {/* <Box>
-                  {" "}
-                  <img src="/img/mdl_icon.png" alt="user icon" />
-                </Box> */}
-                          Edit
-                        </DialogTitle>
-                        <DialogContent>
+                                  }}
+                                  className="extension_title"
+                                >
+                                  Edit
+                                </Typography>
+                                  <IconButton
+                                    className="close_icon"
+                                    onClick={handleCloseModal}
+                                    sx={{ float: "inline-end" }}
+                                  >
+                                    <Close />
+                                  </IconButton>
+                                  
+                                </Box>
+                             
+
+                                <DialogContent sx={{pt: "0",}}>
                           <form>
                             {/* <SelectComponent handleClose={handleClose} /> */}
                             <Typography variant="body1">

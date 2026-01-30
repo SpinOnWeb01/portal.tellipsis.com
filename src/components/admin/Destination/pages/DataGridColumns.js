@@ -1,6 +1,58 @@
 import React from "react";
-import { Typography, IconButton } from "@mui/material";
+import { Typography, IconButton, TextField, InputAdornment } from "@mui/material";
 import { Edit } from "@mui/icons-material";
+import { getGridStringOperators } from "@mui/x-data-grid";
+import ClearIcon from "@mui/icons-material/Clear";
+
+
+function MultiValueInput(props) {
+  const { item, applyValue, focusElementRef } = props;
+
+  const handleChange = (e) => {
+    const raw = e.target.value;
+
+    const values = raw
+      .split(/[\s,]+/) // space, comma, newline
+      .map((v) => v.trim())
+      .filter(Boolean);
+
+    applyValue({ ...item, value: values });
+  };
+
+  const handleClear = () => {
+    applyValue({ ...item, value: [] });
+  };
+
+  return (
+    <TextField
+      inputRef={focusElementRef}
+      className="multiValueFilterInput"
+      value={Array.isArray(item.value) ? item.value.join(", ") : ""}
+      onChange={handleChange}
+      placeholder="Enter numbers separated by space or comma"
+      variant="standard"
+      fullWidth
+      InputProps={{
+        endAdornment: item?.value?.length ? (
+          <InputAdornment position="end">
+            <IconButton
+              edge="end"
+              size="small"
+              onClick={handleClear}
+              sx={{
+                color: "#9CA3AF",
+                "&:hover": { color: "#DC2626" },
+              }}
+            >
+              <ClearIcon />
+            </IconButton>
+          </InputAdornment>
+        ) : null,
+      }}
+    />
+  );
+}
+
 
 export const columns = ({ isMobile, isXs, user, handleEdit }) => [
   {
@@ -20,13 +72,33 @@ export const columns = ({ isMobile, isXs, user, handleEdit }) => [
     ),
   },
   {
-    field: "tfn_number",
-    headerName: "Destination",
-    headerClassName: "custom-header",
-    width: 120,
-    headerAlign: "center",
-    align: "center",
-  },
+  field: "tfn_number",
+  headerName: "Destination",
+  headerClassName: "custom-header",
+  headerAlign: "center",
+  align: "center",
+  width: 150,
+  filterOperators: getGridStringOperators().map((operator) => {
+    if (operator.value === "isAnyOf") {
+      return {
+        ...operator,
+        InputComponent: MultiValueInput,
+        getApplyFilterFn: (filterItem) => {
+          if (!Array.isArray(filterItem.value) || filterItem.value.length === 0) {
+            return null;
+          }
+
+          return (params) => {
+            if (params.value == null) return false;
+
+            return filterItem.value.includes(String(params.value));
+          };
+        },
+      };
+    }
+    return operator;
+  }),
+},
   {
     field: "username",
     headerName: "User",

@@ -216,7 +216,7 @@ function Sidebar({ colorThem }) {
                             </SubMenu> */}
 
           {/* ==add-menu======= */}
-          <SubMenu
+          {/* <SubMenu
             title=" All Products"
             icon={<AddToQueueIcon />}
             onClick={() =>
@@ -242,7 +242,7 @@ function Sidebar({ colorThem }) {
                 Invoice
               </MenuItem>
             </Tooltip>
-          </SubMenu>
+          </SubMenu> */}
           {/* ===End-add-menu======= */}
 
           <SubMenu
@@ -650,7 +650,7 @@ function Sidebar({ colorThem }) {
                         )}
 
                         {/* ==add-menu======= */}
-                        <SubMenu
+                        {/* <SubMenu
                           title=" All Products"
                           icon={<AddToQueueIcon />}
                           onClick={() =>
@@ -682,7 +682,7 @@ function Sidebar({ colorThem }) {
                               Invoice
                             </MenuItem>
                           </Tooltip>
-                        </SubMenu>
+                        </SubMenu> */}
                         {/* ===End-add-menu======= */}
 
                         <SubMenu
