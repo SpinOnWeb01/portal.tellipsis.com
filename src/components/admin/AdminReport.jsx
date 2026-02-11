@@ -187,6 +187,7 @@ function AdminReport({ colorThem }) {
     dayjs().tz(railwayZone).startOf("day").format("DD/MM/YYYY HH:mm")
   );
   const [toDate, setToDate] = useState(
+  
     dayjs().tz(railwayZone).endOf("day").format("DD/MM/YYYY HH:mm") // Default to 23:59
   );
   const [callDirection, setCallDirection] = useState("");
@@ -223,7 +224,7 @@ function AdminReport({ colorThem }) {
   useEffect(() => {
     let data = JSON.stringify({
       from_date: dayjs().startOf("day").format("YYYY-MM-DD HH:mm"),
-      to_date: dayjs().format("YYYY-MM-DD HH:mm"),
+      to_date: dayjs().endOf("day").format("YYYY-MM-DD HH:mm"),
     });
     dispatch(getReport(data));
     dispatch(getAllUsers(""));
@@ -502,6 +503,8 @@ function AdminReport({ colorThem }) {
                   fontWeight: "500",
                   color: "#fd7e14",
                   margin: "0",
+                  
+                  fontSize: "12.215px",
                   textTransform: "capitalize",
                 }}
               >
@@ -516,7 +519,8 @@ function AdminReport({ colorThem }) {
     {
       field: "hangup_reason",
       headerName: "Hangup Reason",
-      width: 220,
+      width: 140,
+      
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
@@ -526,14 +530,14 @@ function AdminReport({ colorThem }) {
     {
       field: "call_result",
       headerName: "Status",
-      width: 220,
+      width: 130,
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
       renderHeader: () => (
         <Typography
           variant="body2"
-          sx={{ fontSize: "calc(0.6rem + 0.15vw)", fontWeight: "bold" }}
+          sx={{  fontSize: "12.215px", fontWeight: "bold" }}
         >
           Status
         </Typography>
@@ -544,12 +548,12 @@ function AdminReport({ colorThem }) {
             color:
               params.row.call_result === "ANSWERED"
                 ? "green"
-                : params.row.call_result === "Missed"
+                : params.row.call_result === "MISSED"
                   ? "orange"
-                  : params.row.call_result === "Failed"
+                  : params.row.call_result === "FAILED"
                     ? "red"
                     : "red",
-            fontSize: "calc(0.5rem + 0.2vw)",
+             fontSize: "12.215px",
           }}
         >
           {params.row.call_result}

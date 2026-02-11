@@ -309,7 +309,10 @@ function AdminRecording({colorThem}) {
                                         }}
                                         required
                                       >
-                                        {state?.allUsers?.users?.map(
+                                        {state?.allUsers?.users?.filter(
+    (item) =>
+      item.role !== "Superadmin" && item.role !== "Admin"
+  )?.map(
                                           (item, index) => {
                                             return (
                                               <MenuItem

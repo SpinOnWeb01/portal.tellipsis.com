@@ -290,7 +290,7 @@ function AdminQueueMember({ colorThem }) {
 
   useEffect(() => {
     dispatch(getExtension());
-    dispatch(getAllUsers(""));
+    dispatch(getAllUsers("t"));
     dispatch(getAdminQueueMember());
   }, [response]);
 
@@ -364,7 +364,7 @@ function AdminQueueMember({ colorThem }) {
       headerName: "Queue",
       headerClassName: "custom-header",
       headerAlign: "center",
-      width: 280,
+      flex: 1,
       align: "center",
     },
     // {
@@ -535,7 +535,10 @@ function AdminQueueMember({ colorThem }) {
                                       }}
                                       required
                                     >
-                                      {state?.allUsers?.users?.map(
+                                      {state?.allUsers?.users?.filter(
+    (item) =>
+      item.role !== "Superadmin" && item.role !== "Admin"
+  )?.map(
                                         (item, index) => {
                                           return (
                                             <MenuItem

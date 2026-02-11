@@ -306,7 +306,7 @@ function AdminQueue({ colorThem }) {
 
   useEffect(() => {
     dispatch(getExtension());
-    dispatch(getAllUsers(""));
+    dispatch(getAllUsers("t"));
     dispatch(getAdminQueue());
   }, [response]);
 
@@ -427,7 +427,7 @@ function AdminQueue({ colorThem }) {
       headerName: "Music On Hold",
       headerClassName: "custom-header",
       headerAlign: "center",
-      width: 120,
+      flex: 1,
       align: "center",
     },
     {
@@ -738,7 +738,10 @@ function AdminQueue({ colorThem }) {
                                         }}
                                         required
                                       >
-                                        {state?.allUsers?.users?.map(
+                                        {state?.allUsers?.users?.filter(
+    (item) =>
+      item.role !== "Superadmin" && item.role !== "Admin"
+  )?.map(
                                           (item, index) => {
                                             return (
                                               <MenuItem

@@ -17,6 +17,7 @@ import {
   DialogActions,
   Tooltip,
   Grid,
+  useMediaQuery,
 } from "@mui/material";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
@@ -224,7 +225,7 @@ function AdminMinutes({ colorThem }) {
   };
 
   
-
+  const isXs = useMediaQuery(theme.breakpoints.only("xs")); // < 600px
 
 
 
@@ -384,7 +385,7 @@ function AdminMinutes({ colorThem }) {
 
   useEffect(() => {
     dispatch(getAdminMinutes());
-    dispatch(getAllUsers(""));
+    dispatch(getAllUsers("t"));
   }, [response]);
 
   useEffect(() => {
@@ -504,79 +505,87 @@ function AdminMinutes({ colorThem }) {
     // },
     
     {
-      field: "created_date",
-      headerName: "Create Date",
-      headerClassName: "custom-header",
-      headerAlign: "center",
-      width: 130,
-      align: "center",
-      renderCell: (params) => {
-        const valueFormatter = (params) => {
-          const date = new Date(params.value);
-          return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-        };
-    
-        return (
-          <div className="d-flex justify-content-between align-items-center">
-            <p
-              style={{
-                fontWeight: "400",
-                color: "blue",
-                margin: "0",
-                textTransform: "capitalize",
+          field: "created_date",
+          headerName: "Date",
+          headerClassName: "custom-header",
+          width: isXs ? 85 : 90,
+          minWidth: 85,
+          maxWidth: 90,
+          headerAlign: "left",
+          align: "left",
+          renderHeader: () => (
+            <Typography
+              variant="body2"
+              sx={{
+                fontSize: "calc(0.6rem + 0.2vw)",
+                fontWeight: "bold",
+                color: "white !important",
               }}
             >
-              {valueFormatter(params)}
-            </p>
-          </div>
-        );
-      },
-      // valueFormatter: (params) => {
-      //   if (params.value !== null) {
-      //     const date = new Date(params.value);
-      //     return `${date.getDate()}/${
-      //       date.getMonth() + 1
-      //     }/${date.getFullYear()}`;
-      //   }
-      // },
-    },
-    {
-      field: "updated_date",
-      headerName: "Update Date",
-      headerClassName: "custom-header",
-      headerAlign: "center",
-      width: 130,
-      align: "center",
-      renderCell: (params) => {
-        const valueFormatter = (params) => {
-          const date = new Date(params.value);
-          return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-        };
+              Create Date
+            </Typography>
+          ),
+          renderCell: (params) => {
+            if (params.value !== null) {
+              const date = new Date(params.value);
+              var day = date.getUTCDate();
+              var month = date.getUTCMonth() + 1; // Month starts from 0
+              var year = date.getUTCFullYear();
     
-        return (
-          <div className="d-flex justify-content-between align-items-center">
-            <p
-              style={{
-                fontWeight: "400",
-                color: "brown",
-                margin: "0",
-                textTransform: "capitalize",
+              // Formatting single-digit day/month with leading zero if needed
+              day = (day < 10 ? "0" : "") + day;
+              month = (month < 10 ? "0" : "") + month;
+              return (
+                <>
+                  <span style={{ color: "blue", fontSize: "calc(0.6rem + 0.2vw)" }}>
+                    {day}/{month}/{year}
+                  </span>
+                </>
+              );
+            }
+          },
+        },
+   {
+          field: "updated_date",
+          headerName: "Date",
+          headerClassName: "custom-header",
+          width: isXs ? 85 : 90,
+          minWidth: 85,
+          maxWidth: 90,
+          headerAlign: "left",
+          align: "left",
+          renderHeader: () => (
+            <Typography
+              variant="body2"
+              sx={{
+                fontSize: "calc(0.6rem + 0.2vw)",
+                fontWeight: "bold",
+                color: "white !important",
               }}
             >
-              {valueFormatter(params)}
-            </p>
-          </div>
-        );
-      },
-      // valueFormatter: (params) => {
-      //   if (params.value !== null) {
-      //     const date = new Date(params.value);
-      //     return `${date.getDate()}/${
-      //       date.getMonth() + 1
-      //     }/${date.getFullYear()}`;
-      //   }
-      // },
-    },
+              Update Date
+            </Typography>
+          ),
+          renderCell: (params) => {
+            if (params.value !== null) {
+              const date = new Date(params.value);
+              var day = date.getUTCDate();
+              var month = date.getUTCMonth() + 1; // Month starts from 0
+              var year = date.getUTCFullYear();
+    
+              // Formatting single-digit day/month with leading zero if needed
+              day = (day < 10 ? "0" : "") + day;
+              month = (month < 10 ? "0" : "") + month;
+              return (
+                <>
+                  <span style={{ color: "brown", fontSize: "calc(0.6rem + 0.2vw)" }}>
+                    {day}/{month}/{year}
+                  </span>
+                </>
+              );
+            }
+          },
+        },
     {
       field: "is_active",
       headerName: "Status",
@@ -778,7 +787,10 @@ return(<>{user?.uid === item.user_id ? (<><div  style={{margin:'auto'}} classNam
                                       }}
                                       required
                                     >
-                                      {state?.allUsers?.users?.map(
+                                      {state?.allUsers?.users?.filter(
+    (item) =>
+      item.role !== "Superadmin" && item.role !== "Admin"
+  )?.map(
                                         (item, index) => {
                                           return (
                                             <MenuItem

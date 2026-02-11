@@ -1,6 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../../../src/style.css";
-import { FormControl, Grid, InputLabel, MenuItem, Popover, Select, Tooltip, Typography, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Popover,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { IconButton, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
@@ -17,7 +38,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { callStatusMessages } from "../../pages/Tooltips";
-
+import CloseIcon from "@mui/icons-material/Close";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -91,6 +112,126 @@ const useStyles = makeStyles({
   },
 });
 
+// const DetailItem = ({ label, value }) => (
+//   <Box
+//     sx={{
+//       position: "relative",
+//       p: 2.5,
+//       borderRadius: "14px",
+//       background: "linear-gradient(135deg, #ffffff, #f9fafb)",
+//       border: "1px solid #e5e7eb",
+//       transition: "all 0.3s ease",
+
+//       "&:hover": {
+//         transform: "translateY(-4px)",
+//         boxShadow: "0 12px 24px rgba(99,102,241,0.18)",
+//         borderColor: "#6366f1",
+//       },
+
+//       /* Accent bar */
+//       "&::before": {
+//         content: '""',
+//         position: "absolute",
+//         left: 0,
+//         top: "0px",
+//         bottom: "0px",
+//         width: "6px",
+//         borderRadius: "10px 0px 0px 10px",
+//         background: "linear-gradient(180deg, #6366f1, #f97316)",
+//       },
+//     }}
+//   >
+//     <Typography
+//       fontSize="15px"
+//       fontWeight={800}
+
+//       color="#0f172a"
+//       textTransform="uppercase"
+//       mb={0.8}
+//       ml={1}
+//     >
+//       {label}
+//     </Typography>
+
+//     <Typography
+//       fontSize="11px"
+//       fontWeight={500}
+//       color="text.secondary"
+
+//       ml={1}
+//     >
+//       {value || "-"}
+//     </Typography>
+//   </Box>
+// );
+
+// const DetailItem = ({ label, value }) => (
+//   <TableRow
+//     sx={{
+//       fontSize: "12px",
+
+//       /* remove border from last row */
+//       "&:last-of-type td": {
+//         borderBottom: "none",
+//       },
+//     }}
+//   >
+//     <TableCell sx={tdLabelStyle}>{label}</TableCell>
+
+//     <TableCell sx={tdValueStyle}>{value || "-"}</TableCell>
+//   </TableRow>
+// );
+
+const formatDateTimeJSX = (value) => {
+  if (!value) return "-";
+
+  const date = new Date(value);
+
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+
+  return (
+    <span style={{ whiteSpace: "nowrap" }}>
+      <span style={{ color: "blue", fontSize: "12.215px" }}>
+        {day}/{month}/{year}
+      </span>
+      &nbsp;
+      <span style={{ color: "green", fontSize: "12.215px" }}>
+        {hours}:{minutes}:{seconds}
+      </span>
+    </span>
+  );
+};
+
+// const DetailRow = ({ label, value }) => (
+//   <TableRow>
+//     <TableCell sx={{ fontWeight: 600 }}>{label}</TableCell>
+//     <TableCell>{value || "-"}</TableCell>
+//   </TableRow>
+// );
+
+// const DetailRow = ({ label, value }) => (
+//   <TableRow
+//     sx={{
+//       fontSize: "12px",
+
+//       /* remove border from last row */
+//       "&:last-of-type td": {
+//         borderBottom: "none",
+//       },
+//     }}
+//   >
+//     <TableCell sx={tdLabelStyle}>{label}</TableCell>
+
+//     <TableCell sx={tdValueStyle}>{value || "-"}</TableCell>
+//   </TableRow>
+// );
+
 const theme = createTheme({
   components: {
     MuiDataGrid: {
@@ -138,10 +279,10 @@ function Report() {
   const [currentAudio, setCurrentAudio] = useState(null);
   const railwayZone = "Asia/Kolkata"; // Replace with your desired timezone
   const [fromDate, setFromDate] = useState(
-    dayjs().tz(railwayZone).startOf("day").format("DD/MM/YYYY HH:mm")
+    dayjs().tz(railwayZone).startOf("day").format("DD/MM/YYYY HH:mm"),
   );
   const [toDate, setToDate] = useState(
-    dayjs().tz(railwayZone).endOf("day").format("DD/MM/YYYY HH:mm") // Default to 23:59
+    dayjs().tz(railwayZone).endOf("day").format("DD/MM/YYYY HH:mm"), // Default to 23:59
   );
   const [callDirection, setCallDirection] = useState("");
   const [didNumber, setDidNumber] = useState("");
@@ -152,6 +293,18 @@ function Report() {
   const audioRefs = useRef({}); // Store references to audio elements
   const state = useSelector((state) => state);
   const dispatch = useDispatch();
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  const handleOpenModal = (row) => {
+    setSelectedRow(row);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    setSelectedRow(null);
+  };
 
   const handleFromDateChange = (date) => {
     if (dayjs(date, "DD/MM/YYYY HH:mm", true).isValid()) {
@@ -172,7 +325,7 @@ function Report() {
   useEffect(() => {
     let data = JSON.stringify({
       from_date: dayjs().startOf("day").format("YYYY-MM-DD HH:mm"),
-      to_date: dayjs().format("YYYY-MM-DD HH:mm"),
+      to_date: dayjs().endOf("day").format("YYYY-MM-DD HH:mm"),
     });
     dispatch(getManageReport(data));
   }, [dispatch, response]);
@@ -251,17 +404,17 @@ function Report() {
   const CallStatusTooltip = ({ statusKey }) => {
     const isMobile = useMediaQuery("(max-width:600px)"); // Detect mobile
     const [anchorEl, setAnchorEl] = useState(null);
-  
+
     const handleClick = (event) => {
       if (isMobile) {
         setAnchorEl(event.currentTarget); // Open Popover on click
       }
     };
-  
+
     const handleClose = () => {
       setAnchorEl(null);
     };
-  
+
     return (
       <>
         {isMobile ? (
@@ -281,7 +434,7 @@ function Report() {
             >
               {statusKey}
             </span>
-  
+
             {/* Popover for Mobile */}
             <Popover
               open={Boolean(anchorEl)}
@@ -296,7 +449,9 @@ function Report() {
                 horizontal: "center",
               }}
             >
-              <Typography sx={{ p: 2, maxWidth: "200px", fontSize: "12.215px" }}>
+              <Typography
+                sx={{ p: 2, maxWidth: "200px", fontSize: "12.215px" }}
+              >
                 {getStatusMessage(statusKey)}
               </Typography>
             </Popover>
@@ -326,29 +481,39 @@ function Report() {
     {
       field: "caller_id_number",
       headerName: "Caller ID",
-      headerClassName: "custom-header",
-      width: 200,
+      width:120,
       headerAlign: "center",
       align: "center",
-        renderCell: (params) => {
-        return (
-          <div className="d-flex justify-content-between align-items-center">            
-             <span style={{ fontSize: "12.215px", }}>  {params?.row?.caller_id_number}</span>            
-          </div>
-        );
-      },
+      headerClassName: "custom-header",
+      renderCell: (params) => (
+        <span
+          onClick={() => handleOpenModal(params.row)}
+          style={{
+            fontSize: "12.5px",
+            fontWeight: 600,
+            color: "#2563eb",
+            cursor: "pointer",
+            textDecoration: "underline",
+          }}
+        >
+          {params.row.caller_id_number}
+        </span>
+      ),
     },
     {
       field: "did_tfn",
       headerName: "DID Number",
-      width: 150,
+      width: 120,
       headerClassName: "custom-header",
       headerAlign: "center",
       align: "center",
-        renderCell: (params) => {
+      renderCell: (params) => {
         return (
-          <div className="d-flex justify-content-between align-items-center">            
-             <span style={{ fontSize: "12.215px", }}>  {params?.row?.did_tfn}</span>            
+          <div className="d-flex justify-content-between align-items-center">
+            <span style={{ fontSize: "12.215px" }}>
+              {" "}
+              {params?.row?.did_tfn}
+            </span>
           </div>
         );
       },
@@ -356,7 +521,7 @@ function Report() {
     {
       field: "call_direction",
       headerName: "Call Direction",
-      width: 150,
+      width: 120,
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
@@ -403,10 +568,10 @@ function Report() {
     //   renderCell: (params) => <CallStatusTooltip statusKey={params.value} />
     // },
 
-     {
+    {
       field: "call_result",
       headerName: "Status",
-      width: 220,
+      width: 120,
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
@@ -424,9 +589,9 @@ function Report() {
             color:
               params.row.call_result === "ANSWERED"
                 ? "green"
-                : params.row.call_result === "Missed"
+                : params.row.call_result === "MISSED"
                   ? "orange"
-                  : params.row.call_result === "Failed"
+                  : params.row.call_result === "FAILED"
                     ? "red"
                     : "red",
             fontSize: "calc(0.5rem + 0.2vw)",
@@ -468,30 +633,35 @@ function Report() {
     {
       field: "destination_type",
       headerName: "Destination Type",
-      width: 150,
+      width: 120,
       headerClassName: "custom-header",
       headerAlign: "center",
       align: "center",
-        renderCell: (params) => {
+      renderCell: (params) => {
         return (
-          <div className="d-flex justify-content-between align-items-center">            
-             <span style={{ fontSize: "12.215px", }}>  {params?.row?.destination_type}</span>            
+          <div className="d-flex justify-content-between align-items-center">
+            <span style={{ fontSize: "12.215px" }}>
+              {" "}
+              {params?.row?.destination_type}
+            </span>
           </div>
         );
       },
-      
     },
     {
       field: "destination",
       headerName: "Destination",
-      width: 150,
+      width: 110,
       headerClassName: "custom-header",
       headerAlign: "center",
       align: "center",
-        renderCell: (params) => {
+      renderCell: (params) => {
         return (
-          <div className="d-flex justify-content-between align-items-center">            
-             <span style={{ fontSize: "12.215px", }}>  {params?.row?.destination}</span>            
+          <div className="d-flex justify-content-between align-items-center">
+            <span style={{ fontSize: "12.215px" }}>
+              {" "}
+              {params?.row?.destination}
+            </span>
           </div>
         );
       },
@@ -503,10 +673,13 @@ function Report() {
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
-        renderCell: (params) => {
+      renderCell: (params) => {
         return (
-          <div className="d-flex justify-content-between align-items-center">            
-             <span style={{ fontSize: "12.215px", }}>  {params?.row?.answered_by}</span>            
+          <div className="d-flex justify-content-between align-items-center">
+            <span style={{ fontSize: "12.215px" }}>
+              {" "}
+              {params?.row?.answered_by}
+            </span>
           </div>
         );
       },
@@ -515,14 +688,17 @@ function Report() {
     {
       field: "duration",
       headerName: "Duration",
-      width: 150,
+      width: 90,
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
-        renderCell: (params) => {
+      renderCell: (params) => {
         return (
-          <div className="d-flex justify-content-between align-items-center">            
-             <span style={{ fontSize: "12.215px", }}>  {params?.row?.duration}</span>            
+          <div className="d-flex justify-content-between align-items-center">
+            <span style={{ fontSize: "12.215px" }}>
+              {" "}
+              {params?.row?.duration}
+            </span>
           </div>
         );
       },
@@ -539,7 +715,7 @@ function Report() {
     {
       field: "recording_path",
       headerName: "Recording",
-      width: 380,
+      width: 250,
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
@@ -583,10 +759,13 @@ function Report() {
       headerAlign: "center",
       align: "center",
       headerClassName: "custom-header",
-        renderCell: (params) => {
+      renderCell: (params) => {
         return (
-          <div className="d-flex justify-content-between align-items-center">            
-             <span style={{ fontSize: "12.215px", }}>  {params?.row?.transfered_to}</span>            
+          <div className="d-flex justify-content-between align-items-center">
+            <span style={{ fontSize: "12.215px" }}>
+              {" "}
+              {params?.row?.transfered_to}
+            </span>
           </div>
         );
       },
@@ -718,11 +897,11 @@ function Report() {
           seconds = (seconds < 10 ? "0" : "") + seconds;
           return (
             <>
-              <span style={{ color: "blue", fontSize: "12.215px", }}>
+              <span style={{ color: "blue", fontSize: "12.215px" }}>
                 {day}/{month}/{year}
               </span>
               &nbsp;
-              <span style={{ color: "green", fontSize: "12.215px", }}>
+              <span style={{ color: "green", fontSize: "12.215px" }}>
                 {hours}:{minutes}:{seconds}
               </span>
             </>
@@ -758,11 +937,11 @@ function Report() {
           seconds = (seconds < 10 ? "0" : "") + seconds;
           return (
             <>
-              <span style={{ color: "blue", fontSize: "12.215px", }}>
+              <span style={{ color: "blue", fontSize: "12.215px" }}>
                 {day}/{month}/{year}
               </span>
               &nbsp;
-              <span style={{ color: "green", fontSize: "12.215px", }}>
+              <span style={{ color: "green", fontSize: "12.215px" }}>
                 {hours}:{minutes}:{seconds}
               </span>
             </>
@@ -1148,6 +1327,309 @@ function Report() {
                             />
                           </div>
                         </ThemeProvider>
+
+                        <Dialog
+                          open={openModal}
+                          onClose={handleCloseModal}
+                          maxWidth="xl"
+                          fullWidth
+                         >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              paddingTop: "10px",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                color: "#07285d",
+                                marginLeft: "20px",
+                                fontSize: "20px",
+                                fontWeight: "600",
+                                width: "auto",
+                                textAlign: "left",
+                              }}
+                              className="extension_title"
+                            >
+                              Call Details
+                            </Typography>
+                            <IconButton
+                              className="close_icon"
+                              onClick={handleCloseModal}
+                              sx={{ float: "inline-end" }}
+                            >
+                              <CloseIcon />
+                            </IconButton>
+                          </Box>
+
+                          <DialogContent dividers>
+                            {selectedRow && (
+                              <>
+                                {/* 🔹 Summary Section */}
+
+                                <Grid container spacing={2} sx={{ mb: 2 }}>
+                                  <Grid item xs={12} md={12}>
+                                    <Box sx={{ mt: 0, mb: 2 }}>
+                                       <Grid item xs={12} md={12}>
+                                      <Typography
+                                        sx={{
+                                          fontWeight: "600",
+                                          fontSize: "18px",
+
+                                          marginBottom: "10px",
+                                        }}
+                                      >
+                                        Call Summary
+                                      </Typography>
+                                    </Grid>
+
+                                    <div
+                                      className="table-responsive"
+                                      style={{
+                                        borderRadius: "12px",
+                                        overflowX: "auto",
+                                        maxWidth: "100%",
+                                      }}
+                                     >
+                                      <table
+                                        className="table mb-0 align-middle"
+                                        style={{
+                                          whiteSpace: "nowrap",
+                                          tableLayout: "auto",
+                                        }}
+                                      >
+                                        <thead>
+                                          <tr>
+                                            {[
+                                              "Caller ID",
+                                              "DID Number",
+                                              "Call Direction",
+                                              "Status",
+                                              "Duration",
+                                              "Answered By",
+                                              "Destination Type",
+                                              "Destination",
+                                              "Transferred To",
+                                              "Call Start Time",
+                                              "Call End Time",
+                                              "Recording",
+                                            ].map((item, i) => (
+                                              <th
+                                                key={i}
+                                                style={{
+                                                  fontSize: "12px",
+                                                  color: "#07285d",
+                                                  whiteSpace: "nowrap",
+                                                }}
+                                              >
+                                                {item}
+                                              </th>
+                                            ))}
+                                          </tr>
+                                        </thead>
+
+                                        <tbody>
+                                          <tr
+                                            style={{
+                                              fontSize: "13px",
+                                              borderRadius: "0px",
+                                            }}
+                                          >
+                                            {[
+                                              selectedRow.caller_id_number,
+                                              selectedRow.did_tfn,
+                                              selectedRow.call_direction,
+                                              selectedRow.call_result,
+                                              selectedRow.duration,
+                                              selectedRow.answered_by,
+                                              selectedRow.destination_type,
+                                              selectedRow.destination,
+                                              selectedRow.transfered_to,
+                                              formatDateTimeJSX(
+                                                selectedRow.start_at,
+                                              ), // ✅ FIX
+                                              formatDateTimeJSX(
+                                                selectedRow.end_at,
+                                              ), // ✅ optional
+                                            ].map((val, i) => (
+                                              <td
+                                                key={i}
+                                                style={{
+                                                  fontSize: "13px",
+                                                  padding: "5px",
+                                                  background: "#f9f9f9",
+                                                  whiteSpace: "nowrap",
+                                                }}
+                                              >
+                                                {val || "-"}
+                                              </td>
+                                            ))}
+
+                                            <td
+                                              style={{
+                                                whiteSpace: "nowrap",
+                                                background: "#f9f9f9",
+                                                padding: "5px",
+                                                fontSize: "13px",
+                                              }}
+                                            >
+                                              {selectedRow.recording_path ? (
+                                                <audio
+                                                  controls
+                                                  src={
+                                                    selectedRow.recording_path
+                                                  }
+                                                  style={{
+                                                    width: "140px",
+                                                    height: "25px",
+                                                  }}
+                                                />
+                                              ) : (
+                                                "-"
+                                              )}
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    </Box>
+
+                                   {/* <Box sx={{ mt: 4, mb: 2 }}>                                              
+                                    <Grid item xs={12} md={12}>
+                                      <Typography
+                                        sx={{
+                                          fontWeight: "600",
+                                          fontSize: "18px",
+
+                                          marginBottom: "10px",
+                                        }}
+                                      >
+                                        Call Flow Summary
+                                      </Typography>
+                                    </Grid>
+
+                                    <div
+                                      className="table-responsive"
+                                      style={{
+                                        borderRadius: "12px",
+                                        overflowX: "auto",
+                                        maxWidth: "100%",
+                                      }}
+                                     >
+                                      <table
+                                        className="table mb-0 align-middle"
+                                        style={{
+                                          whiteSpace: "nowrap",
+                                          tableLayout: "auto",
+                                        }}
+                                      >
+                                        <thead>
+                                          <tr>
+                                            {[
+                                              "Caller ID",
+                                              "DID Number",
+                                              "Call Direction",
+                                              "Status",
+                                              "Duration",
+                                              "Answered By",
+                                              "Destination Type",
+                                              "Destination",
+                                              "Transferred To",
+                                              "Call Start Time",
+                                              "Call End Time",
+                                              "Recording",
+                                            ].map((item, i) => (
+                                              <th
+                                                key={i}
+                                                style={{
+                                                  fontSize: "12px",
+                                                  color: "#07285d",
+                                                  whiteSpace: "nowrap",
+                                                }}
+                                              >
+                                                {item}
+                                              </th>
+                                            ))}
+                                          </tr>
+                                        </thead>
+
+                                        <tbody>
+                                          <tr
+                                            style={{
+                                              fontSize: "13px",
+                                              borderRadius: "0px",
+                                            }}
+                                          >
+                                            {[
+                                              selectedRow.caller_id_number,
+                                              selectedRow.did_tfn,
+                                              selectedRow.call_direction,
+                                              selectedRow.call_result,
+                                              selectedRow.duration,
+                                              selectedRow.answered_by,
+                                              selectedRow.destination_type,
+                                              selectedRow.destination,
+                                              selectedRow.transfered_to,
+                                              formatDateTimeJSX(
+                                                selectedRow.start_at,
+                                              ), // ✅ FIX
+                                              formatDateTimeJSX(
+                                                selectedRow.end_at,
+                                              ), // ✅ optional
+                                            ].map((val, i) => (
+                                              <td
+                                                key={i}
+                                                style={{
+                                                  fontSize: "13px",
+                                                  padding: "5px",
+                                                  background: "#f9f9f9",
+                                                  whiteSpace: "nowrap",
+                                                }}
+                                              >
+                                                {val || "-"}
+                                              </td>
+                                            ))}
+
+                                            <td
+                                              style={{
+                                                whiteSpace: "nowrap",
+                                                background: "#f9f9f9",
+                                                padding: "5px",
+                                                fontSize: "13px",
+                                              }}
+                                            >
+                                              {selectedRow.recording_path ? (
+                                                <audio
+                                                  controls
+                                                  src={
+                                                    selectedRow.recording_path
+                                                  }
+                                                  style={{
+                                                    width: "140px",
+                                                    height: "25px",
+                                                  }}
+                                                />
+                                              ) : (
+                                                "-"
+                                              )}
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                   </Box>  */}
+                                  </Grid>
+                                </Grid>
+
+                                {/* 🔹 Detail Table */}
+
+                                {/* 🔹 Recording */}
+                              </>
+                            )}
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     </div>
 

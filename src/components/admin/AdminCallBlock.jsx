@@ -195,7 +195,7 @@ function AdminCallBlock({ colorThem }) {
 
   useEffect(() => {
     dispatch(getAdminCallBlock());
-    dispatch(getAllUsers(""));
+    dispatch(getAllUsers("t"));
   }, [response]);
 
   const handleClose = () => {
@@ -828,7 +828,10 @@ function AdminCallBlock({ colorThem }) {
                                     }}
                                     required
                                   >
-                                    {state?.allUsers?.users?.map(
+                                    {state?.allUsers?.users?.filter(
+    (item) =>
+      item.role !== "Superadmin" && item.role !== "Admin"
+  )?.map(
                                       (item, index) => {
                                         return (
                                           <MenuItem

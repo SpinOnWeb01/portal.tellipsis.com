@@ -339,7 +339,7 @@ function Sidebar({ colorThem }) {
             icon={<DynamicFeedIcon />}
             onClick={() => navigateTo(Router.ADMIN_LIVE_EXTENSION)}
           >
-            SIP Registrations
+            Live Extension
           </MenuItem>
           <SubMenu
             title="Settings"
@@ -811,7 +811,7 @@ function Sidebar({ colorThem }) {
                             navigateTo(Router.ADMIN_LIVE_EXTENSION)
                           }
                         >
-                          SIP Registrations
+                          Live Extension
                         </MenuItem>
                         <SubMenu
                           title="Settings"

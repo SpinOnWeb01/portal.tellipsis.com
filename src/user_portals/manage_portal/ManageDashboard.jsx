@@ -17,6 +17,8 @@ import {
   Skeleton,
   styled,
   IconButton,
+  Tabs,
+  Tab,
 } from "@mui/material";
 
 import LinearProgress, {
@@ -70,6 +72,16 @@ function Dashboard() {
   const [liveExtension, setLiveExtension] = useState("");
   const [dataVal, setDataVal] = useState([]);
   const [didProg, setDidProg] = useState([]);
+  const [didTab, setDidTab] = useState("inbound");
+
+  const handleTabChange = (event, newValue) => {
+    setDidTab(newValue);
+  };
+
+  const didPerformanceData =
+    didTab === "inbound" ? didProg?.inbound || [] : didProg?.outbound || [];
+
+  console.log("didProg ==> ", didProg);
 
   useEffect(() => {
     const socket = socketIOClient(`${api.dev}`);
@@ -293,8 +305,12 @@ function Dashboard() {
         };
 
         const config3 = {
-          method: "get",
-          url: `${api.dev}/api/recentreport`,
+          method: "post",
+          url: `${api.dev}/api/userallcdr`,
+          data: {
+            from_date: dayjs().startOf("day").format("YYYY-MM-DD HH:mm"),
+            to_date: dayjs().endOf("day").format("YYYY-MM-DD HH:mm"),
+          },
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${user?.access_token}`,
@@ -503,8 +519,17 @@ function Dashboard() {
 
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={12}>
-                    <Box className="d-flex justify-content-between flex-wrap">
-                      <Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        flexWrap: "wrap",
+                        gap: { xs: 1.5, md: 0 },
+                        alignItems: { xs: "flex-start", md: "center" },
+                      }}
+                     >
+                      {/* Left: Title */}
+                      <Box sx={{ width: { xs: "100%", md: "auto" } }}>
                         <Chip
                           label="Call Summary"
                           sx={{
@@ -516,27 +541,31 @@ function Dashboard() {
                             color: "#fff",
                             fontSize: "0.85rem",
                             letterSpacing: 0.5,
+                            width: { xs: "100%", md: "auto" }, // 📱 full width
+                            justifyContent: "center",
                           }}
                         />
                       </Box>
 
-                      <Box>
+                      {/* Right: Note */}
+                      <Box sx={{ width: { xs: "100%", md: "auto" } }}>
                         <Typography
                           sx={{
-                            fontSize: "13px",
+                            fontSize: { xs: "12px", md: "13px" },
                             fontWeight: 600,
                             px: 2,
                             py: 0.8,
                             borderRadius: "8px",
                             backgroundColor: "#1976d215",
                             color: "#0e397f",
-                            display: "inline-flex",
+                            display: "flex",
                             alignItems: "center",
                             gap: 1,
                             position: "relative",
                             overflow: "hidden",
+                            width: "100%", // 📱 full width
+                            justifyContent: { xs: "center", md: "flex-start" },
 
-                            // left accent bar
                             "&::before": {
                               content: '""',
                               position: "absolute",
@@ -548,7 +577,6 @@ function Dashboard() {
                               borderRadius: "4px",
                             },
 
-                            // shrink animation
                             animation: "shrinkPulse 2.8s ease-in-out infinite",
 
                             "@keyframes shrinkPulse": {
@@ -586,8 +614,16 @@ function Dashboard() {
                             <Box
                               key={index}
                               sx={{
-                                flex: "1 1 calc(20% - 10px)",
-                                minWidth: 220,
+                                flex: {
+                                  xs: "0 0 100%", // 📱 mobile = full width
+                                  sm: "1 1 calc(50% - 10px)", // tablet = 2 cards
+                                  md: "1 1 calc(20% - 10px)", // desktop = 5 cards
+                                },
+                                maxWidth: {
+                                  xs: "100%",
+                                  sm: "calc(50% - 10px)",
+                                  md: "calc(20% - 10px)",
+                                },
                               }}
                             >
                               <StatCardSkeleton />
@@ -597,8 +633,16 @@ function Dashboard() {
                             <Box
                               key={index}
                               sx={{
-                                flex: "0 0 calc(20% - 10px)", // 👈 IMPORTANT CHANGE
-                                maxWidth: "calc(20% - 10px)", // 👈 keeps width same
+                                flex: {
+                                  xs: "0 0 100%", // 📱 mobile = full width
+                                  sm: "0 0 calc(50% - 10px)", // tablet = 2 cards
+                                  md: "0 0 calc(20% - 10px)", // desktop = 5 cards
+                                },
+                                maxWidth: {
+                                  xs: "100%",
+                                  sm: "calc(50% - 10px)",
+                                  md: "calc(20% - 10px)",
+                                },
                                 minWidth: 220,
                               }}
                             >
@@ -611,26 +655,85 @@ function Dashboard() {
 
                 <Grid container spacing={2}>
                   <Grid item xs={12} md={6}>
-                    <Grid item xs={12} md={6} className="mt-4">
-                      <Chip
-                        label="DID Performance"
+                    <Grid item xs={12} md={7} className="mt-4">
+                      <Box
                         sx={{
+                          display: "flex",
+                          justifyContent: {
+                            xs: "flex-start",
+                            md: "space-between",
+                          },
+                          alignItems: { xs: "flex-start", md: "center" },
+                          flexDirection: { xs: "column", md: "row" }, // 📱 stack on mobile
                           mb: 2,
-                          px: 2,
-                          py: 1,
-                          fontWeight: 600,
-                          background: "#0e397f",
-                          color: "#fff",
-                          fontSize: "0.85rem",
-                          letterSpacing: 0.5,
+                          gap: 2,
                         }}
-                      />
+                      >
+                        {/* Title Chip */}
+                        <Chip
+                          label="DID Performance"
+                          sx={{
+                            mb: { xs: 0, md: 2 },
+                            px: 2,
+                            py: 1,
+                            fontWeight: 600,
+                            background: "#0e397f",
+                            color: "#fff",
+                            fontSize: "0.85rem",
+                            letterSpacing: 0.5,
+                            width: { xs: "100%", md: "auto" }, // 📱 full width
+                            justifyContent: "center",
+                          }}
+                        />
+
+                        {/* Tabs */}
+                        <Tabs
+                          value={didTab}
+                          onChange={handleTabChange}
+                          TabIndicatorProps={{ style: { display: "none" } }}
+                          sx={{
+                            minHeight: "34px",
+                            mb: { xs: 0, md: 2 },
+                            width: { xs: "100%", md: "auto" }, // 📱 full width
+                            background: "#0e397f",
+                            borderRadius: "10px",
+                            border: "1px solid #e5e7eb",
+                            p: "4px",
+
+                            "& .MuiTab-root": {
+                              flex: { xs: 1, md: "unset" }, // 📱 equal width tabs
+                              minHeight: "30px",
+                              px: 2,
+                              fontSize: "12px",
+                              fontWeight: 500,
+                              textTransform: "none",
+                              borderRadius: "8px",
+                              color: "#e5e7eb",
+                              transition:
+                                "background 0.25s ease, color 0.25s ease",
+                            },
+
+                            "& .MuiTab-root:hover": {
+                              background: "#f97316",
+                              color: "#ffffff",
+                            },
+
+                            "& .Mui-selected": {
+                              background: "#f97316",
+                              color: "#ffffff !important",
+                            },
+                          }}
+                         >
+                          <Tab label="Inbound" value="inbound" />
+                          <Tab label="Outbound" value="outbound" />
+                        </Tabs>
+                      </Box>
                     </Grid>
 
                     {loader ? (
                       <CallPerformanceSkeleton />
-                    ) : didProg?.data?.length > 0 ? (
-                      didProg?.data
+                    ) : didPerformanceData?.length > 0 ? (
+                      didPerformanceData
                         .slice(0, visibleCount)
                         .map((item, index) => {
                           const percent = Math.round(item.percent);
@@ -665,12 +768,17 @@ function Dashboard() {
                                 <Typography fontWeight={700} fontSize="13px">
                                   Total Calls: <b>{item.calls}</b>
                                 </Typography>
-                                <Typography fontWeight={700} fontSize="13px">
-                                  Inbound Calls: {item.inbound_calls}
-                                </Typography>
-                                <Typography fontWeight={700} fontSize="13px">
-                                  Outbound Calls: {item.outbound_calls}
-                                </Typography>
+                                {item.inbound_calls !== undefined && (
+                                  <Typography fontWeight={700} fontSize="13px">
+                                    Inbound Calls: {item.inbound_calls}
+                                  </Typography>
+                                )}
+                                {item.outbound_calls !== undefined && (
+                                  <Typography fontWeight={700} fontSize="13px">
+                                    Outbound Calls: {item.outbound_calls}
+                                  </Typography>
+                                )}
+
                                 <Typography fontWeight={700} fontSize="13px">
                                   Total Hours: <b>{item.total_hours}</b>
                                 </Typography>
@@ -712,7 +820,7 @@ function Dashboard() {
                                   sx={{
                                     position: "absolute",
                                     top: "50%",
-                                    left: `clamp(1%, ${percent}%, 92%)`,
+                                    left: `clamp(1%, ${percent}%, 99%)`,
                                     transform: "translate(-50%, -50%)",
                                     fontSize: "12px",
                                     fontWeight: 700,
@@ -750,7 +858,7 @@ function Dashboard() {
                       </Box>
                     )}
 
-                    {!loader && callPerformanceData1.length > 3 && (
+                    {!loader && didPerformanceData.length > 3 && (
                       <Box
                         textAlign="center"
                         mt={2}
@@ -769,7 +877,7 @@ function Dashboard() {
                           </IconButton>
                         )}
 
-                        {visibleCount < didProg?.data?.length && (
+                        {visibleCount < didPerformanceData?.length && (
                           <IconButton
                             className="all_button_clr"
                             onClick={handleLoadMore}
@@ -795,6 +903,11 @@ function Dashboard() {
                           color: "#fff",
                           fontSize: "0.85rem",
                           letterSpacing: 0.5,
+
+                          // 📱 mobile responsiveness
+                          width: { xs: "100%", md: "auto" },
+                          justifyContent: { xs: "center", md: "flex-start" },
+                          textAlign: "center",
                         }}
                       />
                     </Grid>
@@ -809,6 +922,7 @@ function Dashboard() {
                               <th>Caller ID</th>
                               <th>Forwarding No</th>
                               <th>Status</th>
+                              <th>Duration</th>
                               <th>Call Start</th>
                             </tr>
                           </thead>
@@ -816,26 +930,29 @@ function Dashboard() {
                           <tbody>
                             {loader ? (
                               <TableSkeleton />
-                            ) : dataVal?.data?.records?.length > 0 ? (
-                              dataVal?.data?.records.map((item, index) => (
+                            ) : dataVal?.data?.length > 0 ? (
+                              dataVal?.data?.slice(0, 5)?.map((item, index) => (
                                 <tr key={index} className="fade-row">
                                   <td>{item.src}</td>
                                   <td>{item.tfn_number}</td>
 
                                   <td>
                                     <span
-                                      className={`${
-                                        item.hangup_reason === "Connected"
-                                          ? "success"
-                                          : item.status === "Missed"
-                                            ? "warning"
-                                            : "error"
-                                      }`}
+                                      style={{
+                                        color:
+                                          item.call_result === "ANSWERED"
+                                            ? "green"
+                                            : item.call_result === "MISSED"
+                                              ? "orange"
+                                              : item.call_result === "FAILED"
+                                                ? "red"
+                                                : "red",
+                                      }}
                                     >
-                                      {item.hangup_reason}
+                                      {item.call_result}
                                     </span>
                                   </td>
-
+                                  <td>{item.duration}</td>
                                   <td>
                                     {dayjs(item.start_at).format(
                                       "DD/MM/YYYY HH:mm",
@@ -846,7 +963,7 @@ function Dashboard() {
                             ) : (
                               <tr>
                                 <td
-                                  colSpan={4}
+                                  colSpan={5}
                                   className="text-center py-4 fw-semibold text-muted"
                                 >
                                   No rows found

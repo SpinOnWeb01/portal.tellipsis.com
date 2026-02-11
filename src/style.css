@@ -2194,9 +2194,9 @@ div#app {
     width: 100% !important;
   }
 
-  .MuiTabs-flexContainer.css-heg063-MuiTabs-flexContainer {
+  /* .MuiTabs-flexContainer.css-heg063-MuiTabs-flexContainer {
     overflow: scroll !important;
-  }
+  } */
 
 }
 
@@ -2349,7 +2349,7 @@ div#app {
 
   .manage_rgiht_bdr {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     width: 100%;
   }
 
@@ -3088,14 +3088,14 @@ fieldset {
 
 
 .manage_call span.livecalnow {
-  position: relative;
-  bottom: 12px !important;
-  background-color: #0e397f !important;
-  padding: 0px 4px !important;
-  border-radius: 10px !important;
-  color: #fff !important;
-  font-size: 13px;
-  right: 7px;
+    position: relative;
+    bottom: 8px !important;
+    background-color: #0e397f !important;
+    padding: 0px 4px !important;
+    border-radius: 10px !important;
+    color: #fff !important;
+    font-size: 10px !important;
+    right: 7px;
 }
 
 .call_icon {
@@ -3134,4 +3134,8 @@ fieldset {
 
 .table-forwarding tr th {background:#0E397F ; color:#fff; font-size: 14px;}
 .table-forwarding tr td {font-size: 13px;}
+
+.call_performance_tab {
+  color:#000 !important;
+}
     

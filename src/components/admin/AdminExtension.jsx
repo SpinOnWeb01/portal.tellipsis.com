@@ -240,7 +240,7 @@ function AdminExtension({ colorThem }) {
       setBorderColor("red");
     } else if (!specialCharValid) {
       setError(
-        "Password must include at least one special character(!@#$%^&*)"
+        "Password must include at least one special character(!@#$%^&*)",
       );
       setBorderColor("red");
     } else if (!noWhitespace) {
@@ -298,7 +298,7 @@ function AdminExtension({ colorThem }) {
       outgoing,
       handleCloseModal,
       setResponse,
-    ]
+    ],
   );
   const handleMessage = useCallback(
     (data) => {
@@ -306,7 +306,7 @@ function AdminExtension({ colorThem }) {
       setExtensionId(data?.extension_id);
       setAlertMessage(true);
     },
-    [setName]
+    [setName],
   ); // Memoize event handler
 
   const handleDelete = useCallback(
@@ -315,17 +315,17 @@ function AdminExtension({ colorThem }) {
         deleteAdminExtension(
           { extension_id: extensionId },
           setResponse,
-          setExtensionId
-        )
+          setExtensionId,
+        ),
       );
       setAlertMessage(false);
     },
-    [extensionId, dispatch, setResponse, setExtensionId]
+    [extensionId, dispatch, setResponse, setExtensionId],
   ); // Memoize event handler
 
   useEffect(() => {
     dispatch(getExtension(radioValue));
-    dispatch(getAllUsers(""));
+    dispatch(getAllUsers("t"));
   }, [radioValue, response]);
 
   useEffect(() => {
@@ -603,13 +603,13 @@ function AdminExtension({ colorThem }) {
                                   textAlign="center"
                                 >
                                   <IconButton
-                                  className="close_icon pt-0"
+                                    className="close_icon pt-0"
                                     onClick={handleClose}
                                     sx={{ float: "inline-end" }}
                                   >
                                     <Close />
                                   </IconButton>
-                                  
+
                                   <Typography
                                     id="transition-modal-title"
                                     variant="h6"
@@ -651,8 +651,13 @@ function AdminExtension({ colorThem }) {
                                         }}
                                         required
                                       >
-                                        {state?.allUsers?.users?.map(
-                                          (item, index) => {
+                                        {state?.allUsers?.users
+                                          ?.filter(
+                                            (item) =>
+                                              item.role !== "Superadmin" &&
+                                              item.role !== "Admin",
+                                          )
+                                          ?.map((item, index) => {
                                             return (
                                               <MenuItem
                                                 key={index}
@@ -661,8 +666,7 @@ function AdminExtension({ colorThem }) {
                                                 {item.username}
                                               </MenuItem>
                                             );
-                                          }
-                                        )}
+                                          })}
                                       </Select>
                                     </FormControl>
                                     {validation.userName && (
@@ -929,43 +933,37 @@ return <MenuItem key={index} value={item}>{item}</MenuItem>
                             onClose={handleCloseModal}
                             sx={{ textAlign: "center" }}
                           >
-                          
-                               <Box sx={{
-                                                                   display: "flex",
-                                                                   paddingTop: "10px",
-                                                                  alignItems: "center",
-                                                                  justifyContent: "space-between",
-                                                              }}>
-                                                                  
-                                                              <Typography
-                                                                sx={{
-                                                                  color: "#07285d",
-                                                                  margin: "0 auto",
-                                                                  fontSize: "20px",
-                                                                  fontWeight: "600",
-                                                                  width: "auto",
-                                                                  textAlign: "center",
-                                                               
-                                 
-                                                                                               
-                              
-                                                                }}
-                                                                className="extension_title"
-                                                              >
-                                                                Edit
-                                                              </Typography>
-                                                                <IconButton
-                                                                  className="close_icon"
-                                                                  onClick={handleCloseModal}
-                                                                  sx={{ float: "inline-end" }}
-                                                                >
-                                                                  <Close />
-                                                                </IconButton>
-                                                                
-                                                              </Box>
-                                                           
-                              
-                                                              <DialogContent sx={{pt: "0",}}>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                paddingTop: "10px",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <Typography
+                                sx={{
+                                  color: "#07285d",
+                                  margin: "0 auto",
+                                  fontSize: "20px",
+                                  fontWeight: "600",
+                                  width: "auto",
+                                  textAlign: "center",
+                                }}
+                                className="extension_title"
+                              >
+                                Edit
+                              </Typography>
+                              <IconButton
+                                className="close_icon"
+                                onClick={handleCloseModal}
+                                sx={{ float: "inline-end" }}
+                              >
+                                <Close />
+                              </IconButton>
+                            </Box>
+
+                            <DialogContent sx={{ pt: "0" }}>
                               <form>
                                 {/* <SelectComponent handleClose={handleClose} /> */}
                                 <Typography variant="body1">
@@ -999,8 +997,13 @@ return <MenuItem key={index} value={item}>{item}</MenuItem>
                                         }}
                                         required
                                       >
-                                        {state?.allUsers?.users?.map(
-                                          (item, index) => {
+                                        {state?.allUsers?.users
+                                          ?.filter(
+                                            (item) =>
+                                              item.role !== "Superadmin" &&
+                                              item.role !== "Admin",
+                                          )
+                                          ?.map((item, index) => {
                                             return (
                                               <MenuItem
                                                 key={index}
@@ -1009,8 +1012,7 @@ return <MenuItem key={index} value={item}>{item}</MenuItem>
                                                 {item.username}
                                               </MenuItem>
                                             );
-                                          }
-                                        )}
+                                          })}
                                       </Select>
                                     </FormControl>
                                     <TextField
@@ -1126,7 +1128,7 @@ return <MenuItem key={index} value={item}>{item}</MenuItem>
                                                 {item}
                                               </MenuItem>
                                             );
-                                          }
+                                          },
                                         )}
                                       </Select>
                                     </FormControl>

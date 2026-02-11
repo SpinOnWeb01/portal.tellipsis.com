@@ -411,7 +411,7 @@ function AdminivrUploads({ colorThem }) {
   };
 
   useEffect(() => {
-    dispatch(getAllUsers(""));
+    dispatch(getAllUsers("t"));
     //   if(state?.allUsers?.error === 401){
     //  localStorage.removeItem("admin");
     //       navigate("/");
@@ -551,7 +551,10 @@ function AdminivrUploads({ colorThem }) {
                                   }}
                                   required
                                 >
-                                  {state?.allUsers?.users?.map(
+                                  {state?.allUsers?.users?.filter(
+    (item) =>
+      item.role !== "Superadmin" && item.role !== "Admin"
+  )?.map(
                                     (item, index) => {
                                       return (
                                         <MenuItem key={index} value={item?.id}>

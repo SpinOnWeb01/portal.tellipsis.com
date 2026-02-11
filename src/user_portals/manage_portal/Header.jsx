@@ -67,6 +67,8 @@ function Header() {
   const [extension, setExtension] = useState("");
   const [openmodal, setOpen] = React.useState(false);
   const [number, setNumber] = useState(0);
+  const [indiaTime, setIndiaTime] = useState("");
+  const [usaTime, setUsaTime] = useState("");
   const handleOpen = () => {
     setOpen(true);
     setAnchorEl(null);
@@ -144,7 +146,7 @@ function Header() {
       {},
       {
         headers: config,
-      }
+      },
     );
     if (data?.status === 200) {
       toast.info(data?.message, {
@@ -183,6 +185,34 @@ function Header() {
     dispatch(getManageProfileExtension());
   }, []); // Empty dependency array ensures this effect runs once on mount
 
+  useEffect(() => {
+    const updateTime = () => {
+      const india = new Date().toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      });
+
+      const usa = new Date().toLocaleString("en-US", {
+        timeZone: "America/New_York", // EST / EDT auto handle
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      });
+
+      setIndiaTime(india);
+      setUsaTime(usa);
+    };
+
+    updateTime();
+    const timer = setInterval(updateTime, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   const handleUpdate = async () => {
     let data = JSON.stringify({
       new_password: newPassword,
@@ -201,7 +231,7 @@ function Header() {
       const val = await axios.put(
         `${api.dev}/api/changeprofilepassword`,
         data,
-        config
+        config,
       );
       if (val?.data?.status === 200) {
         toast.success(val?.data?.message, {
@@ -209,7 +239,7 @@ function Header() {
           autoClose: 1500,
         });
         handleClose();
-      }else{
+      } else {
         toast.error(val?.data?.message, {
           position: toast.POSITION.TOP_RIGHT,
           autoClose: 1500,
@@ -263,46 +293,159 @@ function Header() {
 
             <div className="manage_rgiht_bdr d-flex align-items-center">
               <div className="dshbrd_hdr_icon">
-                
-                <div className="d-flex gap-2 align-items-center"> 
-                  
-                    <div>
-                      <Typography
-                    style={{
-                      color: "black",
-                      fontSize: "14px",
+                <div className="d-flex gap-2 align-items-center">
+                  <Box
+                    sx={{
+                      alignItems: "center",
+                      gap: 1,
                       display: "flex",
+                      flexWrap: { xs: "wrap", sm: "nowrap" },
+                      width: "min-content",
+                    }}
+                   >
+                    {/* IST */}
+                    <Typography
+                      sx={{
+                        fontSize: { xs: "11px", sm: "13px" },
+                        fontWeight: 600,
+                        color: "#0f172a",
+                        background: "#e0f2fe",
+                        px: { xs: 1, sm: 1.5 },
+                        py: 0.4,
+                        borderRadius: "6px",
+                        textTransform: "uppercase",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Box
+                        component="span"
+                        sx={{ display: { xs: "none", sm: "inline" } }}
+                      >
+                        IST:
+                      </Box>
+                      <Box
+                        component="span"
+                        sx={{ display: { xs: "inline", sm: "none" } }}
+                      >
+                        IST
+                      </Box>
+                      &nbsp;{indiaTime}
+                    </Typography>
+
+                    {/* EST */}
+                    <Typography
+                      sx={{
+                        fontSize: { xs: "11px", sm: "13px" },
+                        fontWeight: 600,
+                        color: "#1e293b",
+                        background: "#fff7ed",
+                        px: { xs: 1, sm: 1.5 },
+                        py: 0.4,
+                        borderRadius: "6px",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Box
+                        component="span"
+                        sx={{ display: { xs: "none", sm: "inline" } }}
+                      >
+                        EST:
+                      </Box>
+                      <Box
+                        component="span"
+                        sx={{ display: { xs: "inline", sm: "none" } }}
+                      >
+                        EST
+                      </Box>
+                      &nbsp;{usaTime}
+                    </Typography>
+                  </Box>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      width: "min-content",
+                      flexWrap: { xs: "wrap", sm: "nowrap" },
                     }}
                   >
-                    US Minute:
-                    {data?.data?.map((item, index) => {
-                      return (
-                        <div key={index}>
-                          &nbsp;
+                    {/* US Minutes */}
+                    <Typography
+                      sx={{
+                        fontSize: { xs: "11px", sm: "14px" },
+                        fontWeight: 600,
+                        color: "#000",
+                        display: "flex",
+                        alignItems: "center",
+
+                        whiteSpace: "nowrap",
+                        background: { xs: "#f8fafc", sm: "transparent" },
+                        px: { xs: 1, sm: 0 },
+                        py: { xs: 0.3, sm: 0 },
+                        borderRadius: "6px",
+                      }}
+                    >
+                      <Box
+                        component="span"
+                        sx={{ display: { xs: "none", sm: "inline" } }}
+                      >
+                        US Minute:
+                      </Box>
+                      <Box
+                        component="span"
+                        sx={{ display: { xs: "inline", sm: "none" } }}
+                      >
+                        Min:
+                      </Box>
+                      &nbsp;
+                      {data?.data?.map((item, index) => (
+                        <span key={index}>
                           {user.billing_type === "Postpaid"
-                            ? "Unlimited"
+                            ? "∞"
                             : item.remaining_minutes}
-                        </div>
-                      );
-                    })}
-                  </Typography>
-                    </div>
-                    <div>
-                     <IconButton
-                      size="large"
-                      aria-label="account of current user"
-                      aria-controls="menu-appbar"
-                      aria-haspopup="true"
+                        </span>
+                      ))}
+                    </Typography>
+
+                    {/* Live Call */}
+                    <IconButton
                       className="manage_call"
-                    > 
-                      <CallIcon className="call_icon" style={{color:"#07285d!important", }} />
-                        <span className="livecalnow">{number}</span>
-                      Live
-                      
+                      sx={{
+                        px: { xs: 1, sm: 1.5 },
+                        py: 0.4,
+                        borderRadius: "8px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 0.5,
+                        background: { xs: "#transparent", sm: "transparent" },
+                      }}
+                    >
+                      <CallIcon sx={{ color: "#07285d", fontSize: "18px" }} />
+                      <span
+                        className="livecalnow"
+                        style={{
+                          fontSize: "12px",
+                          fontWeight: 700,
+                        }}
+                      >
+                        {number}
+                      </span>
+
+                      <Typography
+                        sx={{
+                          fontSize: "13px",
+                          fontWeight: 600,
+                          display: { xs: "none", sm: "inline" },
+                        }}
+                      >
+                        Live
+                      </Typography>
                     </IconButton>
-                  </div>
+                  </Box>
                 </div>
               </div>
+
               <ul className="hdr_profile">
                 <li
                   className="popover-button"
@@ -365,7 +508,7 @@ function Header() {
                 aria-describedby="profile-dialog-description"
                 maxWidth="sm"
                 fullWidth
-                >
+              >
                 <DialogTitle id="profile-dialog-title">
                   Profile
                   <IconButton
@@ -407,7 +550,7 @@ function Header() {
                           <MenuItem key={index} value={item}>
                             {item}
                           </MenuItem>
-                        )
+                        ),
                       )}
                     </Select>
                   </FormControl>
@@ -427,7 +570,6 @@ function Header() {
                 </DialogActions>
               </Dialog>
               {/* modal-end */}
-           
 
               <IconButton
                 size="large"
@@ -436,6 +578,13 @@ function Header() {
                 aria-haspopup="true"
                 style={{ paddingRight: "0" }}
                 onClick={logout}
+                sx={{
+                  paddingRight: 0,
+                  position: { xs: "absolute", md: "relative" },
+                  bottom: { xs: "60px", md: "auto" },
+                  right: { xs: "20px", md: "auto" },
+                  zIndex: 1300,
+                }}
               >
                 <LogoutIcon className="call_icon " />
               </IconButton>
