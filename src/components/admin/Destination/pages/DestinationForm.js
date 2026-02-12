@@ -10,6 +10,7 @@ import {
   ListItemText,
   DialogActions,
   Button,
+  Grid,
 } from "@mui/material";
 
 // Constants
@@ -58,282 +59,295 @@ const DestinationForm = React.memo(({
 
   return (
     <>
-    <form >
-      <div
-        style={{
-          textAlign: "center",
-          height: "420px",
-          paddingTop: "0px",
-          padding: "0px",
-          width: "auto",
-          overflow: "auto",
+   <form style={{paddingTop: "10px",}}>
+  <Grid container spacing={1}>
+
+    {/* DESTINATION */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        label="Destination"
+        value={tfnNumber}
+        onChange={(e) => {
+          const numericValue = e.target.value.replace(/[^0-9]/g, "");
+          setField("tfnNumber", numericValue);
         }}
-      >
-        {/* Destination Number */}
-        <TextField
-          style={{ width: "100%", margin: "7px 0" }}
-          type="text"
-          label="Destination"
-          variant="outlined"
-          value={tfnNumber}
-          onChange={(e) => {
-            const numericValue = e.target.value.replace(/[^0-9]/g, "");
-            setField("tfnNumber", numericValue);
-          }}
-          inputProps={{ inputMode: "numeric" }}
-        />
-        {validation.tfnNumber && (
-          <p className="mb-0" style={{ color: "red", textAlign: "left" }}>
-            {validation.tfnNumber}
-          </p>
-        )}
+        inputProps={{ inputMode: "numeric" }}
+      />
+    </Grid>
 
-        {/* Reseller Selection */}
-        <FormControl fullWidth style={{ width: "100%", margin: "5px 0" }}>
-          <InputLabel>Reseller</InputLabel>
+    {validation.tfnNumber && (
+      <Grid item xs={12}>
+        <p style={{ color: "red", textAlign: "left", margin: 0 }}>
+          {validation.tfnNumber}
+        </p>
+      </Grid>
+    )}
+
+    {/* RESELLER */}
+    <Grid item xs={12}>
+      <FormControl fullWidth>
+        <InputLabel>Reseller</InputLabel>
+        <Select
+        style={{textAlign: "left"}}
+          label="Reseller"
+          value={resellerId}
+          onChange={(e) => setField("resellerId", e.target.value)}
+        >
+          <MenuItem value="">none</MenuItem>
+          {resellers?.map((item) => (
+            <MenuItem key={item.reseller_id} value={item.reseller_id}>
+              {item.username}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
+
+    {/* USER */}
+    <Grid item xs={12}>
+      <FormControl fullWidth>
+        <InputLabel>UserName</InputLabel>
+        <Select
+        style={{textAlign: "left"}}
+          label="UserName"
+          value={userId}
+          onChange={(e) => setField("userId", e.target.value)}
+        >
+          <MenuItem value="">none</MenuItem>
+          {(resellerId ? resellerUsers : users)?.map((item) => (
+            <MenuItem key={item.user_id} value={item.user_id}>
+              {item.username}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
+
+    {/* SERVICES */}
+    <Grid item xs={12} md={6}>
+      {mode === "add" ? (
+        <FormControl fullWidth>
+          <InputLabel>Services</InputLabel>
           <Select
-            label="Reseller"
-            style={{ textAlign: "left" }}
-            value={resellerId}
-            onChange={(e) => setField("resellerId", e.target.value)}
+          style={{textAlign: "left"}}
+            multiple
+            value={serviceType}
+            onChange={(e) =>
+              setField(
+                "serviceType",
+                typeof e.target.value === "string"
+                  ? e.target.value.split(",")
+                  : e.target.value
+              )
+            }
+            input={<OutlinedInput label="Services" />}
+            renderValue={(selected) => selected.join(", ")}
+            MenuProps={MENU_PROPS}
           >
-            <MenuItem value="">none</MenuItem>
-            {resellers?.map((item) => (
-              <MenuItem key={item.reseller_id} value={item.reseller_id}>
-                {item.username}
+            {SERVICE_TYPES.map((name) => (
+              <MenuItem key={name} value={name}>
+                <Checkbox checked={serviceType.indexOf(name) > -1} />
+                <ListItemText primary={name} />
               </MenuItem>
             ))}
           </Select>
         </FormControl>
-
-        {/* User Selection */}
-        <FormControl fullWidth style={{ width: "100%", margin: "5px 0" }}>
-          <InputLabel>UserName</InputLabel>
+      ) : (
+        <FormControl fullWidth>
+          <InputLabel>Services</InputLabel>
           <Select
-            label="UserName"
-            style={{ textAlign: "left" }}
-            value={userId}
-            onChange={(e) => setField("userId", e.target.value)}
+          style={{textAlign: "left"}}
+            value={service}
+            onChange={(e) => setField("service", e.target.value)}
+            input={<OutlinedInput label="Services" />}
           >
-            <MenuItem value="">none</MenuItem>
-            {(resellerId ? resellerUsers : users)?.map((item) => (
-              <MenuItem key={item.user_id} value={item.user_id}>
-                {item.username}
+            {SERVICE_TYPES.map((name) => (
+              <MenuItem key={name} value={name}>
+                {name}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
+      )}
+    </Grid>
 
-        {/* Service Type */}
-        {mode === "add" ? (
-          <FormControl style={{ width: "100%", margin: "5px 0" }}>
-            <InputLabel>Services</InputLabel>
+    {/* MANAGE */}
+    {(mode === "add"
+      ? serviceType[0] === "Manage"
+      : service === "Manage") && (
+      <>
+            <Grid item xs={12} md={6}>
+          <FormControl fullWidth>
+            <InputLabel>Type</InputLabel>
             <Select
-              label="Services"
-              style={{ textAlign: "left" }}
-              multiple
-              value={serviceType}
-              onChange={(e) =>
-                setField(
-                  "serviceType",
-                  typeof e.target.value === "string"
-                    ? e.target.value.split(",")
-                    : e.target.value
-                )
-              }
-              input={<OutlinedInput label="Services" />}
-              renderValue={(selected) => selected.join(", ")}
-              MenuProps={MENU_PROPS}
+            style={{textAlign: "left"}}
+              value={subType}
+              onChange={(e) => {
+                const newSubType = e.target.value;
+                setField("subType", newSubType);
+                if (newSubType === "Extension" || newSubType === "Queue") {
+                  setField("destinationAction", []);
+                }
+              }}
+              input={<OutlinedInput label="Type" />}
             >
-              {SERVICE_TYPES.map((name) => (
-                <MenuItem key={name} value={name}>
-                  <Checkbox checked={serviceType.indexOf(name) > -1} />
-                  <ListItemText primary={name} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        ) : (
-          <FormControl style={{ width: "100%", margin: "5px 0" }}>
-            <InputLabel>Services</InputLabel>
-            <Select
-              label="Services"
-              style={{ textAlign: "left" }}
-              value={service}
-              onChange={(e) => setField("service", e.target.value)}
-            >
-              {SERVICE_TYPES.map((name) => (
+              {SUB_TYPES.map((name) => (
                 <MenuItem key={name} value={name}>
                   {name}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-        )}
+        </Grid>
 
-        {/* Manage Service Options */}
-        {(mode === "add"
-          ? serviceType[0] === "Manage"
-          : service === "Manage") && (
-          <>
-            <FormControl style={{ width: "100%", margin: "5px 0" }}>
-              <InputLabel>Type</InputLabel>
+        {subType === "Extension" && (
+              <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <InputLabel>Extension</InputLabel>
               <Select
-                label="Sub Type"
-                style={{ textAlign: "left" }}
-                value={subType}
-                onChange={(e) => {
-                  const newSubType = e.target.value;
-                  setField("subType", newSubType);
-                  if (newSubType === "Extension" || newSubType === "Queue") {
-                    setField("destinationAction", []);
-                  }
-                }}
+              style={{textAlign: "left"}}
+                multiple
+                value={destinationAction || []}
+                onChange={(e) =>
+                  setField("destinationAction", e.target.value)
+                }
+                input={<OutlinedInput label="Extension" />}
+                renderValue={(selected) => selected.join(", ")}
+                MenuProps={MENU_PROPS}
               >
-                {SUB_TYPES.map((name) => (
+                {extensionNumber?.data?.map((name) => (
                   <MenuItem key={name} value={name}>
+                    <Checkbox checked={destinationAction.includes(name)} />
                     {name}
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
-
-            {/* Extension Selection */}
-            {subType === "Extension" && (
-              <FormControl style={{ width: "100%", margin: "5px 0" }}>
-                <InputLabel>Extension</InputLabel>
-                <Select
-                  label="Extension"
-                  style={{ textAlign: "left" }}
-                  multiple
-                  value={destinationAction || []}
-                  onChange={(e) =>
-                    setField("destinationAction", e.target.value)
-                  }
-                  renderValue={(selected) => selected.join(", ")}
-                  MenuProps={MENU_PROPS}
-                >
-                  {extensionNumber?.data?.map((name) => (
-                    <MenuItem key={name} value={name}>
-                      <Checkbox checked={destinationAction.includes(name)} />
-                      {name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
-
-            {/* Queue Selection */}
-            {subType === "Queue" && (
-              <FormControl fullWidth style={{ width: "100%", margin: "5px 0" }}>
-                <InputLabel>Queue</InputLabel>
-                <Select
-                  label="Queue"
-                  style={{ textAlign: "left" }}
-                  value={destinationAction}
-                  onChange={(e) =>
-                    setField("destinationAction", e.target.value)
-                  }
-                  MenuProps={MENU_PROPS}
-                >
-                  {queue.data?.map((item) => (
-                    <MenuItem key={item} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
-          </>
+          </Grid>
         )}
 
-        {/* IP Service Option */}
-        {(mode === "add" ? serviceType[0] === "IP" : service === "IP") && (
-          <TextField
-            style={{ width: "100%", margin: "5px 0" }}
-            type="text"
-            label="IP Address"
-            variant="outlined"
-            value={ipAddress}
-            onChange={handleIpChange}
-            error={Boolean(error)}
-            helperText={error}
-          />
+        {subType === "Queue" && (
+              <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <InputLabel>Queue</InputLabel>
+              <Select
+              style={{textAlign: "left"}}
+                value={destinationAction}
+                onChange={(e) =>
+                  setField("destinationAction", e.target.value)
+                }
+                input={<OutlinedInput label="Queue" />}
+              >
+                {queue.data?.map((item) => (
+                  <MenuItem key={item} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
         )}
+      </>
+    )}
 
-        {/* Status Selection */}
-        <FormControl fullWidth style={{ width: "100%", margin: "5px 0" }}>
-          <InputLabel>Status</InputLabel>
+    {/* IP */}
+    {(mode === "add" ? serviceType[0] === "IP" : service === "IP") && (
+          <Grid item xs={12} md={6}>
+        <TextField
+          fullWidth
+          label="IP Address"
+          value={ipAddress}
+          onChange={handleIpChange}
+          error={Boolean(error)}
+          helperText={error}
+        />
+      </Grid>
+    )}
+
+    {/* STATUS */}
+        <Grid item xs={12} md={6}>
+      <FormControl fullWidth>
+        <InputLabel>Status</InputLabel>
+        <Select
+        style={{textAlign: "left",}}
+          value={selectedValue}
+          onChange={(e) => setField("selectedValue", e.target.value)}
+          input={<OutlinedInput label="Status" />}
+        >
+          <MenuItem value="t">Active</MenuItem>
+          <MenuItem value="f">Deactive</MenuItem>
+        </Select>
+      </FormControl>
+    </Grid>
+
+    {/* RECORDING */}
+        <Grid item xs={12} >
+      <FormControl fullWidth>
+        <InputLabel>Recording</InputLabel>
+        <Select
+        style={{textAlign: "left"}}
+          value={recording}
+          onChange={(e) => setField("recording", e.target.value)}
+          input={<OutlinedInput label="Recording" />}
+        >
+          <MenuItem value="true">Yes</MenuItem>
+          <MenuItem value="false">No</MenuItem>
+        </Select>
+      </FormControl>
+    </Grid>
+
+    {/* SUSPEND */}
+    {mode === "edit" && (
+          <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <InputLabel>Suspend</InputLabel>
           <Select
-            label="Status"
-            style={{ textAlign: "left" }}
-            value={selectedValue}
-            onChange={(e) => setField("selectedValue", e.target.value)}
+          style={{textAlign: "left"}}
+            value={suspendValue}
+            onChange={(e) => setField("suspendValue", e.target.value)}
           >
-            <MenuItem value="t">Active</MenuItem>
-            <MenuItem value="f">Deactive</MenuItem>
+            <MenuItem value={0}>Not Suspended</MenuItem>
+            <MenuItem value={1}>Suspended</MenuItem>
           </Select>
         </FormControl>
+      </Grid>
+    )}
 
-        {/* Recording Selection */}
-        <FormControl fullWidth style={{ width: "100%", margin: "5px 0" }}>
-          <InputLabel>Recording</InputLabel>
-          <Select
-            label="Recording"
-            style={{ textAlign: "left" }}
-            value={recording}
-            onChange={(e) => setField("recording", e.target.value)}
-          >
-            <MenuItem value="true">Yes</MenuItem>
-            <MenuItem value="false">No</MenuItem>
-          </Select>
-        </FormControl>
+    {/* CARRIER */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        label="Carrier Name"
+        value={carrierName}
+        onChange={(e) => setField("carrierName", e.target.value)}
+      />
+    </Grid>
 
-        {/* Suspend Selection (Edit mode only) */}
-        {mode === "edit" && (
-          <FormControl fullWidth style={{ width: "100%", margin: "5px 0" }}>
-            <InputLabel>Suspend</InputLabel>
-            <Select
-              label="Suspend"
-              style={{ textAlign: "left" }}
-              value={suspendValue}
-              onChange={(e) => setField("suspendValue", e.target.value)}
-            >
-              <MenuItem value={0}>Not Suspended</MenuItem>
-              <MenuItem value={1}>Suspended</MenuItem>
-            </Select>
-          </FormControl>
-        )}
+    {validation.carrierName && (
+      <Grid item xs={12}>
+        <p style={{ color: "red", textAlign: "left", margin: 0 }}>
+          {validation.carrierName}
+        </p>
+      </Grid>
+    )}
 
-        {/* Carrier Name */}
-        <TextField
-          style={{ width: "100%", margin: "5px 0" }}
-          type="text"
-          label="Carrier Name"
-          variant="outlined"
-          value={carrierName}
-          onChange={(e) => setField("carrierName", e.target.value)}
-        />
-        {validation.carrierName && (
-          <p className="mb-0" style={{ color: "red", textAlign: "left" }}>
-            {validation.carrierName}
-          </p>
-        )}
+    {/* DESCRIPTION */}
+    <Grid item xs={12}>
+      <TextField
+      style={{textAlign: "left"}}
+        fullWidth
+        label="Description"
+        value={destinationDescription}
+        onChange={(e) =>
+          setField("destinationDescription", e.target.value)
+        }
+      />
+    </Grid>
 
-        {/* Description */}
-        <TextField
-          style={{ width: "100%", margin: "5px 0" }}
-          type="text"
-          label="Description"
-          variant="outlined"
-          value={destinationDescription}
-          onChange={(e) => setField("destinationDescription", e.target.value)}
-        />
-      </div>
+  </Grid>
+</form>
 
-      {/* Form Actions */}
-      
-    </form>
     <DialogActions
     sx={{ display: "flex", justifyContent: "center", paddingBottom: "10px" }}
       >

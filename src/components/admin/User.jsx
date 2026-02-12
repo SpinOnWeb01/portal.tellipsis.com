@@ -1393,397 +1393,229 @@ function User({ colorThem }) {
                                 </Box>
                              
 
-                                <DialogContent sx={{pt: "0",}}>
-                <form>
-                  {/* <SelectComponent handleClose={handleClose} /> */}
-                  <Typography variant="body1">
-                    <form
-                      style={{
-                        textAlign: "center",
-                        
-                        // overflow: "auto",
-                        paddingTop: "10px",
-                        padding: "5px",
-                        width: "auto",
-                      }}
-                    >
-                      <TextField
-                        style={{
-                          width: "100%",
-                          margin: " 5px 0 5px 0",
-                        }}
-                        type="text"
-                        label="User Name"
-                        variant="outlined"
-                        name="userName"
-                        value={inputValues?.userName}
-                        onChange={handleChange}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <AccountCircle />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
+                                <DialogContent sx={{pt: "0", pb: "0",}}>
+               
+                  <form
+  style={{
+    textAlign: "center",
+    paddingTop: "10px",
+   
+    width: "100%",
+  }}
+>
+  <Grid container spacing={1}>
 
-                      <br />
-                      <TextField
-                        style={{
-                          width: "100%",
-                          margin: " 5px 0 5px 0",
-                        }}
-                        type="text"
-                        label="Email Id"
-                        variant="outlined"
-                        name="email"
-                        value={inputValues?.email}
-                        onChange={handleChange}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <MailIcon />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                      <br />
+    {/* USERNAME */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        label="User Name"
+        name="userName"
+        value={inputValues?.userName}
+        onChange={handleChange}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <AccountCircle />
+            </InputAdornment>
+          ),
+        }}
+      />
+    </Grid>
 
-                      <TextField
-                        style={{
-                          width: "100%",
-                          margin: " 5px 0 5px 0",
-                        }}
-                        type={showPassword ? "text" : "password"}
-                        label="Change Password"
-                        variant="outlined"
-                        name="password"
-                        value={password}
-                        onChange={(e) => {
-                          setPassword(e.target.value);
-                        }}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment
-                              position="start"
-                              sx={{ cursor: "pointer" }}
-                              onClick={handlePasswordVisibility}
-                            >
-                              {showPassword ? (
-                                <VisibilityIcon />
-                              ) : (
-                                <VisibilityOffIcon />
-                              )}
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
+    {/* EMAIL */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        label="Email Id"
+        name="email"
+        value={inputValues?.email}
+        onChange={handleChange}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <MailIcon />
+            </InputAdornment>
+          ),
+        }}
+      />
+    </Grid>
 
-                      {user.user_role === "Reseller" ? (
-                        <>
-                          <FormControl
-                            fullWidth
-                            style={{ width: "100%", margin: "7px 0" }}
-                          >
-                            <InputLabel id="demo-simple-select-label">
-                              Role
-                            </InputLabel>
+    {/* PASSWORD */}
+    <Grid item xs={12} md={6}>
+      <TextField
+        fullWidth
+        type={showPassword ? "text" : "password"}
+        label="Change Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment
+              position="start"
+              sx={{ cursor: "pointer" }}
+              onClick={handlePasswordVisibility}
+            >
+              {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+            </InputAdornment>
+          ),
+        }}
+      />
+    </Grid>
 
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              label="Role"
-                              style={{ textAlign: "left" }}
-                              defaultValue={roleId}
-                              onChange={(e) => {
-                                setRoleId(e.target.value);
-                              }}
-                              disabled={true}
-                            >
-                              {state?.roles?.users?.map((item, index) => {
-                                return (
-                                  <MenuItem key={index} value={item?.id}>
-                                    <label
-                                      style={{
-                                        margin: "0px",
-                                        padding: "0px",
-                                        textTransform: "capitalize",
-                                      }}
-                                    >
-                                      {item?.name.toString().toLowerCase()}
-                                    </label>
-                                  </MenuItem>
-                                );
-                              })}
-                            </Select>
-                          </FormControl>
-                        </>
-                      ) : (
-                        <>
-                          <FormControl
-                            fullWidth
-                            style={{ width: "100%", margin: "7px 0" }}
-                          >
-                            <InputLabel id="demo-simple-select-label">
-                              Role
-                            </InputLabel>
+    {/* ROLE */}
+    <Grid item xs={12} md={6}>
+      <FormControl fullWidth>
+        <InputLabel>Role</InputLabel>
+        <Select
+        style={{textAlign: "left",}}
+          label="Role"
+          value={roleId}
+          onChange={(e) => setRoleId(e.target.value)}
+          disabled={user.user_role === "Reseller"}
+        >
+          {state?.roles?.users?.map((item, index) => (
+            <MenuItem key={index} value={item?.id}>
+              {item?.name.toLowerCase()}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
 
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              label="Role"
-                              style={{ textAlign: "left" }}
-                              defaultValue={roleId}
-                              onChange={(e) => {
-                                setRoleId(e.target.value);
-                              }}
-                            >
-                              {state?.roles?.users?.map((item, index) => {
-                                return (
-                                  <MenuItem key={index} value={item?.id}>
-                                    <label
-                                      style={{
-                                        margin: "0px",
-                                        padding: "0px",
-                                        textTransform: "capitalize",
-                                      }}
-                                    >
-                                      {item?.name.toString().toLowerCase()}
-                                    </label>
-                                  </MenuItem>
-                                );
-                              })}
-                            </Select>
-                          </FormControl>
-                        </>
-                      )}
+    {/* STATUS */}
+    <Grid item xs={12} md={6}>
+      <FormControl fullWidth>
+        <InputLabel>Status</InputLabel>
+        <Select
+        style={{textAlign: "left",}}
+          label="Status"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <MenuItem value={"t"}>Active</MenuItem>
+          <MenuItem value={"f"}>Deactive</MenuItem>
+          <MenuItem value={"s"}>Suspend</MenuItem>
+        </Select>
+      </FormControl>
+    </Grid>
 
-                      <FormControl
-                        fullWidth
-                        style={{ width: "100%", margin: "7px 0" }}
-                      >
-                        <InputLabel id="demo-simple-select-label">
-                          Status
-                        </InputLabel>
+    {/* LIMIT */}
+    <Grid item xs={12} md={6}>
+      <TextField
+      
+        fullWidth
+        label="Extension Limit"
+        name="limit"
+        value={inputValues?.limit}
+        onChange={handleChange}
+        disabled={user.user_role === "Reseller"}
+      />
+    </Grid>
 
-                        <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
-                          label="Status"
-                          style={{ textAlign: "left" }}
-                          value={status}
-                          onChange={(e) => {
-                            setStatus(e.target.value);
-                          }}
-                        >
-                          <MenuItem value={"t"}>Active</MenuItem>
-                          <MenuItem value={"f"}>Deactive</MenuItem>
-                          <MenuItem value={"s"}>Suspend</MenuItem>
-                        </Select>
-                      </FormControl>
-                      <br />
-                      {user.user_role === "Reseller" ? (
-                        <>
-                          <TextField
-                            style={{
-                              width: "100%",
-                              margin: " 5px 0 5px 0",
-                            }}
-                            type="text"
-                            label="Extension Limit"
-                            variant="outlined"
-                            name="limit"
-                            value={inputValues?.limit}
-                            onChange={handleChange}
-                            disabled
-                          />
-                          <br />
-                        </>
-                      ) : (
-                        <>
-                          <TextField
-                            style={{
-                              width: "100%",
-                              margin: " 5px 0 5px 0",
-                            }}
-                            type="text"
-                            label="Extension Limit"
-                            variant="outlined"
-                            name="limit"
-                            value={inputValues?.limit}
-                            onChange={handleChange}
-                          />
-                          <br />
-                        </>
-                      )}
+    {/* EXTENSION */}
+    <Grid item xs={12} md={6}>
+      <FormControl fullWidth>
+        <InputLabel>Extension</InputLabel>
+        <Select
+        style={{textAlign: "left",}}
+          label="Extension"
+          value={extension}
+          onChange={(e) => setExtension(e.target.value)}
+          MenuProps={MenuProps}
+        >
+          {extensionNumber?.data?.map((name) => (
+            <MenuItem key={name} value={name}>
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
 
-                      <FormControl
-                        style={{
-                          width: "100%",
-                          margin: " 5px 0 5px 0",
-                        }}
-                      >
-                        <InputLabel id="demo-multiple-checkbox-label">
-                          Extension
-                        </InputLabel>
-                        <Select
-                          style={{ textAlign: "left" }}
-                          labelId="demo-multiple-checkbox-label"
-                          label="Extension"
-                          id="demo-multiple-checkbox"
-                          value={extension}
-                          onChange={(e) => {
-                            setExtension(e.target.value);
-                          }}
-                          // input={
-                          //   <OutlinedInput label="Extension" />
-                          // }
-                          // renderValue={(selected) =>
-                          //   selected.join(", ")
-                          // }
-                          MenuProps={MenuProps}
-                        >
-                          {extensionNumber?.data?.map((name) => (
-                            <MenuItem key={name} value={name}>
-                              {name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                      <br />
-                      {user.user_role === "Reseller" ? (
-                        <></>
-                      ) : (
-                        <>
-                          {" "}
-                          <FormControl
-                            style={{
-                              width: "100%",
-                              margin: " 5px 0 5px 0",
-                            }}
-                          >
-                            <InputLabel id="demo-multiple-checkbox-label">
-                              Account
-                            </InputLabel>
-                            <Select
-                              style={{ textAlign: "left" }}
-                              labelId="demo-multiple-checkbox-label"
-                              label="Extension"
-                              id="demo-multiple-checkbox"
-                              value={attempts}
-                              onChange={(e) => {
-                                setAttempts(e.target.value);
-                              }}
-                              // input={
-                              //   <OutlinedInput label="Extension" />
-                              // }
-                              // renderValue={(selected) =>
-                              //   selected.join(", ")
-                              // }
-                              MenuProps={MenuProps}
-                            >
-                              <MenuItem value={4}>Unlocked</MenuItem>
-                              <MenuItem value={0}>Locked</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </>
-                      )}
-                      <br />
-                      {user.user_role === "Reseller" ? (
-                        <></>
-                      ) : (
-                        <>
-                          <FormControl
-                            style={{
-                              width: "100%",
-                              margin: " 5px 0 5px 0",
-                            }}
-                          >
-                            <InputLabel id="demo-multiple-checkbox-label">
-                              Reseller
-                            </InputLabel>
-                            <Select
-                              style={{ textAlign: "left" }}
-                              labelId="demo-multiple-checkbox-label"
-                              label="Reseller"
-                              id="demo-multiple-checkbox"
-                              fullWidth
-                              value={reseller}
-                              onChange={(e) => {
-                                setReseller(e.target.value);
-                              }}
-                              // input={
-                              //   <OutlinedInput label="Reseller" />
-                              // }
-                              // renderValue={(selected) =>
-                              //   selected.join(", ")
-                              // }
-                              // MenuProps={MenuProps}
-                            >
-                              {state?.allUsers?.users?.map((name, index) => {
-                                if (name?.role === "Reseller") {
-                                  return (
-                                    <MenuItem key={index} value={name?.id}>
-                                      {name.username}
-                                    </MenuItem>
-                                  );
-                                }
-                                // {name?.role === "Reseller" ? (
-                                //   <MenuItem key={index} value={name.username}>
-                                //   {name.username}
-                                //  </MenuItem>
-                                // ) : (<></>)}
-                              })}
-                            </Select>
-                          </FormControl>
-                        </>
-                      )}
-                      <FormControl
-                        style={{ width: "100%", margin: "5px 0 5px 0" }}
-                      >
-                        <InputLabel id="demo-multiple-checkbox-label">
-                          Enable Feature
-                        </InputLabel>
-                        <Select
-                          style={{ textAlign: "left" }}
-                          labelId="demo-multiple-checkbox-label"
-                          label="Enable Feature"
-                          id="demo-multiple-checkbox"
-                          multiple
-                          fullWidth
-                          value={selectedPermissions}
-                          onChange={handlePermissionChange}
-                          input={<OutlinedInput label="Enable Feature" />}
-                          renderValue={(selected) =>
-                            selected.map((key) => permission[0][key]).join(", ")
-                          }
-                        >
-                          {Object.entries(permission[0]).map(([key, value]) => (
-                            <MenuItem key={key} value={key}>
-                              <Checkbox
-                                checked={selectedPermissions.indexOf(key) > -1}
-                              />
-                              <ListItemText primary={value} />
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                      <TextField
-      style={{
-        width: "100%",
-        margin: "5px 0 5px 0",
-      }}
-      label="Address"
-      variant="outlined"
-      name="address"
-      value={address}
-      onChange={(e) => setAddress(e.target.value)}
-      multiline
-      rows={2} // textarea ki height set karne ke liye
-    />
-                    </form>
-                  </Typography>
-                </form>
+    {/* ACCOUNT */}
+    {user.user_role !== "Reseller" && (
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <InputLabel>Account</InputLabel>
+          <Select
+          style={{textAlign: "left",}}
+            value={attempts}
+            onChange={(e) => setAttempts(e.target.value)}
+            input={<OutlinedInput label="Account" />}
+          >
+            <MenuItem value={4}>Unlocked</MenuItem>
+            <MenuItem value={0}>Locked</MenuItem>
+          </Select>
+        </FormControl>
+      </Grid>
+    )}
+
+    {/* RESELLER */}
+    {user.user_role !== "Reseller" && (
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <InputLabel>Reseller</InputLabel>
+          <Select
+          style={{textAlign: "left",}}
+            value={reseller}
+            onChange={(e) => setReseller(e.target.value)}
+            input={<OutlinedInput label="Reseller" />}
+          >
+            {state?.allUsers?.users?.map((name, index) => {
+              if (name?.role === "Reseller") {
+                return (
+                  <MenuItem key={index} value={name?.id}>
+                    {name.username}
+                  </MenuItem>
+                );
+              }
+            })}
+          </Select>
+        </FormControl>
+      </Grid>
+    )}
+
+    {/* PERMISSION */}
+    <Grid item xs={12} md={6}>
+      <FormControl fullWidth>
+        <InputLabel>Enable Feature</InputLabel>
+        <Select
+        style={{textAlign: "left",}}
+          multiple
+          value={selectedPermissions}
+          onChange={handlePermissionChange}
+          input={<OutlinedInput label="Enable Feature" />}
+          renderValue={(selected) =>
+            selected.map((key) => permission[0][key]).join(", ")
+          }
+        >
+          {Object.entries(permission[0]).map(([key, value]) => (
+            <MenuItem key={key} value={key}>
+              <Checkbox checked={selectedPermissions.indexOf(key) > -1} />
+              <ListItemText primary={value} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
+
+    {/* ADDRESS */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        label="Address"
+        multiline
+        rows={1.6}
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+      />
+    </Grid>
+
+  </Grid>
+</form>
+
+               
               </DialogContent>
               <DialogActions
                 sx={{
@@ -1798,7 +1630,7 @@ function User({ colorThem }) {
                     fontSize: "16px !impotant",
                     background:
                       "linear-gradient(180deg, #0E397F 0%, #001E50 100%) !important",
-                    marginTop: "20px",
+                    marginTop: "10px",
                     marginLeft: "0px !important",
                     padding: "10px 20px !important",
                     textTransform: "capitalize !important",
@@ -1814,7 +1646,7 @@ function User({ colorThem }) {
                   variant="contained"
                   sx={{
                     fontSize: "16px !impotant",
-                    marginTop: "20px",
+                    marginTop: "10px",
                     padding: "10px 20px !important",
                     textTransform: "capitalize !important",
                     marginLeft: "0px !important",
@@ -1988,388 +1820,222 @@ function User({ colorThem }) {
                              
 
                                 <DialogContent sx={{pt: "0",}}>
-                            <form>
-                              {/* <SelectComponent handleClose={handleClose} /> */}
-                              <Typography variant="body1">
-                                <form
-                                  style={{
-                                    textAlign: "center",
-                                 
-                                    // overflow: "auto",
-                                    paddingTop: "10px",
-                                    padding: "5px",
-                                    width: "auto",
-                                  }}
-                                >
-                                  <TextField
-                                    style={{
-                                      width: "100%",
-                                      margin: " 5px 0 5px 0",
-                                    }}
-                                    type="text"
-                                    label="User Name"
-                                    variant="outlined"
-                                    name="userName"
-                                    value={inputValues?.userName}
-                                    onChange={handleChange}
-                                    InputProps={{
-                                      startAdornment: (
-                                        <InputAdornment position="start">
-                                          <AccountCircle />
-                                        </InputAdornment>
-                                      ),
-                                    }}
-                                  />
-                                  {validation.userName && (
-                                    <p
-                                      className="mb-0"
-                                      style={{
-                                        color: "red",
-                                        textAlign: "left",
-                                      }}
-                                    >
-                                      {validation.userName}
-                                    </p>
-                                  )}
-                                  <br />
-                                  <TextField
-                                    style={{
-                                      width: "100%",
-                                      margin: " 5px 0 5px 0",
-                                    }}
-                                    type="text"
-                                    label="Email Id"
-                                    variant="outlined"
-                                    name="email"
-                                    value={inputValues?.email}
-                                    onChange={handleChange}
-                                    InputProps={{
-                                      startAdornment: (
-                                        <InputAdornment position="start">
-                                          <MailIcon />
-                                        </InputAdornment>
-                                      ),
-                                    }}
-                                  />
-                                  {validation.email && (
-                                    <p
-                                      className="mb-0"
-                                      style={{
-                                        color: "red",
-                                        textAlign: "left",
-                                      }}
-                                    >
-                                      {validation.email}
-                                    </p>
-                                  )}
-                                  <br />
-                                  <TextField
-                                    style={{
-                                      width: "100%",
-                                      margin: " 5px 0 5px 0",
-                                    }}
-                                    type="password"
-                                    label="Password"
-                                    variant="outlined"
-                                    name="password"
-                                    value={inputValues?.password}
-                                    onChange={handleChange}
-                                  />
-                                  {validation.password && (
-                                    <p
-                                      className="mb-0"
-                                      style={{
-                                        color: "red",
-                                        textAlign: "left",
-                                      }}
-                                    >
-                                      {validation.password}
-                                    </p>
-                                  )}
-                                  <br />
+                           
+                               <form
+  style={{
+    textAlign: "center",
+    paddingTop: "10px",
+    width: "100%",
+  }}
+>
+  <Grid container spacing={1}>
 
-                                  <TextField
-                                    style={{
-                                      width: "100%",
-                                      margin: " 5px 0 5px 0",
-                                    }}
-                                    type="password"
-                                    label="Confirm Password"
-                                    variant="outlined"
-                                    name="confirmPassword"
-                                    value={inputValues?.confirmPassword}
-                                    onChange={handleChange}
-                                  />
-                                  {validation.confirmPassword && (
-                                    <p
-                                      className="mb-0"
-                                      style={{
-                                        color: "red",
-                                        textAlign: "left",
-                                      }}
-                                    >
-                                      {validation.confirmPassword}
-                                    </p>
-                                  )}
-                                  <br />
-                                  {user.user_role === "Reseller" ? (
-                                    <></>
-                                  ) : (
-                                    <>
-                                      <FormControl
-                                        fullWidth
-                                        style={{
-                                          width: "100%",
-                                          margin: "7px 0",
-                                        }}
-                                      >
-                                        <InputLabel id="demo-simple-select-label">
-                                          Role
-                                        </InputLabel>
+    {/* USERNAME */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        label="User Name"
+        name="userName"
+        value={inputValues?.userName}
+        onChange={handleChange}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <AccountCircle />
+            </InputAdornment>
+          ),
+        }}
+      />
+      {validation.userName && (
+        <p style={{ color: "red", textAlign: "left", margin: 0 }}>
+          {validation.userName}
+        </p>
+      )}
+    </Grid>
 
-                                        <Select
-                                          labelId="demo-simple-select-label"
-                                          id="demo-simple-select"
-                                          label="Role"
-                                          style={{ textAlign: "left" }}
-                                          value={roleId}
-                                          onChange={(e) => {
-                                            setRoleId(e.target.value);
-                                          }}
-                                          required
-                                        >
-                                          {state?.roles?.users?.map(
-                                            (item, index) => {
-                                              // Filter out "Superadmin" role if the logged-in user is also a "Superadmin"
-                                              if (
-                                                user.user_role ===
-                                                  "Superadmin" &&
-                                                item.name === "Superadmin"
-                                              ) {
-                                                return null; // Skip rendering this MenuItem
-                                              } else if (
-                                                user.user_role === "Admin" &&
-                                                (item.name === "Superadmin" ||
-                                                  item.name === "Admin")
-                                              ) {
-                                                return null;
-                                              } else if (
-                                                user.user_role === "Reseller" &&
-                                                (item.name === "Reseller" ||
-                                                  item.name === "Superadmin" ||
-                                                  item.name === "Admin")
-                                              ) {
-                                                return null;
-                                              } else {
-                                                // Render other roles
-                                                return (
-                                                  <MenuItem
-                                                    key={index}
-                                                    value={item?.id}
-                                                  >
-                                                    <label
-                                                      style={{
-                                                        margin: "0px",
-                                                        padding: "0px",
-                                                        textTransform:
-                                                          "capitalize",
-                                                      }}
-                                                    >
-                                                      {item?.name
-                                                        .toString()
-                                                        .toLowerCase()}
-                                                    </label>
-                                                  </MenuItem>
-                                                );
-                                              }
-                                            }
-                                          )}
-                                        </Select>
-                                      </FormControl>
+    {/* EMAIL */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        label="Email Id"
+        name="email"
+        value={inputValues?.email}
+        onChange={handleChange}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <MailIcon />
+            </InputAdornment>
+          ),
+        }}
+      />
+      {validation.email && (
+        <p style={{ color: "red", textAlign: "left", margin: 0 }}>
+          {validation.email}
+        </p>
+      )}
+    </Grid>
 
-                                      {validation.role && (
-                                        <p
-                                          className="mb-0"
-                                          style={{
-                                            color: "red",
-                                            textAlign: "left",
-                                          }}
-                                        >
-                                          {validation.role}
-                                        </p>
-                                      )}
+    {/* PASSWORD */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        type="password"
+        label="Password"
+        name="password"
+        value={inputValues?.password}
+        onChange={handleChange}
+      />
+    </Grid>
 
-                                      <br />
-                                    </>
-                                  )}
+    {/* CONFIRM PASSWORD */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        type="password"
+        label="Confirm Password"
+        name="confirmPassword"
+        value={inputValues?.confirmPassword}
+        onChange={handleChange}
+      />
+    </Grid>
 
-                                  <FormControl
-                                    fullWidth
-                                    style={{ width: "100%", margin: "7px 0" }}
-                                  >
-                                    <InputLabel id="demo-simple-select-label">
-                                      Status
-                                    </InputLabel>
+    {/* ROLE */}
+    {user.user_role !== "Reseller" && (
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <InputLabel>Role</InputLabel>
+          <Select
+          style={{textAlign: "left",}}
+            label="Role"
+            value={roleId}
+            onChange={(e) => setRoleId(e.target.value)}
+          >
+            {state?.roles?.users?.map((item, index) => {
+              if (
+                user.user_role === "Superadmin" &&
+                item.name === "Superadmin"
+              )
+                return null;
 
-                                    <Select
-                                      labelId="demo-simple-select-label"
-                                      id="demo-simple-select"
-                                      label="Status"
-                                      style={{ textAlign: "left" }}
-                                      value={userActive}
-                                      onChange={(e) => {
-                                        setUserActive(e.target.value);
-                                      }}
-                                    >
-                                      <MenuItem value={"t"}>Active</MenuItem>
-                                      <MenuItem value={"f"}>Deactive</MenuItem>
-                                      <MenuItem value={"s"}>Suspend</MenuItem>
-                                    </Select>
-                                  </FormControl>
-                                  {validation.status && (
-                                    <p
-                                      className="mb-0"
-                                      style={{
-                                        color: "red",
-                                        textAlign: "left",
-                                      }}
-                                    >
-                                      {validation.status}
-                                    </p>
-                                  )}
-                                  {user.user_role === "Reseller" ? (
-                                    <></>
-                                  ) : (
-                                    <>
-                                      {validation.service && (
-                                        <p
-                                          className="mb-0"
-                                          style={{
-                                            color: "red",
-                                            textAlign: "left",
-                                          }}
-                                        >
-                                          {validation.service}
-                                        </p>
-                                      )}
-                                      <br />
-                                    </>
-                                  )}
-                                  <TextField
-                                    style={{
-                                      width: "100%",
-                                      margin: " 5px 0 5px 0",
-                                    }}
-                                    type="text"
-                                    label="Extension Limit"
-                                    variant="outlined"
-                                    name="limit"
-                                    value={inputValues?.limit}
-                                    onChange={handleChange}
-                                  />
-                                  <br />
-                                  {roleId === 4 ? (
-                                    <>
-                                      <FormControl
-                                        style={{
-                                          width: "100%",
-                                          margin: " 5px 0 5px 0",
-                                        }}
-                                      >
-                                        <InputLabel id="demo-multiple-checkbox-label">
-                                          Reseller
-                                        </InputLabel>
-                                        <Select
-                                          style={{ textAlign: "left" }}
-                                          labelId="demo-multiple-checkbox-label"
-                                          label="Reseller"
-                                          id="demo-multiple-checkbox"
-                                          fullWidth
-                                          value={reseller}
-                                          onChange={(e) => {
-                                            setReseller(e.target.value);
-                                          }}
-                                        >
-                                          {state?.allUsers?.users?.map(
-                                            (name, index) => {
-                                              if (name?.role === "Reseller") {
-                                                return (
-                                                  <MenuItem
-                                                    key={index}
-                                                    value={name?.id}
-                                                  >
-                                                    {name.username}
-                                                  </MenuItem>
-                                                );
-                                              }
-                                            }
-                                          )}
-                                        </Select>
-                                      </FormControl>
-                                    </>
-                                  ) : (
-                                    <></>
-                                  )}
+              if (
+                user.user_role === "Admin" &&
+                (item.name === "Superadmin" || item.name === "Admin")
+              )
+                return null;
 
-                                  <FormControl
-                                    style={{
-                                      width: "100%",
-                                      margin: "5px 0 5px 0",
-                                    }}
-                                  >
-                                    <InputLabel id="demo-multiple-checkbox-label">
-                                      Enable Feature
-                                    </InputLabel>
-                                    <Select
-                                      style={{ textAlign: "left" }}
-                                      labelId="demo-multiple-checkbox-label"
-                                      label="Enable Feature"
-                                      id="demo-multiple-checkbox"
-                                      multiple
-                                      fullWidth
-                                      value={selectedPermissions}
-                                      onChange={handlePermissionChange}
-                                      input={
-                                        <OutlinedInput label="Enable Feature" />
-                                      }
-                                      renderValue={(selected) =>
-                                        selected
-                                          .map((key) => permission[0][key])
-                                          .join(", ")
-                                      }
-                                    >
-                                      {Object.entries(permission[0]).map(
-                                        ([key, value]) => (
-                                          <MenuItem key={key} value={key}>
-                                            <Checkbox
-                                              checked={
-                                                selectedPermissions.indexOf(
-                                                  key
-                                                ) > -1
-                                              }
-                                            />
-                                            <ListItemText primary={value} />
-                                          </MenuItem>
-                                        )
-                                      )}
-                                    </Select>
-                                  </FormControl>
-                                  <TextField
-      style={{
-        width: "100%",
-        margin: "5px 0 5px 0",
-      }}
-      label="Address"
-      variant="outlined"
-      name="address"
-      value={address}
-      onChange={(e) => setAddress(e.target.value)}
-      multiline
-      rows={2} // textarea ki height set karne ke liye
-    />
-                                </form>
-                              </Typography>
-                            </form>
+              if (
+                user.user_role === "Reseller" &&
+                (item.name === "Reseller" ||
+                  item.name === "Superadmin" ||
+                  item.name === "Admin")
+              )
+                return null;
+
+              return (
+                <MenuItem key={index} value={item?.id}>
+                  {item?.name.toLowerCase()}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+    </Grid>
+    )}
+
+    {/* STATUS */}
+    <Grid item xs={12} md={6}>
+      <FormControl fullWidth>
+        <InputLabel>Status</InputLabel>
+        <Select
+        style={{textAlign: "left",}}
+          label="Status"
+          value={userActive}
+          onChange={(e) => setUserActive(e.target.value)}
+        >
+          <MenuItem value={"t"}>Active</MenuItem>
+          <MenuItem value={"f"}>Deactive</MenuItem>
+          <MenuItem value={"s"}>Suspend</MenuItem>
+        </Select>
+      </FormControl>
+    </Grid>
+
+    {/* LIMIT */}
+    <Grid item xs={12} md={6}>
+      <TextField
+        fullWidth
+        label="Extension Limit"
+        name="limit"
+        value={inputValues?.limit}
+        onChange={handleChange}
+      />
+    </Grid>
+
+    {/* RESELLER */}
+    {roleId === 4 && (
+      <Grid item xs={12}>
+        <FormControl fullWidth>
+          <InputLabel>Reseller</InputLabel>
+          <Select
+          style={{textAlign: "left",}}
+            label="Reseller"
+            value={reseller}
+            onChange={(e) => setReseller(e.target.value)}
+          >
+            {state?.allUsers?.users?.map((name, index) => {
+              if (name?.role === "Reseller") {
+                return (
+                  <MenuItem key={index} value={name?.id}>
+                    {name.username}
+                  </MenuItem>
+                );
+              }
+            })}
+          </Select>
+        </FormControl>
+      </Grid>
+    )}
+
+    {/* PERMISSIONS */}
+    <Grid item xs={12} md={6}>
+      <FormControl fullWidth>
+        <InputLabel>Enable Feature</InputLabel>
+        <Select
+        style={{textAlign: "left",}}
+          multiple
+          value={selectedPermissions}
+          onChange={handlePermissionChange}
+          input={<OutlinedInput label="Enable Feature" />}
+          renderValue={(selected) =>
+            selected.map((key) => permission[0][key]).join(", ")
+          }
+        >
+          {Object.entries(permission[0]).map(([key, value]) => (
+            <MenuItem key={key} value={key}>
+              <Checkbox checked={selectedPermissions.indexOf(key) > -1} />
+              <ListItemText primary={value} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
+
+    {/* ADDRESS */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        label="Address"
+        multiline
+        rows={2}
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+      />
+    </Grid>
+
+  </Grid>
+</form>
+
+                             
                           </DialogContent>
                           <DialogActions
                             sx={{

@@ -19,6 +19,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Grid,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
@@ -1302,557 +1303,242 @@ function DID_TFN_number({ colorThem }) {
                                 </DialogTitle>
 
                                 <DialogContent>
-                                  <form>
+                                  
                                     <form
-                                      style={{
-                                        textAlign: "center",
-                                        height: "348px",
-                                        paddingTop: "10px",
-                                        padding: "5px",
-                                        width: "auto",
-                                      }}
-                                    >
-                                      <TextField
-                                        style={{
-                                          width: "100%",
-                                          margin: "7px 0",
-                                        }}
-                                        type="text"
-                                        label="Destination"
-                                        variant="outlined"
-                                        name="tfnNumber"
-                                        value={tfnNumber}
-                                        onChange={(e) => {
-                                          const numericValue =
-                                            e.target.value.replace(
-                                              /[^0-9]/g,
-                                              ""
-                                            );
-                                          setTfnNumber(numericValue);
-                                        }}
-                                        inputProps={{
-                                          inputMode: "numeric",
-                                          // pattern: '[0-9]*',
-                                        }}
-                                      />
-                                      {validation.tfnNumber && (
-                                        <p
-                                          className="mb-0"
-                                          style={{
-                                            color: "red",
-                                            textAlign: "left",
-                                          }}
-                                        >
-                                          {validation.tfnNumber}
-                                        </p>
-                                      )}
+  style={{
+    textAlign: "center",
+    paddingTop: "10px",
+    padding: "5px",
+    width: "100%",
+  }}
+>
+  <Grid container spacing={1}>
 
-                                      <FormControl
-                                        fullWidth
-                                        style={{
-                                          width: "100%",
-                                          margin: "7px 0",
-                                        }}
-                                        className={classes.formControl}
-                                      >
-                                        <InputLabel id="demo-simple-select-label">
-                                          Reseller
-                                        </InputLabel>
+    {/* DESTINATION */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        label="Destination"
+        name="tfnNumber"
+        value={tfnNumber}
+        onChange={(e) => {
+          const numericValue = e.target.value.replace(/[^0-9]/g, "");
+          setTfnNumber(numericValue);
+        }}
+        inputProps={{ inputMode: "numeric" }}
+      />
+    </Grid>
 
-                                        <Select
-                                          labelId="demo-simple-select-label"
-                                          id="demo-simple-select"
-                                          label="Reseller"
-                                          style={{ textAlign: "left" }}
-                                          value={resellerId}
-                                          onChange={(e) => {
-                                            setResellerId(e.target.value);
-                                          }}
-                                          required
-                                        >
-                                          <MenuItem value={""}>none</MenuItem>
-                                          {resellers?.map((item, index) => {
-                                            return (
-                                              <MenuItem
-                                                key={index}
-                                                value={item?.reseller_id}
-                                              >
-                                                {item.username}
-                                              </MenuItem>
-                                            );
-                                          })}
-                                        </Select>
-                                      </FormControl>
+    {validation.tfnNumber && (
+      <Grid item xs={12}>
+        <p style={{ color: "red", textAlign: "left", margin: 0 }}>
+          {validation.tfnNumber}
+        </p>
+      </Grid>
+    )}
 
-                                      <br />
-                                      {resellerId === "" ? (
-                                        <>
-                                          <FormControl
-                                            fullWidth
-                                            style={{
-                                              width: "100%",
-                                              margin: "7px 0",
-                                            }}
-                                          >
-                                            <InputLabel id="demo-simple-select-label">
-                                              UserName
-                                            </InputLabel>
+    {/* RESELLER */}
+    <Grid item xs={12}>
+      <FormControl fullWidth>
+        <InputLabel>Reseller</InputLabel>
+        <Select
+          label="Reseller"
+          value={resellerId}
+          onChange={(e) => setResellerId(e.target.value)}
+        >
+          <MenuItem value={""}>none</MenuItem>
+          {resellers?.map((item, index) => (
+            <MenuItem key={index} value={item?.reseller_id}>
+              {item.username}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
 
-                                            <Select
-                                              labelId="demo-simple-select-label"
-                                              id="demo-simple-select"
-                                              label="UserName"
-                                              style={{ textAlign: "left" }}
-                                              value={userId}
-                                              onChange={(e) => {
-                                                setUserId(e.target.value);
-                                              }}
-                                            >
-                                              <MenuItem value={""}>
-                                                none
-                                              </MenuItem>
-                                              {users?.map((item, index) => {
-                                                return (
-                                                  <MenuItem
-                                                    key={index}
-                                                    value={item?.user_id}
-                                                  >
-                                                    {item.username}
-                                                  </MenuItem>
-                                                );
-                                              })}
-                                            </Select>
-                                          </FormControl>
-                                          {validation.userId && (
-                                            <p
-                                              className="mb-0"
-                                              style={{
-                                                color: "red",
-                                                textAlign: "left",
-                                              }}
-                                            >
-                                              {validation.userId}
-                                            </p>
-                                          )}
-                                        </>
-                                      ) : (
-                                        <>
-                                          <FormControl
-                                            fullWidth
-                                            style={{
-                                              width: "100%",
-                                              margin: "7px 0",
-                                            }}
-                                          >
-                                            <InputLabel id="demo-simple-select-label">
-                                              UserName
-                                            </InputLabel>
+    {/* USER */}
+    <Grid item xs={12}>
+      <FormControl fullWidth>
+        <InputLabel>UserName</InputLabel>
+        <Select
+          label="UserName"
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
+        >
+          <MenuItem value={""}>none</MenuItem>
 
-                                            <Select
-                                              labelId="demo-simple-select-label"
-                                              id="demo-simple-select"
-                                              label="UserName"
-                                              style={{ textAlign: "left" }}
-                                              value={userId}
-                                              onChange={(e) => {
-                                                setUserId(e.target.value);
-                                              }}
-                                            >
-                                              <MenuItem value={""}>
-                                                none
-                                              </MenuItem>
-                                              {resellerUsers?.map(
-                                                (item, index) => {
-                                                  return (
-                                                    <MenuItem
-                                                      key={index}
-                                                      value={item?.user_id}
-                                                    >
-                                                      {item.username}
-                                                    </MenuItem>
-                                                  );
-                                                }
-                                              )}
-                                            </Select>
-                                          </FormControl>
-                                          {validation.userId && (
-                                            <p
-                                              className="mb-0"
-                                              style={{
-                                                color: "red",
-                                                textAlign: "left",
-                                              }}
-                                            >
-                                              {validation.userId}
-                                            </p>
-                                          )}
-                                        </>
-                                      )}
+          {(resellerId === "" ? users : resellerUsers)?.map((item, index) => (
+            <MenuItem key={index} value={item?.user_id}>
+              {item.username}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
 
-                                      <FormControl
-                                        style={{
-                                          width: "100%",
-                                          margin: " 5px 0 5px 0",
-                                        }}
-                                      >
-                                        <InputLabel id="demo-multiple-checkbox-label">
-                                          Services
-                                        </InputLabel>
-                                        <Select
-                                          style={{ textAlign: "left" }}
-                                          labelId="demo-multiple-checkbox-label"
-                                          label="Services"
-                                          id="demo-multiple-checkbox"
-                                          //multiple
-                                          fullWidth
-                                          value={serviceType}
-                                          onChange={handleChanges}
-                                          input={
-                                            <OutlinedInput label="Services" />
-                                          }
-                                          renderValue={(selected) =>
-                                            selected.join(", ")
-                                          }
-                                          MenuProps={MenuProps}
-                                          // disabled={true}
-                                        >
-                                          {names.map((name) => (
-                                            <MenuItem key={name} value={name}>
-                                              <Checkbox
-                                                checked={
-                                                  serviceType.indexOf(name) > -1
-                                                }
-                                              />
-                                              <ListItemText primary={name} />
-                                            </MenuItem>
-                                          ))}
-                                        </Select>
-                                      </FormControl>
-                                      {validation.serviceType && (
-                                        <p
-                                          className="mb-0"
-                                          style={{
-                                            color: "red",
-                                            textAlign: "left",
-                                          }}
-                                        >
-                                          {validation.serviceType}
-                                        </p>
-                                      )}
+    {validation.userId && (
+      <Grid item xs={12}>
+        <p style={{ color: "red", textAlign: "left", margin: 0 }}>
+          {validation.userId}
+        </p>
+      </Grid>
+    )}
 
-                                      {serviceType.map((item, index) => {
-                                        return (
-                                          <>
-                                            {item === "Manage" ? (
-                                              <>
-                                                {" "}
-                                                <br />
-                                                <FormControl
-                                                  style={{
-                                                    width: "100%",
-                                                    margin: " 5px 0 5px 0",
-                                                  }}
-                                                >
-                                                  <InputLabel id="demo-multiple-checkbox-label">
-                                                    Type
-                                                  </InputLabel>
-                                                  <Select
-                                                    style={{
-                                                      textAlign: "left",
-                                                    }}
-                                                    labelId="demo-multiple-checkbox-label"
-                                                    label="Sub Type"
-                                                    id="demo-multiple-checkbox"
-                                                    //multiple
-                                                    fullWidth
-                                                    value={subType}
-                                                    onChange={(e) => {
-                                                      const newSubType =
-                                                        e.target.value;
-                                                      setSubType(newSubType);
-                                                      // Clear destinationAction if subType is Extension or Queue
-                                                      if (
-                                                        newSubType ===
-                                                          "Extension" ||
-                                                        newSubType === "Queue"
-                                                      ) {
-                                                        setDestinationAction(
-                                                          []
-                                                        );
-                                                      }
-                                                    }}
-                                                  >
-                                                    {sub_type.map((name) => (
-                                                      <MenuItem
-                                                        key={name}
-                                                        value={name}
-                                                      >
-                                                        {name}
-                                                      </MenuItem>
-                                                    ))}
-                                                  </Select>
-                                                </FormControl>
-                                                {subType === "Extension" ? (
-                                                  <>
-                                                    <FormControl
-                                                      style={{
-                                                        width: "100%",
-                                                        margin: "5px 0 5px 0",
-                                                      }}
-                                                    >
-                                                      <InputLabel id="demo-multiple-checkbox-label">
-                                                        Extension
-                                                      </InputLabel>
-                                                      <Select
-                                                        style={{
-                                                          textAlign: "left",
-                                                        }}
-                                                        labelId="demo-multiple-checkbox-label"
-                                                        label="Extension"
-                                                        id="demo-multiple-checkbox"
-                                                        multiple // Enable multiple selection
-                                                        fullWidth
-                                                        value={
-                                                          destinationAction ||
-                                                          []
-                                                        } // Ensure the state is an array
-                                                        onChange={(e) => {
-                                                          setDestinationAction(
-                                                            e.target.value
-                                                          ); // Update state with selected values
-                                                        }}
-                                                        renderValue={(
-                                                          selected
-                                                        ) =>
-                                                          selected.join(", ")
-                                                        } // Display selected values
-                                                        MenuProps={MenuProps}
-                                                      >
-                                                        {extensionNumber?.data?.map(
-                                                          (name) => (
-                                                            <MenuItem
-                                                              key={name}
-                                                              value={name}
-                                                            >
-                                                              <Checkbox
-                                                                checked={destinationAction.includes(
-                                                                  name
-                                                                )}
-                                                              />
-                                                              {/* Add Checkbox */}
-                                                              {name}
-                                                            </MenuItem>
-                                                          )
-                                                        )}
-                                                      </Select>
-                                                    </FormControl>
-                                                  </>
-                                                ) : (
-                                                  <></>
-                                                )}
-                                                {subType === "Queue" ? (
-                                                  <>
-                                                    {" "}
-                                                    <FormControl
-                                                      fullWidth
-                                                      style={{
-                                                        width: "100%",
-                                                        margin: "7px 0",
-                                                      }}
-                                                    >
-                                                      <InputLabel id="demo-simple-select-label">
-                                                        Queue
-                                                      </InputLabel>
+    {/* SERVICES */}
+    <Grid item xs={12}>
+      <FormControl fullWidth>
+        <InputLabel>Services</InputLabel>
+        <Select
+          multiple
+          value={serviceType}
+          onChange={handleChanges}
+          input={<OutlinedInput label="Services" />}
+          renderValue={(selected) => selected.join(", ")}
+          MenuProps={MenuProps}
+        >
+          {names.map((name) => (
+            <MenuItem key={name} value={name}>
+              <Checkbox checked={serviceType.indexOf(name) > -1} />
+              <ListItemText primary={name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
 
-                                                      <Select
-                                                        labelId="demo-simple-select-label"
-                                                        id="demo-simple-select"
-                                                        label="Queue"
-                                                        style={{
-                                                          textAlign: "left",
-                                                        }}
-                                                        // multiple
-                                                        value={
-                                                          destinationAction
-                                                        }
-                                                        onChange={(e) => {
-                                                          setDestinationAction(
-                                                            e.target.value
-                                                          );
-                                                        }}
-                                                        MenuProps={MenuProps}
-                                                        required
-                                                      >
-                                                        {queue.data?.map(
-                                                          (item, index) => {
-                                                            return (
-                                                              <MenuItem
-                                                                key={index}
-                                                                value={item}
-                                                              >
-                                                                {item}
-                                                              </MenuItem>
-                                                            );
-                                                          }
-                                                        )}
-                                                      </Select>
-                                                    </FormControl>
-                                                  </>
-                                                ) : (
-                                                  <></>
-                                                )}
-                                              </>
-                                            ) : (
-                                              <>
-                                                <TextField
-                                                  style={{
-                                                    width: "100%",
-                                                    margin: "7px 0",
-                                                  }}
-                                                  type="text"
-                                                  label="IP Address"
-                                                  variant="outlined"
-                                                  value={ipAddress}
-                                                  onChange={handleIpChange}
-                                                  error={Boolean(error)}
-                                                />
-                                              </>
-                                            )}
-                                          </>
-                                        );
-                                      })}
+    {/* MANAGE TYPE */}
+    {serviceType.includes("Manage") && (
+      <Grid item xs={12}>
+        <FormControl fullWidth>
+          <InputLabel>Type</InputLabel>
+          <Select
+            value={subType}
+            onChange={(e) => {
+              const newSubType = e.target.value;
+              setSubType(newSubType);
+              if (newSubType === "Extension" || newSubType === "Queue") {
+                setDestinationAction([]);
+              }
+            }}
+          >
+            {sub_type.map((name) => (
+              <MenuItem key={name} value={name}>
+                {name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+    )}
 
-                                      <br />
+    {/* EXTENSION MULTI */}
+    {subType === "Extension" && (
+      <Grid item xs={12}>
+        <FormControl fullWidth>
+          <InputLabel>Extension</InputLabel>
+          <Select
+            multiple
+            value={destinationAction || []}
+            onChange={(e) => setDestinationAction(e.target.value)}
+            renderValue={(selected) => selected.join(", ")}
+            MenuProps={MenuProps}
+          >
+            {extensionNumber?.data?.map((name) => (
+              <MenuItem key={name} value={name}>
+                <Checkbox checked={destinationAction.includes(name)} />
+                {name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+    )}
 
-                                      <FormControl
-                                        fullWidth
-                                        style={{
-                                          width: "100%",
-                                          margin: "7px 0",
-                                        }}
-                                      >
-                                        <InputLabel id="demo-simple-select-label">
-                                          Status
-                                        </InputLabel>
-                                        <Select
-                                          labelId="demo-simple-select-label"
-                                          id="demo-simple-select"
-                                          label="Status"
-                                          style={{ textAlign: "left" }}
-                                          value={selectedValue}
-                                          onChange={handleSelectChange}
-                                          required
-                                        >
-                                          <MenuItem value={"t"}>
-                                            Active
-                                          </MenuItem>
-                                          <MenuItem value={"f"}>
-                                            Deactive
-                                          </MenuItem>
-                                        </Select>
-                                      </FormControl>
-                                      {validation.selectedValue && (
-                                        <p
-                                          className="mb-0"
-                                          style={{
-                                            color: "red",
-                                            textAlign: "left",
-                                          }}
-                                        >
-                                          {validation.selectedValue}
-                                        </p>
-                                      )}
+    {/* QUEUE */}
+    {subType === "Queue" && (
+      <Grid item xs={12}>
+        <FormControl fullWidth>
+          <InputLabel>Queue</InputLabel>
+          <Select
+            value={destinationAction}
+            onChange={(e) => setDestinationAction(e.target.value)}
+            MenuProps={MenuProps}
+          >
+            {queue.data?.map((item, index) => (
+              <MenuItem key={index} value={item}>
+                {item}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+    )}
 
-                                      <br />
-                                      <FormControl
-                                        fullWidth
-                                        style={{
-                                          width: "100%",
-                                          margin: "7px 0",
-                                        }}
-                                      >
-                                        <InputLabel id="demo-simple-select-label">
-                                          Recording
-                                        </InputLabel>
-                                        <Select
-                                          labelId="demo-simple-select-label"
-                                          id="demo-simple-select"
-                                          label="Recording"
-                                          style={{ textAlign: "left" }}
-                                          value={recording}
-                                          onChange={(e) => {
-                                            setRecording(e.target.value);
-                                          }}
-                                          required
-                                        >
-                                          <MenuItem value={"true"}>
-                                            Yes
-                                          </MenuItem>
-                                          <MenuItem value={"false"}>
-                                            No
-                                          </MenuItem>
-                                        </Select>
-                                      </FormControl>
-                                      {validation.recording && (
-                                        <p
-                                          className="mb-0"
-                                          style={{
-                                            color: "red",
-                                            textAlign: "left",
-                                          }}
-                                        >
-                                          {validation.recording}
-                                        </p>
-                                      )}
+    {/* IP */}
+    {serviceType.some((s) => s !== "Manage") && (
+      <Grid item xs={12}>
+        <TextField
+          fullWidth
+          label="IP Address"
+          value={ipAddress}
+          onChange={handleIpChange}
+          error={Boolean(error)}
+        />
+      </Grid>
+    )}
 
-                                      <br />
-                                      <TextField
-                                        style={{
-                                          width: "100%",
-                                          margin: "7px 0",
-                                        }}
-                                        type="text"
-                                        label="Carrier Name"
-                                        variant="outlined"
-                                        name="carrier_name"
-                                        value={carrierName}
-                                        onChange={(e) => {
-                                          setCarrierName(e.target.value);
-                                        }}
-                                      />
-                                      {validation.carrierName && (
-                                        <p
-                                          className="mb-0"
-                                          style={{
-                                            color: "red",
-                                            textAlign: "left",
-                                          }}
-                                        >
-                                          {validation.carrierName}
-                                        </p>
-                                      )}
+    {/* STATUS */}
+    <Grid item xs={12}>
+      <FormControl fullWidth>
+        <InputLabel>Status</InputLabel>
+        <Select
+          value={selectedValue}
+          onChange={handleSelectChange}
+        >
+          <MenuItem value={"t"}>Active</MenuItem>
+          <MenuItem value={"f"}>Deactive</MenuItem>
+        </Select>
+      </FormControl>
+    </Grid>
 
-                                      <br />
+    {/* RECORDING */}
+    <Grid item xs={12}>
+      <FormControl fullWidth>
+        <InputLabel>Recording</InputLabel>
+        <Select
+          value={recording}
+          onChange={(e) => setRecording(e.target.value)}
+        >
+          <MenuItem value={"true"}>Yes</MenuItem>
+          <MenuItem value={"false"}>No</MenuItem>
+        </Select>
+      </FormControl>
+    </Grid>
 
-                                      <TextField
-                                        style={{
-                                          width: "100%",
-                                          margin: "7px 0",
-                                        }}
-                                        type="text"
-                                        label="Description"
-                                        variant="outlined"
-                                        name="destinationDescription"
-                                        value={destinationDescription}
-                                        onChange={(e) => {
-                                          setDestinationDescription(
-                                            e.target.value
-                                          );
-                                        }}
-                                      />
-                                      <br />
-                                    </form>
-                                  </form>
+    {/* CARRIER */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        label="Carrier Name"
+        value={carrierName}
+        onChange={(e) => setCarrierName(e.target.value)}
+      />
+    </Grid>
+
+    {/* DESCRIPTION */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        label="Description"
+        value={destinationDescription}
+        onChange={(e) => setDestinationDescription(e.target.value)}
+      />
+    </Grid>
+
+  </Grid>
+</form>
+
+                                  
                                 </DialogContent>
 
                                 <DialogActions
@@ -1930,511 +1616,246 @@ function DID_TFN_number({ colorThem }) {
                                 </DialogTitle>
 
                                 <DialogContent>
-                                  <form>
-                                    <Typography variant="body1">
+                               
                                       <form
-                                        style={{
-                                          textAlign: "center",
-                                          height: "348px",
-                                          paddingTop: "10px",
-                                          padding: "5px",
-                                          width: "auto",
-                                        }}
-                                      >
-                                        <TextField
-                                          style={{
-                                            width: "100%",
-                                            margin: " 5px 0 5px 0",
-                                          }}
-                                          type="number"
-                                          label="Destination"
-                                          variant="outlined"
-                                          name="tfnNumber"
-                                          value={parseInt(tfnNumber)}
-                                          onChange={handleChange}
-                                          padding={"0px 0 !important"}
-                                        />
+  style={{
+    textAlign: "center",
+    paddingTop: "10px",
+    width: "100%",
+  }}
+>
+  <Grid container spacing={1}>
 
-                                        <FormControl
-                                          fullWidth
-                                          style={{
-                                            width: "100%",
-                                            margin: "7px 0",
-                                          }}
-                                        >
-                                          <InputLabel id="demo-simple-select-label">
-                                            Reseller
-                                          </InputLabel>
+    {/* DESTINATION */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        type="number"
+        label="Destination"
+        name="tfnNumber"
+        value={parseInt(tfnNumber)}
+        onChange={handleChange}
+      />
+    </Grid>
 
-                                          <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            label="Reseller"
-                                            style={{ textAlign: "left" }}
-                                            value={resellerId}
-                                            onChange={(e) => {
-                                              setResellerId(e.target.value);
-                                            }}
-                                            required
-                                          >
-                                            <MenuItem value="">none</MenuItem>
-                                            {resellers?.map((item, index) => {
-                                              return (
-                                                <MenuItem
-                                                  key={index}
-                                                  value={item?.reseller_id}
-                                                >
-                                                  {item.username}
-                                                </MenuItem>
-                                              );
-                                            })}
-                                          </Select>
-                                        </FormControl>
+    {/* RESELLER */}
+    <Grid item xs={12}>
+      <FormControl fullWidth>
+        <InputLabel>Reseller</InputLabel>
+        <Select
+          label="Reseller"
+          value={resellerId}
+          onChange={(e) => setResellerId(e.target.value)}
+        >
+          <MenuItem value="">none</MenuItem>
+          {resellers?.map((item, index) => (
+            <MenuItem key={index} value={item?.reseller_id}>
+              {item.username}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
 
-                                        {resellerId === "" ? (
-                                          <>
-                                            <FormControl
-                                              fullWidth
-                                              style={{
-                                                width: "100%",
-                                                margin: "7px 0",
-                                              }}
-                                            >
-                                              <InputLabel id="demo-simple-select-label">
-                                                UserName
-                                              </InputLabel>
+    {/* USER */}
+    <Grid item xs={12}>
+      <FormControl fullWidth>
+        <InputLabel>UserName</InputLabel>
+        <Select
+          label="UserName"
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
+        >
+          <MenuItem value="">none</MenuItem>
 
-                                              <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                label="UserName"
-                                                style={{ textAlign: "left" }}
-                                                value={userId}
-                                                onChange={(e) => {
-                                                  setUserId(e.target.value);
-                                                }}
-                                              >
-                                                <MenuItem value={""}>
-                                                  none
-                                                </MenuItem>
-                                                {users?.map((item, index) => {
-                                                  return (
-                                                    <MenuItem
-                                                      key={index}
-                                                      value={item?.user_id}
-                                                    >
-                                                      {item.username}
-                                                    </MenuItem>
-                                                  );
-                                                })}
-                                              </Select>
-                                            </FormControl>
-                                            {validation.userId && (
-                                              <p
-                                                className="mb-0"
-                                                style={{
-                                                  color: "red",
-                                                  textAlign: "left",
-                                                }}
-                                              >
-                                                {validation.userId}
-                                              </p>
-                                            )}
-                                          </>
-                                        ) : (
-                                          <>
-                                            <FormControl
-                                              fullWidth
-                                              style={{
-                                                width: "100%",
-                                                margin: "7px 0",
-                                              }}
-                                            >
-                                              <InputLabel id="demo-simple-select-label">
-                                                UserName
-                                              </InputLabel>
+          {(resellerId === "" ? users : resellerUsers)?.map((item, index) => (
+            <MenuItem key={index} value={item?.user_id}>
+              {item.username}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
 
-                                              <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                label="UserName"
-                                                style={{ textAlign: "left" }}
-                                                value={userId}
-                                                onChange={(e) => {
-                                                  setUserId(e.target.value);
-                                                }}
-                                              >
-                                                <MenuItem value={""}>
-                                                  none
-                                                </MenuItem>
-                                                {resellerUsers?.map(
-                                                  (item, index) => {
-                                                    return (
-                                                      <MenuItem
-                                                        key={index}
-                                                        value={item?.user_id}
-                                                      >
-                                                        {item.username}
-                                                      </MenuItem>
-                                                    );
-                                                  }
-                                                )}
-                                              </Select>
-                                            </FormControl>
-                                            {validation.userId && (
-                                              <p
-                                                className="mb-0"
-                                                style={{
-                                                  color: "red",
-                                                  textAlign: "left",
-                                                }}
-                                              >
-                                                {validation.userId}
-                                              </p>
-                                            )}
-                                          </>
-                                        )}
+    {validation.userId && (
+      <Grid item xs={12}>
+        <p style={{ color: "red", textAlign: "left", margin: 0 }}>
+          {validation.userId}
+        </p>
+      </Grid>
+    )}
 
-                                        <FormControl
-                                          style={{
-                                            width: "100%",
-                                            margin: " 5px 0 5px 0",
-                                          }}
-                                        >
-                                          <InputLabel id="demo-multiple-checkbox-label">
-                                            Services
-                                          </InputLabel>
-                                          <Select
-                                            style={{ textAlign: "left" }}
-                                            labelId="demo-multiple-checkbox-label"
-                                            label="Services"
-                                            id="demo-multiple-checkbox"
-                                            fullWidth
-                                            value={service}
-                                            onChange={(e) => {
-                                              setService(e.target.value);
-                                            }}
-                                          >
-                                            {names.map((name) => (
-                                              <MenuItem key={name} value={name}>
-                                                {name}
-                                              </MenuItem>
-                                            ))}
-                                          </Select>
-                                        </FormControl>
+    {/* SERVICE */}
+    <Grid item xs={12} md={6}>
+      <FormControl fullWidth>
+        <InputLabel>Services</InputLabel>
+        <Select
+          label="Services"
+          value={service}
+          onChange={(e) => setService(e.target.value)}
+        >
+          {names.map((name) => (
+            <MenuItem key={name} value={name}>
+              {name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Grid>
 
-                                        {service === "Manage" ? (
-                                          <>
-                                            <FormControl
-                                              style={{
-                                                width: "100%",
-                                                margin: " 5px 0 5px 0",
-                                              }}
-                                            >
-                                              <InputLabel id="demo-multiple-checkbox-label">
-                                                Sub Type
-                                              </InputLabel>
-                                              <Select
-                                                style={{ textAlign: "left" }}
-                                                labelId="demo-multiple-checkbox-label"
-                                                label="Sub Type"
-                                                id="demo-multiple-checkbox"
-                                                //multiple
-                                                fullWidth
-                                                value={subType}
-                                                onChange={(e) => {
-                                                  const newSubType =
-                                                    e.target.value;
-                                                  setSubType(newSubType);
-                                                  // Clear destinationAction if subType is Extension or Queue
-                                                  if (
-                                                    newSubType ===
-                                                      "Extension" ||
-                                                    newSubType === "Queue"
-                                                  ) {
-                                                    setDestinationAction([]);
-                                                  }
-                                                }}
-                                              >
-                                                {sub_type.map((name) => (
-                                                  <MenuItem
-                                                    key={name}
-                                                    value={name}
-                                                  >
-                                                    {name}
-                                                  </MenuItem>
-                                                ))}
-                                              </Select>
-                                            </FormControl>
-                                            {subType === "Extension" ? (
-                                              <>
-                                                <FormControl
-                                                  style={{
-                                                    width: "100%",
-                                                    margin: "5px 0 5px 0",
-                                                  }}
-                                                >
-                                                  <InputLabel id="demo-multiple-checkbox-label">
-                                                    Extension
-                                                  </InputLabel>
-                                                  <Select
-                                                    style={{
-                                                      textAlign: "left",
-                                                    }}
-                                                    labelId="demo-multiple-checkbox-label"
-                                                    label="Extension"
-                                                    id="demo-multiple-checkbox"
-                                                    multiple // Enable multiple selection
-                                                    fullWidth
-                                                    value={
-                                                      destinationAction || []
-                                                    } // Ensure the state is an array
-                                                    onChange={(e) => {
-                                                      setDestinationAction(
-                                                        e.target.value
-                                                      ); // Update state with selected values
-                                                    }}
-                                                    renderValue={(selected) =>
-                                                      selected.join(", ")
-                                                    } // Display selected values
-                                                    MenuProps={MenuProps}
-                                                  >
-                                                    {extensionNumber?.data?.map(
-                                                      (name) => (
-                                                        <MenuItem
-                                                          key={name}
-                                                          value={name}
-                                                        >
-                                                          <Checkbox
-                                                            checked={destinationAction.includes(
-                                                              name
-                                                            )}
-                                                          />{" "}
-                                                          {/* Add Checkbox */}
-                                                          {name}
-                                                        </MenuItem>
-                                                      )
-                                                    )}
-                                                  </Select>
-                                                </FormControl>
-                                              </>
-                                            ) : (
-                                              <></>
-                                            )}
-                                            {subType === "Queue" ? (
-                                              <>
-                                                {" "}
-                                                <FormControl
-                                                  fullWidth
-                                                  style={{
-                                                    width: "100%",
-                                                    margin: "7px 0",
-                                                  }}
-                                                >
-                                                  <InputLabel id="demo-simple-select-label">
-                                                    Queue
-                                                  </InputLabel>
+    {/* MANAGE TYPE */}
+    {service === "Manage" && (
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <InputLabel>Sub Type</InputLabel>
+          <Select
+            label="Sub Type"
+            value={subType}
+            onChange={(e) => {
+              const newSubType = e.target.value;
+              setSubType(newSubType);
+              if (newSubType === "Extension" || newSubType === "Queue") {
+                setDestinationAction([]);
+              }
+            }}
+          >
+            {sub_type.map((name) => (
+              <MenuItem key={name} value={name}>
+                {name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+    )}
 
-                                                  <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    label="Queue"
-                                                    style={{
-                                                      textAlign: "left",
-                                                    }}
-                                                    // multiple
-                                                    value={destinationAction}
-                                                    onChange={(e) => {
-                                                      setDestinationAction(
-                                                        e.target.value
-                                                      );
-                                                    }}
-                                                    MenuProps={MenuProps}
-                                                    required
-                                                  >
-                                                    {queue.data?.map(
-                                                      (item, index) => {
-                                                        return (
-                                                          <MenuItem
-                                                            key={index}
-                                                            value={item}
-                                                          >
-                                                            {item}
-                                                          </MenuItem>
-                                                        );
-                                                      }
-                                                    )}
-                                                  </Select>
-                                                </FormControl>
-                                              </>
-                                            ) : (
-                                              <></>
-                                            )}
-                                          </>
-                                        ) : (
-                                          <>
-                                            {service === "IP" ? (
-                                              <>
-                                                <TextField
-                                                  style={{
-                                                    width: "100%",
-                                                    margin: "7px 0",
-                                                  }}
-                                                  type="text"
-                                                  label="IP Address"
-                                                  variant="outlined"
-                                                  value={ipAddress}
-                                                  onChange={handleIpChange}
-                                                  error={Boolean(error)}
-                                                />
-                                              </>
-                                            ) : (
-                                              <></>
-                                            )}
-                                          </>
-                                        )}
+    {/* EXTENSION */}
+    {subType === "Extension" && (
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <InputLabel>Extension</InputLabel>
+          <Select
+            multiple
+            value={destinationAction || []}
+            onChange={(e) => setDestinationAction(e.target.value)}
+            renderValue={(selected) => selected.join(", ")}
+            MenuProps={MenuProps}
+          >
+            {extensionNumber?.data?.map((name) => (
+              <MenuItem key={name} value={name}>
+                <Checkbox checked={destinationAction.includes(name)} />
+                {name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+    )}
 
-                                        <br />
-                                        <FormControl
-                                          fullWidth
-                                          style={{
-                                            width: "100%",
-                                            margin: "7px 0",
-                                          }}
-                                        >
-                                          <InputLabel id="demo-simple-select-label">
-                                            Recording
-                                          </InputLabel>
-                                          <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            label="Recording"
-                                            style={{ textAlign: "left" }}
-                                            value={recording}
-                                            onChange={(e) => {
-                                              setRecording(e.target.value);
-                                            }}
-                                            required
-                                          >
-                                            <MenuItem value={"true"}>
-                                              Yes
-                                            </MenuItem>
-                                            <MenuItem value={"false"}>
-                                              No
-                                            </MenuItem>
-                                          </Select>
-                                        </FormControl>
+    {/* QUEUE */}
+    {subType === "Queue" && (
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <InputLabel>Queue</InputLabel>
+          <Select
+            value={destinationAction}
+            onChange={(e) => setDestinationAction(e.target.value)}
+            MenuProps={MenuProps}
+          >
+            {queue.data?.map((item, index) => (
+              <MenuItem key={index} value={item}>
+                {item}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+    )}
 
-                                        <FormControl
-                                          fullWidth
-                                          style={{
-                                            width: "100%",
-                                            margin: "7px 0",
-                                          }}
-                                        >
-                                          <InputLabel id="demo-simple-select-label">
-                                            Status
-                                          </InputLabel>
-                                          <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            label="Status"
-                                            style={{ textAlign: "left" }}
-                                            value={selectedValue}
-                                            onChange={handleSelectChange}
-                                            required
-                                          >
-                                            <MenuItem value={"t"}>
-                                              Active
-                                            </MenuItem>
-                                            <MenuItem value={"f"}>
-                                              Deactive
-                                            </MenuItem>
-                                          </Select>
-                                        </FormControl>
+    {/* IP */}
+    {service === "IP" && (
+      <Grid item xs={12} md={6}>
+        <TextField
+          fullWidth
+          label="IP Address"
+          value={ipAddress}
+          onChange={handleIpChange}
+          error={Boolean(error)}
+        />
+      </Grid>
+    )}
 
-                                        <br />
+    {/* RECORDING */}
+    <Grid item xs={12} md={6}>
+      <FormControl fullWidth>
+        <InputLabel>Recording</InputLabel>
+        <Select
+          value={recording}
+          onChange={(e) => setRecording(e.target.value)}
+        >
+          <MenuItem value={"true"}>Yes</MenuItem>
+          <MenuItem value={"false"}>No</MenuItem>
+        </Select>
+      </FormControl>
+    </Grid>
 
-                                        <FormControl
-                                          fullWidth
-                                          style={{
-                                            width: "100%",
-                                            margin: "7px 0",
-                                          }}
-                                        >
-                                          <InputLabel id="demo-simple-select-label">
-                                            Suspend
-                                          </InputLabel>
-                                          <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            label="Suspend"
-                                            style={{ textAlign: "left" }}
-                                            value={suspendValue}
-                                            onChange={(e) =>
-                                              setSuspendValue(e.target.value)
-                                            }
-                                            required
-                                          >
-                                            <MenuItem value={0}>
-                                              Not Suspended
-                                            </MenuItem>
-                                            <MenuItem value={1}>
-                                              Suspended
-                                            </MenuItem>
-                                          </Select>
-                                        </FormControl>
+    {/* STATUS */}
+    <Grid item xs={12} md={6}>
+      <FormControl fullWidth>
+        <InputLabel>Status</InputLabel>
+        <Select value={selectedValue} onChange={handleSelectChange}>
+          <MenuItem value={"t"}>Active</MenuItem>
+          <MenuItem value={"f"}>Deactive</MenuItem>
+        </Select>
+      </FormControl>
+    </Grid>
 
-                                        <br />
+    {/* SUSPEND */}
+    <Grid item xs={12} md={6}>
+      <FormControl fullWidth>
+        <InputLabel>Suspend</InputLabel>
+        <Select
+          value={suspendValue}
+          onChange={(e) => setSuspendValue(e.target.value)}
+        >
+          <MenuItem value={0}>Not Suspended</MenuItem>
+          <MenuItem value={1}>Suspended</MenuItem>
+        </Select>
+      </FormControl>
+    </Grid>
 
-                                        <TextField
-                                          style={{
-                                            width: "100%",
-                                            margin: "7px 0",
-                                          }}
-                                          type="text"
-                                          label="Carrier Name"
-                                          variant="outlined"
-                                          name="carrier_name"
-                                          value={carrierName}
-                                          onChange={(e) => {
-                                            setCarrierName(e.target.value);
-                                          }}
-                                          required
-                                        />
-                                        {validation.carrierName && (
-                                          <p
-                                            className="mb-0"
-                                            style={{
-                                              color: "red",
-                                              textAlign: "left",
-                                            }}
-                                          >
-                                            {validation.carrierName}
-                                          </p>
-                                        )}
-                                        <br />
+    {/* CARRIER */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        label="Carrier Name"
+        value={carrierName}
+        onChange={(e) => setCarrierName(e.target.value)}
+      />
+    </Grid>
 
-                                        <TextField
-                                          style={{
-                                            width: "100%",
-                                            margin: "7px 0",
-                                          }}
-                                          type="text"
-                                          label="Description"
-                                          variant="outlined"
-                                          name="destinationDescription"
-                                          value={destinationDescription}
-                                          onChange={(e) => {
-                                            setDestinationDescription(
-                                              e.target.value
-                                            );
-                                          }}
-                                        />
-                                        <br />
-                                      </form>
-                                    </Typography>
-                                  </form>
+    {validation.carrierName && (
+      <Grid item xs={12}>
+        <p style={{ color: "red", textAlign: "left", margin: 0 }}>
+          {validation.carrierName}
+        </p>
+      </Grid>
+    )}
+
+    {/* DESCRIPTION */}
+    <Grid item xs={12}>
+      <TextField
+        fullWidth
+        label="Description"
+        value={destinationDescription}
+        onChange={(e) => setDestinationDescription(e.target.value)}
+      />
+    </Grid>
+
+  </Grid>
+</form>
+
+                                    
                                 </DialogContent>
 
                                 <DialogActions
